@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "336277741870",
+    "project_id": "appchop-f4d21",
+    "storage_bucket": "appchop-f4d21.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:336277741870:android:3724500317de58caa0dabf",
+        "android_client_info": {
+          "package_name": "com.trujiscorp.appchop"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAvCXg9ADr_OsFzAKOgeA63UInRHKG69aY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
