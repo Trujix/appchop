@@ -1,8 +1,11 @@
 <?php
     Class Prueba {
+
         public static function ejecutarPrueba($data) {
-            //$valor_externo = $_SESSION['hola'];
+            Auth::verify();
+
             die(json_encode($data));
         }
+
     }
 ?>
