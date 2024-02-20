@@ -4,10 +4,10 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 class FirebaseService {
   void init() async {
     try {
-      print("CREANDO TOKEN");
       await Firebase.initializeApp();
       FirebaseMessaging.onBackgroundMessage(_onBackgroundMessage);
       var token = await FirebaseMessaging.instance.getToken();
+      print("CREANDO TOKEN");
       print(token);
       FirebaseMessaging.onMessage.listen((RemoteMessage message) {
         _onMessage(message.data);
@@ -30,7 +30,7 @@ class FirebaseService {
 @pragma('vm:entry-point')
 Future<void> _onBackgroundMessage(RemoteMessage message) async {
   try {
-
+    
   } catch(e) {
     return;
   }
