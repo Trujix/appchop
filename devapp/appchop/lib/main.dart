@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:material_color_gen/material_color_gen.dart';
 
 import 'app/modules/home/home_binding.dart';
 import 'app/modules/home/home_page.dart';
 import 'app/routes/app_pages.dart';
 import 'app/utils/app_configuration.dart';
+import 'app/utils/color_list.dart';
 
 void main() {
   AppConfiguration.init();
@@ -19,7 +21,9 @@ class AppChop extends StatelessWidget {
     return GetMaterialApp(
       title: "Shop App",
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Color(
+          ColorList.main[0],
+        ).toMaterialColor(),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       debugShowCheckedModeBanner: false,

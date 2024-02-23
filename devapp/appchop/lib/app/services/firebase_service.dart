@@ -7,8 +7,8 @@ class FirebaseService {
       await Firebase.initializeApp();
       FirebaseMessaging.onBackgroundMessage(_onBackgroundMessage);
       var token = await FirebaseMessaging.instance.getToken();
-      print("CREANDO TOKEN");
-      print(token);
+      /*print("CREANDO TOKEN");
+      print(token);*/
       FirebaseMessaging.onMessage.listen((RemoteMessage message) {
         _onMessage(message.data);
       });
