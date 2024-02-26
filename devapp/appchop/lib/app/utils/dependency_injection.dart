@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 
 import '../services/firebase_service.dart';
 import '../services/storage_service.dart';
+import '../services/tool_service.dart';
 
 class DependencyInjection {
   static DependencyInjection dependencyInjection = DependencyInjection();
@@ -12,8 +13,9 @@ class DependencyInjection {
   }
 
   void _injectServices() {
-    Get.put<FirebaseService>(FirebaseService());
     Get.put<StorageService>(StorageService());
+    Get.put<FirebaseService>(FirebaseService());
+    Get.put<ToolService>(ToolService());
   }
 
   void _injectDAL() {

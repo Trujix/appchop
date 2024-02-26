@@ -7,8 +7,12 @@ class HomeController extends GetInjection {
   
   @override
   void onInit() async {
-    firebaseService.init();
+    _init();
     super.onInit();
+  }
+
+  void _init() {
+
   }
 
   void abrirMenu() {
@@ -16,5 +20,4 @@ class HomeController extends GetInjection {
   }
 
   String texto = "Hola";
-
 }

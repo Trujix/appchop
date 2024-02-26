@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:material_color_gen/material_color_gen.dart';
 
-import 'app/modules/home/home_binding.dart';
-import 'app/modules/home/home_page.dart';
+import 'app/modules/alpha/alpha_binding.dart';
+import 'app/modules/alpha/alpha_page.dart';
 import 'app/routes/app_pages.dart';
 import 'app/utils/app_configuration.dart';
 import 'app/utils/color_list.dart';
@@ -28,8 +28,8 @@ class AppChop extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       getPages: AppPages.pages,
-      home: const HomePage(),
-      initialBinding: HomeBinding(),
+      home: const AlphaPage(),
+      initialBinding: AlphaBinding(),
     );
   }
 }

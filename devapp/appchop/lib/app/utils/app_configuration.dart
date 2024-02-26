@@ -8,10 +8,10 @@ class AppConfiguration {
   static void init() async {
     WidgetsFlutterBinding.ensureInitialized();
     await Permission.notification.isDenied.then((denegado) {
-        if (denegado) {
-          Permission.notification.request();
-        }
-      });
+      if (denegado) {
+        Permission.notification.request();
+      }
+    });
     SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp],
     );

@@ -5,7 +5,7 @@
     header('Access-Control-Allow-Headers: X-Requested-With');
     header('Content-Type: text/html; charset=utf-8');
     header('P3P: CP="IDC DSP COR CURa ADMa OUR IND PHY ONL COM STA"');
-    
+
     $services_list = array();
     foreach(glob('services/*.php') as $service) {
         array_push(

@@ -1,20 +1,27 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:get/get.dart';
+
+import '../data/models/local_storage/local_storage.dart';
+import '../utils/literals.dart';
+import 'storage_service.dart';
 
 class FirebaseService {
-  void init() async {
+  Future<void> init() async {
     try {
       await Firebase.initializeApp();
-      FirebaseMessaging.onBackgroundMessage(_onBackgroundMessage);
+      var storage = Get.find<StorageService>();
       var token = await FirebaseMessaging.instance.getToken();
-      /*print("CREANDO TOKEN");
-      print(token);*/
+      storage.update(token, 'idFirebase', LocalStorage());
+      await FirebaseMessaging.instance.subscribeToTopic(Literals.notificacionTopic);
+      FirebaseMessaging.onBackgroundMessage(_onBackgroundMessage);
       FirebaseMessaging.onMessage.listen((RemoteMessage message) {
         _onMessage(message.data);
       });
       FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
         _onMessage(message.data, true);
       });
+      return;
     } catch(e) {
       return;
     }
