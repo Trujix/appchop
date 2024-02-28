@@ -18,13 +18,16 @@
             );
         }
 
-        public function executeReader($query) {
+        public function executeReader($query, $single = false) {
             $resultado = array();
             if($execute_query = $this->conn->query($query)) {
                 while($reader = $execute_query->fetch_object()) {
                     $resultado[] = $reader;
                 }
                 while ($this->conn->more_results() && $this->conn->next_result());
+                if(count($resultado) > 0 && $single) {
+                    $resultado = $resultado[0];
+                }
             }
             return $resultado;
         }
