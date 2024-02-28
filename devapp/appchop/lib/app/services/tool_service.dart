@@ -1,7 +1,8 @@
 import 'dart:convert';
+import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 
-class ToolService {
+class ToolService extends GetxController {
   String guid() {
     const uuid = Uuid();
     var newGuid = uuid.v4();

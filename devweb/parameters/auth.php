@@ -10,7 +10,7 @@
                 die('No autorizado');
             }
             $token = $_SESSION['Token'];
-            if($token != "abc123") {
+            if($token != "diego2024") {
                 http_response_code(401);
                 die('No autorizado');
             }
