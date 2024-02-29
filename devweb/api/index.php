@@ -73,7 +73,7 @@
     try {
         set_time_limit(18000);
         date_default_timezone_set('America/Mexico_City');
-        call_user_func(array($servicio, $funcion), $params);
+        echo call_user_func(array($servicio, $funcion), $params);
     } catch(Exception $e) {
         http_response_code(500);
         die($e->getMessage());

@@ -14,7 +14,7 @@
                 "localhost",
                 "root",
                 "root",
-                "prueba"
+                "appchop"
             );
         }
 

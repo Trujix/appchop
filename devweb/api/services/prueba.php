@@ -1,14 +1,14 @@
 <?php
     Class Prueba {
         public static function ejecutarPrueba($data) {
-            //Auth::verify();
+            Auth::verify();
             //die(json_encode($data[0]));
 
-            $mysql = new Mysql();
+            /*$mysql = new Mysql();
             $consulta = $mysql->executeReader(
                 "SELECT * FROM usuarios WHERE nombre = 'diegoxxx'", true
             );
-            echo json_encode($consulta);
+            echo json_encode($consulta);*/
             /*$mysql = new Mysql();
             $json = (object)$data;
             $result = $mysql->executeNonQuery(
