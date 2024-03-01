@@ -9,6 +9,10 @@ class ToolService extends GetxController {
     return newGuid;
   }
 
+  bool isObject(dynamic data) {
+    return isJson(data) || isArray(data) || isJsonArray(data);
+  }
+
   bool isJson(dynamic elemento) {
     try {
       var jsonCadena = jsonEncode(elemento);
@@ -22,6 +26,16 @@ class ToolService extends GetxController {
     try {
       var jsonCadena = jsonEncode(elemento);
       return jsonCadena[jsonCadena.length -1] == "]";
+    } catch(e) {
+      return false;
+    }
+  }
+
+  bool isJsonArray(dynamic data) {
+    try {
+      var cadAux = jsonEncode(data);
+      var cadJson = cadAux[cadAux.length - 2] + cadAux[cadAux.length - 1];
+      return cadJson == "}]";
     } catch(e) {
       return false;
     }

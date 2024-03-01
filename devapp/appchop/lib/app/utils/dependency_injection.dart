@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 
+import '../services/api_service.dart';
 import '../services/firebase_service.dart';
 import '../services/storage_service.dart';
 import '../services/tool_service.dart';
@@ -13,9 +14,10 @@ class DependencyInjection {
   }
 
   void _injectServices() {
+    Get.put<ToolService>(ToolService());
     Get.put<StorageService>(StorageService());
     Get.put<FirebaseService>(FirebaseService());
-    Get.put<ToolService>(ToolService());
+    Get.put<ApiService>(ApiService());
   }
 
   void _injectDAL() {

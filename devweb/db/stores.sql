@@ -20,9 +20,21 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS STP_INICIAR_SESION;
 DELIMITER $$
 CREATE PROCEDURE STP_INICIAR_SESION(
-    IN _USUARIO VARCHAR(150), IN _PASSWORD VARCHAR(150)
+    IN _USUARIO VARCHAR(150), IN _PASSWORD VARCHAR(150), 
+    IN _FIREBASE VARCHAR(350)
 )
 BEGIN
+    DECLARE _ID INT DEFAULT 0;
+    SET _ID = (
+        SELECT
+            US1.id 
+        FROM appchop.usuarios AS US1
+        WHERE US1.usuario = _USUARIO 
+            AND US1.password = MD5(_PASSWORD)
+    );
+    UPDATE appchop.usuarios SET 
+        id_firebase = _FIREBASE
+    WHERE id = _ID;
     SELECT
         US1.id,
         US1.id_sistema,
@@ -36,7 +48,6 @@ BEGIN
         AU1.token
     FROM appchop.usuarios AS US1
         LEFT OUTER JOIN appchop.autorization AU1 ON Au1.id = US1.id_autorization
-    WHERE US1.usuario = _USUARIO 
-        AND US1.password = MD5(_PASSWORD);
+    WHERE US1.id = _ID;
 END $$
 DELIMITER ;

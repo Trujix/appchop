@@ -17,12 +17,12 @@ class AlphaController extends GetInjection {
 
   Future<void> _init() async {
     try {
-      await storageService.init();
-      await firebaseService.init();
-      var storage = LocalStorage.fromJson(storageService.get(LocalStorage()));
+      await storage.init();
+      await firebase.init();
+      var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
       await tool.wait();
-      var page = storage.login! ? const HomePage() : const LoginPage();
-      var binding = storage.login! ? HomeBinding() : LoginBinding();
+      var page = localStorage.login! ? const HomePage() : const LoginPage();
+      var binding = localStorage.login! ? HomeBinding() : LoginBinding();
       Get.offAll(
         page,
         binding: binding,

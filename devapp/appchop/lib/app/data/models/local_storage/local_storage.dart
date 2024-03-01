@@ -13,6 +13,7 @@ class LocalStorage {
   String? apellidoMaterno;
   String? password;
   String? email;
+  String? token;
   bool? activo;
   String? idFirebase;
 
@@ -26,6 +27,7 @@ class LocalStorage {
     this.apellidoMaterno = "",
     this.password = "",
     this.email = "",
+    this.token = "-",
     this.activo = true,
     this.idFirebase = "",
   });
@@ -41,6 +43,7 @@ class LocalStorage {
     'apellidoMaterno'   : apellidoMaterno,
     'password'          : password,
     'email'             : email,
+    'token'             : token,
     'activo'            : activo,
     'idFirebase'        : idFirebase,
   };
@@ -57,6 +60,7 @@ class LocalStorage {
       'apellidoMaterno'   : apellidoMaterno,
       'password'          : password,
       'email'             : email,
+      'token'             : token,
       'activo'            : activo,
       'idFirebase'        : idFirebase,
     };
@@ -71,6 +75,7 @@ class LocalStorage {
     apellidoMaterno = json['apellidoMaterno'] ?? "";
     password = json['password'] ?? "";
     email = json['email'] ?? "";
+    token = json['token'] ?? "";
     activo = json['activo'] ?? true;
     idFirebase = json['idFirebase'] ?? "";
   }
@@ -83,6 +88,7 @@ class LocalStorage {
     apellidoMaterno = json['apellidoMaterno'] ?? "";
     password = json['password'] ?? "";
     email = json['email'] ?? "";
+    token = json['token'] ?? "";
     activo = json['activo'] ?? true;
     idFirebase = json['idFirebase'] ?? "";
   }
@@ -97,6 +103,7 @@ class LocalStorage {
     apellidoMaterno: json['apellidoMaterno'] ?? "",
     password: json['password'] ?? "",
     email: json['email'] ?? "",
+    token: json['token'] ?? "",
     activo: json['activo'] ?? true,
     idFirebase: json['idFirebase'] ?? "",
   );
