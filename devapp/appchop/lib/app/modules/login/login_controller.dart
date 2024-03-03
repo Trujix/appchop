@@ -1,8 +1,12 @@
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 
 import '../../data/models/login/login_form.dart';
 import '../../utils/get_injection.dart';
 import '../../data/models/local_storage/local_storage.dart';
+import '../../utils/literals.dart';
+import '../home/home_binding.dart';
+import '../home/home_page.dart';
 
 class LoginController extends GetInjection {
   TextEditingController usuario = TextEditingController();
@@ -31,11 +35,29 @@ class LoginController extends GetInjection {
         password: password.text,
         firebase: localStorage.idFirebase,
       );
-      var result = await api.post('login/iniciarSesion', loginForm);
-      print(result);
+      var result = await loginRepository.iniciarsesionAsync(loginForm);
       if(result == null) {
         throw Exception();
       }
+      localStorage.activo = result.status == Literals.statusActivo;
+      if(!localStorage.activo!) {
+        
+      }
+      localStorage.login = true;
+      localStorage.idUsuario = result.idSistema;
+      localStorage.email = usuario.text;
+      localStorage.password = password.text;
+      localStorage.nombres = result.nombres;
+      localStorage.apellidos = result.apellidos;
+      localStorage.token = result.token;
+      storage.update(localStorage);
+      Get.offAll(
+        const HomePage(),
+        binding: HomeBinding(),
+        transition: Transition.cupertino,
+        duration: 1.seconds,
+      );
+      return;
     } catch(e) {
       return;
     }

@@ -9,8 +9,7 @@ class LocalStorage {
   bool? login;
   String? idUsuario;
   String? nombres;
-  String? apellidoPaterno;
-  String? apellidoMaterno;
+  String? apellidos;
   String? password;
   String? email;
   String? token;
@@ -23,8 +22,7 @@ class LocalStorage {
     this.login = false,
     this.idUsuario = "",
     this.nombres = "",
-    this.apellidoPaterno = "",
-    this.apellidoMaterno = "",
+    this.apellidos = "",
     this.password = "",
     this.email = "",
     this.token = "-",
@@ -39,8 +37,7 @@ class LocalStorage {
     'login'             : login,
     'idUsuario'         : idUsuario,
     'nombres'           : nombres,
-    'apellidoPaterno'   : apellidoPaterno,
-    'apellidoMaterno'   : apellidoMaterno,
+    'apellidos'         : apellidos,
     'password'          : password,
     'email'             : email,
     'token'             : token,
@@ -56,8 +53,7 @@ class LocalStorage {
       'login'             : login,
       'idUsuario'         : idUsuario,
       'nombres'           : nombres,
-      'apellidoPaterno'   : apellidoPaterno,
-      'apellidoMaterno'   : apellidoMaterno,
+      'apellidos'         : apellidos,
       'password'          : password,
       'email'             : email,
       'token'             : token,
@@ -71,8 +67,7 @@ class LocalStorage {
     login = json['login'] ?? false;
     idUsuario = json['idUsuario'] ?? "";
     nombres = json['nombres'] ?? "";
-    apellidoPaterno = json['apellidoPaterno'] ?? "";
-    apellidoMaterno = json['apellidoMaterno'] ?? "";
+    apellidos = json['apellidos'] ?? "";
     password = json['password'] ?? "";
     email = json['email'] ?? "";
     token = json['token'] ?? "";
@@ -84,8 +79,7 @@ class LocalStorage {
     login = json['login'] ?? false;
     idUsuario = json['idUsuario'] ?? "";
     nombres = json['nombres'] ?? "";
-    apellidoPaterno = json['apellidoPaterno'] ?? "";
-    apellidoMaterno = json['apellidoMaterno'] ?? "";
+    apellidos = json['apellidos'] ?? "";
     password = json['password'] ?? "";
     email = json['email'] ?? "";
     token = json['token'] ?? "";
@@ -99,8 +93,7 @@ class LocalStorage {
     login: json['login'] ?? false,
     idUsuario: json['idUsuario'] ?? "",
     nombres: json['nombres'] ?? "",
-    apellidoPaterno: json['apellidoPaterno'] ?? "",
-    apellidoMaterno: json['apellidoMaterno'] ?? "",
+    apellidos: json['apellidos'] ?? "",
     password: json['password'] ?? "",
     email: json['email'] ?? "",
     token: json['token'] ?? "",

@@ -41,6 +41,25 @@ class ToolService extends GetxController {
     }
   }
 
+  bool isNumeric(String? s) {
+    if (s == null) {
+      return false;
+    }
+    return double.tryParse(s) != null;
+  }
+
+  bool str2bool(String cadena) {
+    return cadena.toLowerCase() == 'true';
+  }
+
+  double str2double(String cadena) {
+    return double.tryParse(cadena) ?? 0.0;
+  }
+
+  int str2int(String cadena) {
+    return int.tryParse(cadena) ?? 0;
+  }
+
   Future<void> wait([int segundos = 2]) async {
     await Future.delayed(Duration(seconds: segundos));
     return;

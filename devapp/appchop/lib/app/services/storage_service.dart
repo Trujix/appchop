@@ -9,12 +9,14 @@ import 'tool_service.dart';
 
 class StorageService {
   Box? _storage;
+  final ToolService _tool = Get.find<ToolService>();
 
   Future<void> init() async {
     try {
       await _openBox();
       var localStorage = LocalStorage.fromJson(get(LocalStorage()));
-      if(!localStorage.init!) {
+      var version = localStorage.version! != LocalStorage().version!;
+      if(!localStorage.init! || version) {
         var nuevoStorage = _nuevoLocalStorage(actual: localStorage);
         _storage!.put(nuevoStorage!.tabla, jsonEncode(nuevoStorage));
       }
@@ -24,11 +26,10 @@ class StorageService {
     }
   }
 
-  dynamic get<S>(S clase) {
+  dynamic get(dynamic elem) {
     try {
-      var tool = Get.find<ToolService>();
-      var jsonData = jsonDecode(jsonEncode(clase));
-      var tabla = tool.isArray(tool) ? jsonData[0]['tabla'] : jsonData['tabla'];
+      var jsonData = jsonDecode(jsonEncode(elem));
+      var tabla = _tool.isArray(jsonData) ? jsonData[0]['tabla'] : jsonData['tabla'];
       var storage = _storage!.get(tabla);
       if(storage == null) {
         return jsonData;
@@ -39,16 +40,12 @@ class StorageService {
     }
   }
 
-  Future<void> update<S>(dynamic valor, String llave, S clase) async {
+  Future<void> update<S>(dynamic elem) async {
     try {
-      var tool = Get.find<ToolService>();
-      var jsonData = jsonDecode(jsonEncode(clase));
-      var tabla = tool.isArray(tool) ? jsonData[0]['tabla'] : jsonData['tabla'];
-      var storageString = _storage!.get(tabla) ?? Exception();
-      var storage = jsonDecode(storageString);
-      storage[llave] = valor;
+      var jsonData = jsonDecode(jsonEncode(elem));
+      var tabla = _tool.isArray(jsonData) ? jsonData[0]['tabla'] : jsonData['tabla'];
       await _storage!.delete(tabla);
-      await _storage!.put(tabla, jsonEncode(storage));
+      await _storage!.put(tabla, jsonEncode(elem));
       return;
     } catch(e) {
       return;
@@ -57,9 +54,8 @@ class StorageService {
 
   Future<void> delete<S>(S clase) async {
     try {
-      var tool = Get.find<ToolService>();
       var jsonData = jsonDecode(jsonEncode(clase));
-      var tabla = tool.isArray(tool) ? jsonData[0]['tabla'] : jsonData['tabla'];
+      var tabla = _tool.isArray(jsonData) ? jsonData[0]['tabla'] : jsonData['tabla'];
       await _storage!.delete(tabla);
       return;
     } catch(e) {
@@ -74,8 +70,8 @@ class StorageService {
     try {
       var nuevoStorage = LocalStorage();
       nuevoStorage.init = true;
-      var version = actual != null ? actual.version == nuevoStorage.version! : false;
-      if(nuevo || version) {
+      var version = actual != null ? actual.version == nuevoStorage.version! : true;
+      if(nuevo && version) {
         return nuevoStorage;
       } else {
         Map<String, dynamic> nuevoStorageTemp = jsonDecode(jsonEncode(nuevoStorage));

@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+import '../data/providers/login_provider.dart';
+import '../data/repositories/login_repository.dart';
 import '../services/api_service.dart';
 import '../services/firebase_service.dart';
 import '../services/storage_service.dart';
@@ -21,6 +23,7 @@ class DependencyInjection {
   }
 
   void _injectDAL() {
-
+    Get.put<LoginProvider>(LoginProvider());
+    Get.put<LoginRepository>(LoginRepository());
   }
 }

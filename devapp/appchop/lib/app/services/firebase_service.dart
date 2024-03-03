@@ -7,12 +7,13 @@ import '../utils/literals.dart';
 import 'storage_service.dart';
 
 class FirebaseService {
+  final StorageService _storage = Get.find<StorageService>();
+
   Future<void> init() async {
     try {
       await Firebase.initializeApp();
-      var storage = Get.find<StorageService>();
       var token = await FirebaseMessaging.instance.getToken();
-      storage.update(token, 'idFirebase', LocalStorage());
+      _updateFirebaseToken(token!);
       await FirebaseMessaging.instance.subscribeToTopic(Literals.notificacionTopic);
       FirebaseMessaging.onBackgroundMessage(_onBackgroundMessage);
       FirebaseMessaging.onMessage.listen((RemoteMessage message) {
@@ -31,6 +32,14 @@ class FirebaseService {
     if(open) {
 
     }
+  }
+
+  void _updateFirebaseToken(String token) {
+    try {
+      var localStorage = LocalStorage.fromJson(_storage.get(LocalStorage()));
+      localStorage.idFirebase = token;
+      _storage.update(localStorage);
+    } finally { }
   }
 }
 

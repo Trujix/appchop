@@ -1,7 +1,7 @@
 <?php
     Class Prueba {
         public static function ejecutarPrueba($data) {
-            Auth::verify();
+            //Auth::verify();
             //die(json_encode($data[0]));
 
             /*$mysql = new Mysql();

@@ -7,14 +7,15 @@
         }
 
         public function conection() {
+            $mysql_params = explode("~", getenv('MYSQLCONN'));
             $this->conn = mysqli_init();
             $this->conn->options(MYSQLI_OPT_CONNECT_TIMEOUT, 300);
             $this->conn->options(MYSQLI_SET_CHARSET_NAME, "utf8");
             $this->conn->real_connect(
-                "localhost",
-                "root",
-                "root",
-                "appchop"
+                $mysql_params[0],
+                $mysql_params[1],
+                $mysql_params[2],
+                $mysql_params[3]
             );
         }
 

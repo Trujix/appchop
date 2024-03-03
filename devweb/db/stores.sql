@@ -47,7 +47,7 @@ BEGIN
         US1.perfil,
         AU1.token
     FROM appchop.usuarios AS US1
-        LEFT OUTER JOIN appchop.autorization AU1 ON Au1.id = US1.id_autorization
+        LEFT OUTER JOIN appchop.autorization AU1 ON AU1.id = US1.id_autorization
     WHERE US1.id = _ID;
 END $$
 DELIMITER ;

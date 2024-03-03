@@ -14,7 +14,7 @@ class SolidButton extends StatelessWidget {
   const SolidButton({
     super.key,
     this.texto = '',
-    this.textoSize = 14,
+    this.textoSize = 16,
     required this.onPressed,
     required this.onLongPress,
     this.icono,

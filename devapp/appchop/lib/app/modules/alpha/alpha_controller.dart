@@ -27,7 +27,7 @@ class AlphaController extends GetInjection {
         page,
         binding: binding,
         transition: Transition.circularReveal,
-        duration: const Duration(seconds: 1),
+        duration: 1.seconds,
       );
     } catch(e) {
       return;
