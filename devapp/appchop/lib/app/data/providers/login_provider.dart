@@ -11,7 +11,7 @@ class LoginProvider {
   Future<LoginData?> iniciarsesionAsync(LoginForm form) async {
     try {
       var result = await _api.post(
-        "login/iniciarSesion",
+        "api/login/iniciarSesion",
         form,
       );
       return LoginData.fromApi(jsonDecode(result!));

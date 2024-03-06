@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 
+import '../../utils/color_list.dart';
+import '../../widgets/buttons/solid_button.dart';
+import '../../widgets/containers/menu_footer_container.dart';
+import '../../widgets/containers/menu_header_container.dart';
+import '../../widgets/containers/menu_version_container.dart';
+import '../../widgets/drawers/menu_drawer.dart';
+import '../cobranza_main/cobranza_main_page.dart';
 import 'home_controller.dart';
 
 class HomePage extends StatelessWidget with WidgetsBindingObserver {
@@ -10,49 +17,41 @@ class HomePage extends StatelessWidget with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<HomeController>(
-      builder: (_) => ZoomDrawer(
-          controller: _.drawerController,
-          mainScreen: Scaffold(
-      appBar: AppBar(
-        title: GestureDetector(
-          child: Icon(
-            Icons.menu,
+      builder: (_) => MenuDrawer(
+        controller: _.drawerController,
+        mainScreen: const CobranzaMainPage(),
+        menuScreen: <Widget>[
+          const SizedBox(height: 75,),
+          MenuHeaderContainer(
+            nombre: _.nombre,
+            idUsduario: _.idUsuario,
           ),
-          onTap: _.abrirMenu,
-        ),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+          Expanded(
+            child: Scaffold(
+              backgroundColor: Colors.transparent,
+              body: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: _.listaMenu.map((elem) {
+                  return elem;
+                }).toList(),
+              ),
             ),
-            Text(
-              '1',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _.abrirMenu,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
-    ),
-          menuScreen: Scaffold(
-            backgroundColor: Color(0xFF444A59),
-            body: Text('Sidebar'),
           ),
-          borderRadius: 24.0,
-          showShadow: true,
-          angle: -8.0,
-          openCurve: Curves.fastOutSlowIn,
-          closeCurve: Curves.bounceIn,
-          menuBackgroundColor: Color(0xFF444A59),
-          slideWidth: MediaQuery.of(context).size.width*.80,
-        ),
+          MenuFooterContainer(
+            widgets: <Widget>[
+              SolidButton(
+                texto: 'Cerrar sesión',
+                icono: MaterialIcons.logout,
+                fondoColor: ColorList.sys[2],
+                textoColor: ColorList.sys[0],
+                onPressed: _.cerrarSesion,
+                onLongPress: () {},
+              ),
+              const MenuVersionContainer(),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

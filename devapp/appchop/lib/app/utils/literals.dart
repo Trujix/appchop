@@ -5,7 +5,8 @@ class Literals {
   static const String storageName = "appchopStorage";
   static const String storageBoxName = "appchop";
 
-  static const String uri = "http://192.168.1.85:81/appchop/devweb/api/";
+  //static const String uri = "http://192.168.1.85:81/appchop/devweb/";
+  static const String uri = "https://appchop.com/";
   static const String contentType = "ContentType";
   static const String applicationJson = "application/json";
   static const String autorization = "Authorization";

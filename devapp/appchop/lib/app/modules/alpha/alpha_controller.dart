@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../data/models/local_storage/local_storage.dart';
 import '../../utils/get_injection.dart';
@@ -10,7 +11,7 @@ import '../login/login_page.dart';
 class AlphaController extends GetInjection {
 
   @override
-  void onInit() async {
+  Future<void> onInit() async {
     await _init();
     super.onInit();
   }
@@ -31,6 +32,16 @@ class AlphaController extends GetInjection {
       );
     } catch(e) {
       return;
+    } finally {
+      _verificarPermisos();
     }
+  }
+
+  void _verificarPermisos() async {
+    await Permission.notification.isDenied.then((denegado) {
+      if (denegado) {
+        Permission.notification.request();
+      }
+    });
   }
 }

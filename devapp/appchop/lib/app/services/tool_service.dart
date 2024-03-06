@@ -1,8 +1,85 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 
+import '../widgets/dialogs/alerta_dialog.dart';
+import '../widgets/dialogs/loading_dialog.dart';
+
 class ToolService extends GetxController {
+  bool _loadingOpen = false;
+
+  void isBusy([bool open = true]) {
+    try {
+      var thisContext = Get.context;
+      if(!open && _loadingOpen) {
+        try {
+          Navigator.pop(thisContext!);
+        } finally { }
+      }
+      _loadingOpen = open;
+      if(open) {
+        showDialog(
+          context: thisContext!,
+          builder: (BuildContext context) {
+            context = context;
+            return const LoadingDialog();
+          },
+        );
+      }
+    } finally { }
+  }
+
+  void msg(String mensaje, int tipo) {
+    try {
+      var thisContext = Get.context;
+      if(_loadingOpen) {
+        isBusy(false);
+      }
+      List<IconData> iconos = [
+        MaterialIcons.help,
+        MaterialIcons.check_circle,
+        MaterialIcons.warning,
+        MaterialIcons.error,
+      ];
+      List<int> colores = [
+        0xFF2E86C1,
+        0xFF239B56,
+        0xFFEB984E,
+        0xFFE74C3C,
+      ];
+      showDialog(
+        context: thisContext!,
+        builder: (BuildContext context) {
+          context = context;
+          return AlertaDialog(
+            mensaje: mensaje,
+            icono: iconos[tipo < 4 ? tipo : 0],
+            color: colores[tipo < 4 ? tipo : 0],
+          );
+        },
+      );
+    } finally { }
+  }
+
+  void toast([String msg = ""]) {
+    Fluttertoast.showToast(
+      msg: msg,
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.CENTER,
+      timeInSecForIosWeb: 1,
+      textColor: Colors.white,
+      fontSize: 16.0,
+      webShowClose: true,
+    );
+  }
+
+  bool isNullOrEmpty(TextEditingController? input) {
+    return input?.text == "" || input == null;
+  }
+
   String guid() {
     const uuid = Uuid();
     var newGuid = uuid.v4();

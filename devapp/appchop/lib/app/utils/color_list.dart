@@ -1,21 +1,34 @@
 import 'package:flutter/animation.dart';
 
 class ColorList {
-  var probador = const Color(0xFF5B6E97);
+  var probador = const Color(0xFFE0E3E7);
+
+  static List<int> sys = [
+    0xFF0B4251,
+    0xFF87BBD7,
+    0xFFF2C864,
+    0xFFE0E3E7,
+  ];
 
   static List<int> main = [
-    0xFF197192,
+    0xFF0B4251,
   ];
   
   static List<int> alpha = [
-    0xFF5B6E97,
+    0xFF0B4251,
   ];
 
   static List<int> home = [
     
   ];
 
+  static List<int> login = [
+    0xFF0B4251,
+    0xFF87BBD7,
+    0xFFF2C864,
+  ];
+
   static List<int> textforms = [
-    0xFF3A6F85,
+    0xFF0B4251,
   ];
 }
