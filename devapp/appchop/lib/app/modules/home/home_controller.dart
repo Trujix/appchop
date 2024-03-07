@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:get/get.dart';
 
+import '../../data/models/local_storage/categorias.dart';
 import '../../data/models/local_storage/local_storage.dart';
 import '../../routes/app_routes.dart';
 import '../../utils/get_injection.dart';
@@ -19,12 +22,12 @@ class HomeController extends GetInjection {
   String idUsuario = "";
   
   @override
-  void onInit() {
-    _init();
+  Future<void> onInit() async {
+    await _init();
     super.onInit();
   }
 
-  void _init() {
+  Future<void> _init() async {
     Get.put<CobranzaMainController>(CobranzaMainController());
     var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
     nombre = "${localStorage.nombres} ${localStorage.apellidos}";
@@ -46,7 +49,20 @@ class HomeController extends GetInjection {
         onTap: () => _abrirOpcion(3),
       ),
     ];
+    var categoriaStorage = List<Categorias>.from(
+      storage.get([Categorias()]).map((json) => Categorias.fromJson(json))
+    );
+    if(categoriaStorage.isEmpty) {
+      categoriaStorage.add(Categorias(
+        idUsuario: localStorage.idUsuario,
+        idCategoria: tool.guid(),
+        valueCategoria: "SIN_CATEGORIA",
+        labelCategoria: "Sin categoria",
+      ));
+      await storage.update(categoriaStorage);
+    }
     update();
+    return;
   }
 
   void abrirMenu() {

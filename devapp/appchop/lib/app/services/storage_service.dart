@@ -15,7 +15,6 @@ class StorageService {
     try {
       await _openBox();
       var localStorage = LocalStorage.fromJson(get(LocalStorage()));
-      print("---------------------");
       print(jsonEncode(localStorage));
       var version = localStorage.version! != LocalStorage().version!;
       if(!localStorage.creado! || version) {
@@ -31,16 +30,10 @@ class StorageService {
   dynamic get(dynamic elem) {
     try {
       var jsonData = jsonDecode(jsonEncode(elem));
-      var isArray = _tool.isArray(jsonData);
-      var tabla = isArray ? jsonData[0]['tabla'] : jsonData['tabla'];
+      var tabla = _tool.isArray(jsonData) ? jsonData[0]['tabla'] : jsonData['tabla'];
       var storage = _storage!.get(tabla);
       if(storage != null) {
         return jsonDecode(storage);
-      }
-      if(isArray) {
-        jsonData[0]['creado'] = false;
-      } else {
-        jsonData['creado'] = false;
       }
       return jsonData;
     } catch(e) {
@@ -83,6 +76,15 @@ class StorageService {
     }
   }
 
+  bool verify(dynamic elem) {
+    try {
+      var jsonData = jsonDecode(jsonEncode(elem));
+      var tabla = jsonData['tabla'];
+      var storage = _storage!.get(tabla);
+      return storage != null;
+    } finally { }
+  }
+
   LocalStorage? _nuevoLocalStorage({
     LocalStorage? actual,
   }) {
@@ -90,6 +92,9 @@ class StorageService {
       var nuevoStorage = LocalStorage();
       if(actual!.idDispositivo == "") {
         actual.idDispositivo = _tool.cadenaAleatoria(25);
+      }
+      if(!actual.creado!) {
+        actual.creado = true;
       }
       Map<String, dynamic> nuevoStorageTemp = jsonDecode(jsonEncode(nuevoStorage));
       Map<String, dynamic> actualStorageTemp = jsonDecode(jsonEncode(actual));

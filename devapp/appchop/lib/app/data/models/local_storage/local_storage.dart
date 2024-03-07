@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 class LocalStorage {
-  static const int _localStorageVersion = 4;
+  static const int _localStorageVersion = 1;
 
   String? tabla = "local_storage";
   int? version = _localStorageVersion;
@@ -15,7 +15,7 @@ class LocalStorage {
   bool? activo;
   String? idFirebase;
   String? idDispositivo;
-  bool? creado;
+  bool? creado = false;
 
   LocalStorage({
     this.version = _localStorageVersion,
@@ -29,7 +29,7 @@ class LocalStorage {
     this.activo = true,
     this.idFirebase = "",
     this.idDispositivo = "",
-    this.creado = true,
+    this.creado = false,
   });
 
   Map toJson() => {

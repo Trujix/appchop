@@ -1,22 +1,14 @@
-import 'dart:convert';
-
 import 'package:get/get.dart';
 
 import '../../../services/storage_service.dart';
-import '../../../services/tool_service.dart';
-import 'local_storage.dart';
 
 class Categorias {
-  final StorageService _storage = Get.find<StorageService>();
-  final ToolService _tool = Get.find<ToolService>();
-  
   String? tabla = "categorias";
   String? idUsuario;
   String? idCategoria;
   String? valueCategoria;
   String? labelCategoria;
   String? fechaCreacion;
-  bool? creado;
 
   Categorias({
     this.idUsuario = "",
@@ -24,22 +16,22 @@ class Categorias {
     this.valueCategoria = "",
     this.labelCategoria = "",
     this.fechaCreacion = "",
-    this.creado = true,
   });
 
   static void init() {
     try {
-      var localStorage = LocalStorage.fromJson(Categorias()._storage.get(LocalStorage()));
-      var categoriaStorage = List<Categorias>.from(
-        Categorias()._storage.get([Categorias()]).map((json) => Categorias.fromJson(json))
-      );
-      print(jsonEncode(categoriaStorage));
-      if(!categoriaStorage[0].creado!) {
-        var categoriaDefault = Categorias(
-          
-        );
-        Categorias()._storage.put([]);
+      var storage = Get.find<StorageService>();
+      var verify = storage.verify(Categorias());
+      if(!verify) {
+        storage.put([Categorias()]);
       }
+      /*var storage = Get.find<StorageService>();
+      var categoriaStorage = List<Categorias>.from(
+        storage.get([Categorias()]).map((json) => Categorias.fromJson(json))
+      );
+      if(verify) {
+        storage.put([Categorias()]);
+      }*/
     } catch(e) {
       return;
     }
@@ -52,15 +44,13 @@ class Categorias {
     'valueCategoria'  : valueCategoria,
     'labelCategoria'  : labelCategoria,
     'fechaCreacion'   : fechaCreacion,
-    'creado'          : creado,
   };
 
   factory Categorias.fromJson(Map<String, dynamic> json) => Categorias(
-    idUsuario: json['nombres'] ?? "",
-    idCategoria: json['apellidos'] ?? "",
-    valueCategoria: json['password'] ?? "",
-    labelCategoria: json['email'] ?? "",
-    fechaCreacion: json['token'] ?? "",
-    creado: json['creado'] ?? false,
+    idUsuario: json['idUsuario'] ?? "",
+    idCategoria: json['idCategoria'] ?? "",
+    valueCategoria: json['valueCategoria'] ?? "",
+    labelCategoria: json['labelCategoria'] ?? "",
+    fechaCreacion: json['fechaCreacion'] ?? "",
   );
 }
