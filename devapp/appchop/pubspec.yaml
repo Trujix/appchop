@@ -23,6 +23,7 @@ dependencies:
   flutter_spinkit: ^5.2.0
   cached_network_image: ^3.3.1
   custom_radio_grouped_button: ^2.2.1
+  adaptive_action_sheet: ^2.0.3
   uuid: ^4.3.3
   auto_size_text: ^3.0.0
   fluttercontactpicker: ^4.7.0

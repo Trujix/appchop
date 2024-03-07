@@ -1,4 +1,3 @@
-import 'package:custom_radio_grouped_button/custom_radio_grouped_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
@@ -6,8 +5,10 @@ import 'package:get/get.dart';
 import '../../utils/color_list.dart';
 import '../../widgets/appbars/back_appbar.dart';
 import '../../widgets/buttons/solid_button.dart';
+import '../../widgets/combo/selection_combo.dart';
 import '../../widgets/containers/card_container.dart';
 import '../../widgets/containers/titulo_container.dart';
+import '../../widgets/radiobuttons/group_radiobutton.dart';
 import '../../widgets/textforms/date_textform.dart';
 import '../../widgets/textforms/standard_textform.dart';
 import 'alta_cobranza_controller.dart';
@@ -35,30 +36,10 @@ class AltaCobranzaPage extends StatelessWidget with WidgetsBindingObserver {
             CardContainer(
               fondo: 0xFFFDFEFE,
               children: [
-                Container(
-                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                  child: CustomRadioButton(
-                    unSelectedBorderColor: Colors.transparent,
-                    selectedBorderColor: Colors.transparent,
-                    elevation: 0,
-                    radius: 0,
-                    shapeRadius: 0,
-                    width: (MediaQuery.of(context).size.width / 2) - 50,
-                    absoluteZeroSpacing: true,
-                    unSelectedColor: Theme.of(context).canvasColor,
-                    buttonLables: _.labelsTipoCobranza,
-                    buttonValues: _.valuesTipoCobranza,
-                    defaultSelected: _.valuesTipoCobranza[0],
-                    buttonTextStyle: const ButtonTextStyle(
-                      selectedColor: Colors.white,
-                      unSelectedColor: Colors.black,
-                      textStyle: TextStyle(fontSize: 16),
-                    ),
-                    radioButtonValue: (value) {
-                      _.tipoCobranza = value;
-                    },
-                    selectedColor: Color(ColorList.sys[1]),
-                  ),
+                GroupRadiobutton(
+                  buttonLables: _.labelsTipoCobranza,
+                  buttonValues: _.valuesTipoCobranza,
+                  radioButtonValue: _.cobranzaSelected,
                 ),
                 Row(
                   children: <Widget>[
@@ -87,6 +68,12 @@ class AltaCobranzaPage extends StatelessWidget with WidgetsBindingObserver {
                   text: "Cantidad",
                   icon: MaterialIcons.attach_money,
                   keyboardType: TextInputType.number,
+                ),
+                ComboStandarTextform(
+                  titulo: "Elige categoría",
+                  controller: _.categoria,
+                  values: _.listaCategoria,
+                  icono: MaterialIcons.list_alt,
                 ),
               ],
             ),
@@ -141,13 +128,8 @@ class AltaCobranzaPage extends StatelessWidget with WidgetsBindingObserver {
               icono: MaterialIcons.save,
               fondoColor: ColorList.sys[2],
               textoColor: ColorList.sys[0],
-              ltrbm: [
-                0,
-                0,
-                0,
-                15,
-              ],
-              onPressed: () {},
+              ltrbm: const [0, 0, 0, 15,],
+              onPressed: _.guardarNuevaCobranza,
               onLongPress: () {},
             ),
           ],

@@ -1,3 +1,4 @@
+import 'package:adaptive_action_sheet/adaptive_action_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttercontactpicker/fluttercontactpicker.dart';
 import 'package:get/get.dart';
@@ -6,21 +7,22 @@ import 'package:permission_handler/permission_handler.dart';
 
 import '../../utils/get_injection.dart';
 
-class AltaCobranzaController extends GetInjection {
-  String tipoCobranza = "";
-  List<String> valuesTipoCobranza = ["ME_DEBEN", "DEBO",];
-  List<String> labelsTipoCobranza = ['Me deben', 'Debo',];
-  
+class AltaCobranzaController extends GetInjection { 
   TextEditingController nombre = TextEditingController();
   FocusNode nombreFocus = FocusNode();
-
   TextEditingController telefono = TextEditingController();
   FocusNode telefonoFocus = FocusNode();
-
+  TextEditingController categoria = TextEditingController();
   TextEditingController fechaRegistro = TextEditingController();
   FocusNode fechaRegistroFocus = FocusNode();
   TextEditingController fechaVencimiento = TextEditingController();
   FocusNode fechaVencimientoFocus = FocusNode();
+
+  List<BottomSheetAction> listaCategoria = [];
+
+  String tipoCobranza = "";
+  List<String> valuesTipoCobranza = ["ME_DEBEN", "DEBO",];
+  List<String> labelsTipoCobranza = ['Me deben', 'Debo',];
 
   @override
   void onInit() {
@@ -50,6 +52,14 @@ class AltaCobranzaController extends GetInjection {
         }
       }
     });
+  }
+
+  Future<void> guardarNuevaCobranza() async {
+
+  }
+
+  void cobranzaSelected(String tipo) {
+    tipoCobranza = tipo;
   }
 
   void dateSelected() {

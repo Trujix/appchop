@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -78,6 +79,30 @@ class ToolService extends GetxController {
 
   bool isNullOrEmpty(TextEditingController? input) {
     return input?.text == "" || input == null;
+  }
+
+  String cadenaAleatoria(int length, [String tipo = 'LNX']) {
+    var randomGenerator = Random();
+    var caracteresRandom = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+    if(tipo == 'LNM') {
+      caracteresRandom = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+    } else if(tipo == 'LNm') {
+      caracteresRandom = 'abcdefghijklmnopqrstuvwxyz1234567890';
+    } else if(tipo == 'Lm') {
+      caracteresRandom = 'abcdefghijklmnopqrstuvwxyz';
+    } else if(tipo == 'LM') {
+      caracteresRandom = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    } else if(tipo == 'N') {
+      caracteresRandom = '1234567890';
+    }
+    return String.fromCharCodes(
+      Iterable.generate(
+        length,
+        (_) => caracteresRandom.codeUnitAt(
+          randomGenerator.nextInt(caracteresRandom.length)
+        )
+      )
+    );
   }
 
   String guid() {

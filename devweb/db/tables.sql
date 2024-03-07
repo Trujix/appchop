@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS usuarios(
     apellidos VARCHAR(150) NOT NULL DEFAULT '-' COMMENT 'Apellido(s) del usuario',
     perfil VARCHAR(150) NOT NULL DEFAULT '-' COMMENT 'Perfil de usuario',
     id_firebase VARCHAR(350) NOT NULL DEFAULT '-' COMMENT 'Id del sistema de Notificaciones Firebase',
+    sesion VARCHAR(30) NOT NULL DEFAULT 'NONE' COMMENT 'Indica si hay una sesion activa',
     fh_registro DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Fecha y hora del registro'
 );
 
@@ -39,11 +40,11 @@ INSERT INTO usuarios (
     apellidos,
     perfil
 ) VALUES (
-    'abc-ABC-1234',
+    'b0339cf5-e46e-4179-9ea9-3772e4aaf26b',
     'manuel@mail.com',
     MD5('12345'),
     'ACTIVO',
-    2,
+    1,
     'Manuel',
     'Trujillo',
     'ADMINISTRADOR'

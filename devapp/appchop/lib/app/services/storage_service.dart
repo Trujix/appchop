@@ -15,11 +15,12 @@ class StorageService {
     try {
       await _openBox();
       var localStorage = LocalStorage.fromJson(get(LocalStorage()));
+      print("---------------------");
       print(jsonEncode(localStorage));
       var version = localStorage.version! != LocalStorage().version!;
-      if(!localStorage.init! || version) {
+      if(!localStorage.creado! || version) {
         var nuevoStorage = _nuevoLocalStorage(actual: localStorage);
-        _storage!.put(nuevoStorage!.tabla, jsonEncode(nuevoStorage));
+        await _storage!.put(nuevoStorage!.tabla, jsonEncode(nuevoStorage));
       }
       return;
     } catch(e) {
@@ -30,14 +31,32 @@ class StorageService {
   dynamic get(dynamic elem) {
     try {
       var jsonData = jsonDecode(jsonEncode(elem));
-      var tabla = _tool.isArray(jsonData) ? jsonData[0]['tabla'] : jsonData['tabla'];
+      var isArray = _tool.isArray(jsonData);
+      var tabla = isArray ? jsonData[0]['tabla'] : jsonData['tabla'];
       var storage = _storage!.get(tabla);
-      if(storage == null) {
-        return jsonData;
+      if(storage != null) {
+        return jsonDecode(storage);
       }
-      return jsonDecode(storage);
+      if(isArray) {
+        jsonData[0]['creado'] = false;
+      } else {
+        jsonData['creado'] = false;
+      }
+      return jsonData;
     } catch(e) {
       return null;
+    }
+  }
+
+  Future<bool> put(dynamic elem) async {
+    try {
+      var jsonData = jsonDecode(jsonEncode(elem));
+      var isArray = _tool.isArray(jsonData);
+      var tabla = isArray ? jsonData[0]['tabla'] : jsonData['tabla'];
+      await _storage!.put(tabla, jsonEncode(isArray ? [] : elem));
+      return true;
+    } catch(e) {
+      return false;
     }
   }
 
@@ -65,26 +84,22 @@ class StorageService {
   }
 
   LocalStorage? _nuevoLocalStorage({
-    bool nuevo = true,
     LocalStorage? actual,
   }) {
     try {
       var nuevoStorage = LocalStorage();
-      nuevoStorage.init = true;
-      var version = actual != null ? actual.version == nuevoStorage.version! : true;
-      if(nuevo && version) {
-        return nuevoStorage;
-      } else {
-        Map<String, dynamic> nuevoStorageTemp = jsonDecode(jsonEncode(nuevoStorage));
-        Map<String, dynamic> actualStorageTemp = jsonDecode(jsonEncode(actual));
-        actualStorageTemp.forEach((key, value) {
-          if(nuevoStorageTemp[key] != null) {
-            nuevoStorageTemp[key] = value;
-          }
-        });
-        var storageString = jsonEncode(nuevoStorageTemp);
-        return LocalStorage.fromString(storageString);
+      if(actual!.idDispositivo == "") {
+        actual!.idDispositivo = _tool.cadenaAleatoria(25);
       }
+      Map<String, dynamic> nuevoStorageTemp = jsonDecode(jsonEncode(nuevoStorage));
+      Map<String, dynamic> actualStorageTemp = jsonDecode(jsonEncode(actual));
+      actualStorageTemp.forEach((key, value) {
+        if(nuevoStorageTemp[key] != null) {
+          nuevoStorageTemp[key] = value;
+        }
+      });
+      var storageString = jsonEncode(nuevoStorageTemp);
+      return LocalStorage.fromString(storageString);
     } catch(e) {
       return null;
     }

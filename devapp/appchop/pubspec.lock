@@ -9,6 +9,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.21"
+  adaptive_action_sheet:
+    dependency: "direct main"
+    description:
+      name: adaptive_action_sheet
+      sha256: "35190411e7136a3c244d58accdf254ac7158eac38e57a62d85b0477a7988f1c5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.3"
   ansicolor:
     dependency: transitive
     description:
