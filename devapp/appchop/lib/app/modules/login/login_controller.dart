@@ -38,6 +38,7 @@ class LoginController extends GetInjection {
         usuario: usuario.text,
         password: password.text,
         firebase: localStorage.idFirebase,
+        sesion: localStorage.idDispositivo,
       );
       var result = await loginRepository.iniciarsesionAsync(loginForm);
       if(result == null) {
@@ -46,7 +47,8 @@ class LoginController extends GetInjection {
       }
       localStorage.activo = result.status == Literals.statusActivo;
       if(!localStorage.activo!) {
-        
+        tool.msg("Su cuenta de usuario se encuentra como INACTIVA, consulte con el administrador", 2);
+        return;
       }
       localStorage.login = true;
       localStorage.idUsuario = result.idSistema;

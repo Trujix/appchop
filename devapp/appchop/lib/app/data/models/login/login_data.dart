@@ -14,6 +14,7 @@ class LoginData {
   String? idFirebase;
   String? perfil;
   String? token;
+  String? sesion;
 
   LoginData({
     this.id = 0,
@@ -26,6 +27,7 @@ class LoginData {
     this.idFirebase = "",
     this.perfil = "",
     this.token = "",
+    this.sesion = "",
   });
 
   Map toJson() => {
@@ -39,6 +41,7 @@ class LoginData {
     'idFirebase'      : idFirebase,
     'perfil'          : perfil,
     'token'           : token,
+    'sesion'          : sesion,
   };
 
   LoginData.fromApi(Map<String, dynamic> json) {
@@ -52,5 +55,6 @@ class LoginData {
     idFirebase = json['id_firebase'].toString();
     perfil = json['perfil'].toString();
     token = json['token'].toString();
+    sesion = json['sesion'].toString();
   }
 }

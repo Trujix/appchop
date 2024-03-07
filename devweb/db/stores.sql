@@ -21,7 +21,7 @@ DROP PROCEDURE IF EXISTS STP_INICIAR_SESION;
 DELIMITER $$
 CREATE PROCEDURE STP_INICIAR_SESION(
     IN _USUARIO VARCHAR(150), IN _PASSWORD VARCHAR(150), 
-    IN _FIREBASE VARCHAR(350), IN _SESION VARCHAR(30)
+    IN _FIREBASE VARCHAR(350)
 )
 BEGIN
     DECLARE _ID INT DEFAULT 0;
@@ -33,8 +33,7 @@ BEGIN
             AND US1.password = MD5(_PASSWORD)
     );
     UPDATE appchop.usuarios SET 
-        id_firebase = _FIREBASE,
-        sesion = _SESION 
+        id_firebase = _FIREBASE
     WHERE id = _ID;
     SELECT
         US1.id,

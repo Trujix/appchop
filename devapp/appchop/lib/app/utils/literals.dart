@@ -11,9 +11,10 @@ class Literals {
   static const String applicationJson = "application/json";
   static const String autorization = "Authorization";
 
-  static const String noneStorage = "NONE";
-
   static const String statusActivo = "ACTIVO";
+  static const String statusIdDispositivo = "NONE";
+
+  static const String noneStorage = "NONE";
   
   /* drtlnf5qTI6hnz11eHzn7M:APA91bHn_VWEPRhAvYNdyOmaPe6Z_ioQwxQzBZ0_nK5IU7eCCs7AvluufgbL7zYVxtOsHn-H4iQGGs2gaK8syfWEhqczno3awZVE_Ec99d7vUi1SFfUZAUXEU-zrVEIYRSCrpQtLPMae */
 }

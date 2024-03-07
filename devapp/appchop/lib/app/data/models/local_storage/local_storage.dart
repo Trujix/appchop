@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 class LocalStorage {
-  static const int _localStorageVersion = 1;
+  static const int _localStorageVersion = 4;
 
   String? tabla = "local_storage";
   int? version = _localStorageVersion;

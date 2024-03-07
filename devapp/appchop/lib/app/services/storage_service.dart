@@ -89,7 +89,7 @@ class StorageService {
     try {
       var nuevoStorage = LocalStorage();
       if(actual!.idDispositivo == "") {
-        actual!.idDispositivo = _tool.cadenaAleatoria(25);
+        actual.idDispositivo = _tool.cadenaAleatoria(25);
       }
       Map<String, dynamic> nuevoStorageTemp = jsonDecode(jsonEncode(nuevoStorage));
       Map<String, dynamic> actualStorageTemp = jsonDecode(jsonEncode(actual));
