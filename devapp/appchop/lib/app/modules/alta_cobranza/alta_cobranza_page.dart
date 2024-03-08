@@ -41,6 +41,12 @@ class AltaCobranzaPage extends StatelessWidget with WidgetsBindingObserver {
                   buttonValues: _.valuesTipoCobranza,
                   radioButtonValue: _.cobranzaSelected,
                 ),
+                ComboStandarTextform(
+                  titulo: "- Elige categoría -",
+                  controller: _.categoria,
+                  values: _.listaCategoria,
+                  icono: MaterialIcons.list_alt,
+                ),
                 Row(
                   children: <Widget>[
                     Expanded(
@@ -66,14 +72,10 @@ class AltaCobranzaPage extends StatelessWidget with WidgetsBindingObserver {
                 ),
                 StandardTextform(
                   text: "Cantidad",
+                  controller: _.cantidad,
+                  focusNode: _.cantidadFocus,
                   icon: MaterialIcons.attach_money,
                   keyboardType: TextInputType.number,
-                ),
-                ComboStandarTextform(
-                  titulo: "Elige categoría",
-                  controller: _.categoria,
-                  values: _.listaCategoria,
-                  icono: MaterialIcons.list_alt,
                 ),
               ],
             ),
@@ -81,6 +83,8 @@ class AltaCobranzaPage extends StatelessWidget with WidgetsBindingObserver {
               fondo: 0xFFFDFEFE,
               children: [
                 StandardTextform(
+                  controller: _.descripcion,
+                  focusNode: _.descripcionFocus,
                   text: "Descripción",
                   icon: MaterialIcons.description,
                 ),
@@ -92,10 +96,14 @@ class AltaCobranzaPage extends StatelessWidget with WidgetsBindingObserver {
                   keyboardType: TextInputType.phone,
                 ),
                 StandardTextform(
+                  controller: _.direccion,
+                  focusNode: _.direccionFocus,
                   text: "Dirección",
                   icon: MaterialIcons.home,
                 ),
                 StandardTextform(
+                  controller: _.email,
+                  focusNode: _.emailFocus,
                   text: "Correo electrónico",
                   icon: MaterialIcons.email,
                   keyboardType: TextInputType.emailAddress,

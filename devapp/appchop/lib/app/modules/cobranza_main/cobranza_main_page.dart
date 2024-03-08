@@ -20,34 +20,71 @@ class CobranzaMainPage extends StatelessWidget with WidgetsBindingObserver {
           backgroundColor: Color(ColorList.sys[3]),
           title: GestureDetector(
             onTap: Get.find<HomeController>().abrirMenu,
-            child: const Icon(Icons.menu,),
+            child: Icon(
+              Icons.menu,
+              color: Color(ColorList.sys[0]),
+            ),
           ),
         ),
-        body: Column(
-          children: [
-
-          ],
+        body: Builder(
+          builder: (context) {
+            if(_.mostrarResultados) {
+              return Column(
+                children: [
+                  Expanded(
+                    child: ListView(
+                      children: _.lll,
+                    ),
+                  ),
+                ],
+              );
+            } else {
+              return Column(
+                children: [
+                  Expanded(
+                    child: Image.asset('assets/home/background.png'),
+                  ),
+                ],
+              );
+            }
+          },
         ),
-        bottomNavigationBar: NavigationBar(
-          height: 60,
-          elevation: 0,
-          selectedIndex: _.opcionDeudaSeleccion,
-          indicatorColor: Color(ColorList.sys[1]),
-          backgroundColor: Color(ColorList.sys[3]),
-          onDestinationSelected: _.opcionDeudaSeleccionar,
-          destinations: const <Widget>[
-            NavigationDestination(
-              icon: Icon(MaterialIcons.attach_money),
-              label: 'Me deben',
+        bottomNavigationBar: Row(
+          children: [
+            Expanded(
+              child: NavigationBar(
+                height: 60,
+                elevation: 0,
+                selectedIndex: _.opcionDeudaSeleccion,
+                indicatorColor: Color(ColorList.sys[1]),
+                backgroundColor: Color(ColorList.sys[3]),
+                onDestinationSelected: _.opcionDeudaSeleccionar,
+                destinations: <Widget>[
+                  NavigationDestination(
+                    icon: Icon(
+                      MaterialIcons.attach_money,
+                      color: Color(ColorList.sys[0]),
+                    ),
+                    label: 'Me deben',
+                  ),
+                  NavigationDestination(
+                    icon: Icon(
+                      MaterialIcons.money_off,
+                      color: Color(ColorList.sys[0]),
+                    ),
+                    label: 'Debo',
+                  ),
+                  NavigationDestination(
+                    icon: Icon(
+                      MaterialIcons.hourglass_empty,
+                      color: Color(ColorList.sys[0]),
+                    ),
+                    label: 'Vencidas',
+                  ),
+                ],
+              ),
             ),
-            NavigationDestination(
-              icon: Icon(MaterialIcons.money_off),
-              label: 'Debo',
-            ),
-            NavigationDestination(
-              icon: Icon(MaterialIcons.hourglass_empty),
-              label: 'Vencidas',
-            ),
+            const SizedBox(width: 50,),
           ],
         ),
         floatingActionButton: FloatingActionButton(
@@ -59,6 +96,7 @@ class CobranzaMainPage extends StatelessWidget with WidgetsBindingObserver {
             color: Color(ColorList.sys[0]).toMaterialColor(),
           ),
         ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.miniEndDocked,
       ),
     );
   }

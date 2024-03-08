@@ -15,7 +15,6 @@ class StorageService {
     try {
       await _openBox();
       var localStorage = LocalStorage.fromJson(get(LocalStorage()));
-      print(jsonEncode(localStorage));
       var version = localStorage.version! != LocalStorage().version!;
       if(!localStorage.creado! || version) {
         var nuevoStorage = _nuevoLocalStorage(actual: localStorage);

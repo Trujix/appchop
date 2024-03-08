@@ -13,6 +13,7 @@ class ComboStandarTextform extends StatelessWidget {
   final int maxLength;
   final bool mayuscula;
   final bool enabled;
+  final double height;
   const ComboStandarTextform({
     super.key,
     this.texts = '',
@@ -25,11 +26,13 @@ class ComboStandarTextform extends StatelessWidget {
     this.maxLength = 9999999,
     this.mayuscula = true,
     this.enabled = true,
+    this.height = 80,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: height,
       padding: EdgeInsets.only(
         left: ltrb[0],
         top: ltrb[1],

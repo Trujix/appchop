@@ -25,16 +25,7 @@ class Categorias {
       if(!verify) {
         storage.put([Categorias()]);
       }
-      /*var storage = Get.find<StorageService>();
-      var categoriaStorage = List<Categorias>.from(
-        storage.get([Categorias()]).map((json) => Categorias.fromJson(json))
-      );
-      if(verify) {
-        storage.put([Categorias()]);
-      }*/
-    } catch(e) {
-      return;
-    }
+    } finally { }
   }
 
   Map toJson() => {

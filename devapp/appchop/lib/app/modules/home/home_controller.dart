@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
@@ -49,18 +47,7 @@ class HomeController extends GetInjection {
         onTap: () => _abrirOpcion(3),
       ),
     ];
-    var categoriaStorage = List<Categorias>.from(
-      storage.get([Categorias()]).map((json) => Categorias.fromJson(json))
-    );
-    if(categoriaStorage.isEmpty) {
-      categoriaStorage.add(Categorias(
-        idUsuario: localStorage.idUsuario,
-        idCategoria: tool.guid(),
-        valueCategoria: "SIN_CATEGORIA",
-        labelCategoria: "Sin categoria",
-      ));
-      await storage.update(categoriaStorage);
-    }
+    await _configurarCategorias(localStorage);
     update();
     return;
   }
@@ -106,6 +93,24 @@ class HomeController extends GetInjection {
         transition: Transition.cupertino,
         duration: 1.seconds,
       );
+    } finally { }
+  }
+
+  Future<void> _configurarCategorias(LocalStorage localStorage) async {
+    try {
+      var categoriaStorage = List<Categorias>.from(
+        storage.get([Categorias()]).map((json) => Categorias.fromJson(json))
+      );
+      if(categoriaStorage.isEmpty) {
+        categoriaStorage.add(Categorias(
+          idUsuario: localStorage.idUsuario,
+          idCategoria: tool.guid(),
+          valueCategoria: "SIN_CATEGORIA",
+          labelCategoria: "Sin categoria",
+        ));
+        await storage.update(categoriaStorage);
+      }
+      return;
     } finally { }
   }
 }
