@@ -42,6 +42,7 @@ BEGIN
         US1.id_firebase,
         US1.perfil,
         US1.sesion,
+        US1.acepta,
         AU1.token
     FROM appchop.usuarios AS US1
         LEFT OUTER JOIN appchop.autorization AU1 ON AU1.id = US1.id_autorization
