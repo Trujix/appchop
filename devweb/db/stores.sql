@@ -20,8 +20,7 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS STP_INICIAR_SESION;
 DELIMITER $$
 CREATE PROCEDURE STP_INICIAR_SESION(
-    IN _USUARIO VARCHAR(150), IN _PASSWORD VARCHAR(150), 
-    IN _FIREBASE VARCHAR(350)
+    IN _USUARIO VARCHAR(150), IN _PASSWORD VARCHAR(150)
 )
 BEGIN
     DECLARE _ID INT DEFAULT 0;
@@ -50,5 +49,37 @@ BEGIN
     FROM appchop.usuarios AS US1
         LEFT OUTER JOIN appchop.autorization AU1 ON AU1.id = US1.id_autorization
     WHERE US1.id = _ID;
+END $$
+DELIMITER ;
+
+/* ------------------------------------------------------------------------------------*/
+
+DROP PROCEDURE IF EXISTS STP_ACTUALIZAR_SESION;
+DELIMITER $$
+CREATE PROCEDURE STP_ACTUALIZAR_SESION(
+    IN _IDSISTEMA VARCHAR(120),
+    IN _SESSION VARCHAR(30),
+    IN _FIREBASE VARCHAR(350)
+)
+BEGIN
+    UPDATE appchop.usuarios SET 
+        sesion = _SESSION, 
+        id_firebase = _FIREBASE 
+    WHERE id_sistema = _IDSISTEMA;
+END $$
+DELIMITER ;
+
+
+/* ------------------------------------------------------------------------------------*/
+
+DROP PROCEDURE IF EXISTS STP_ACEPTA_ACTUALIZAR;
+DELIMITER $$
+CREATE PROCEDURE STP_ACEPTA_ACTUALIZAR(
+    IN _IDSISTEMA VARCHAR(120), IN _ACEPTA BIT
+)
+BEGIN
+    UPDATE appchop.usuarios SET 
+        acepta = _ACEPTA
+    WHERE id_sistema = _IDSISTEMA;
 END $$
 DELIMITER ;

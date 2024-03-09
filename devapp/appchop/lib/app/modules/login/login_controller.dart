@@ -15,6 +15,7 @@ class LoginController extends GetInjection {
   FocusNode passwordFocus = FocusNode();
 
   bool ocultarPassword = true;
+  bool usuarioTextEnabled = true;
 
   @override
   void onInit() {
@@ -25,6 +26,8 @@ class LoginController extends GetInjection {
   void _init() {
     var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
     usuario.text = localStorage.email!;
+    usuarioTextEnabled = localStorage.email! == "";
+    update();
   }
 
   Future<void> iniciarSesion() async {

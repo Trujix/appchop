@@ -12,7 +12,19 @@ class AlphaPage extends StatelessWidget with WidgetsBindingObserver {
     return GetBuilder<AlphaController>(
       builder: (_) => Scaffold(
         backgroundColor: Color(ColorList.alpha[0]),
-        
+        body: Expanded(
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                child: Center(
+                  child: Image.asset(
+                    "assets/home/menu_logo.png",
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

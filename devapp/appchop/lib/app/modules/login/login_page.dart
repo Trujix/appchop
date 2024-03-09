@@ -27,10 +27,15 @@ class LoginPage extends StatelessWidget with WidgetsBindingObserver {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
+                  Image.asset(
+                    "assets/login/head_login.png",
+                    scale: 1.5,
+                  ),
                   StandardTextform(
                     controller: _.usuario,
                     focusNode: _.usuaroFocus,
                     text: "Usuario",
+                    enabled: _.usuarioTextEnabled,
                   ),
                   PasswordTextform(
                     controller: _.password,

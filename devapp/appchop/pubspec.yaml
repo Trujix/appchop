@@ -31,7 +31,7 @@ dependencies:
   material_color_gen: ^2.0.0
 
 #  flutter_launcher_icons: ^0.11.0
-  flutter_native_splash: ^2.2.15
+#  flutter_native_splash: ^2.2.15
   flutter_localizations:
     sdk: flutter
   intl: ^0.18.1
@@ -48,3 +48,4 @@ flutter:
   assets:
     - assets/home/menu_logo.png
     - assets/home/background.png
+    - assets/login/head_login.png

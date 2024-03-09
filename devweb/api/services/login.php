@@ -18,7 +18,7 @@
         }
 
         public static function actualizarSesion($params) {
-
+            
         }
     }
 ?>
