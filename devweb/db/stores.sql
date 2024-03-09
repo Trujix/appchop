@@ -31,9 +31,6 @@ BEGIN
         WHERE US1.usuario = _USUARIO 
             AND US1.password = MD5(_PASSWORD)
     );
-    UPDATE appchop.usuarios SET 
-        id_firebase = _FIREBASE
-    WHERE id = _ID;
     SELECT
         US1.id,
         US1.id_sistema,
