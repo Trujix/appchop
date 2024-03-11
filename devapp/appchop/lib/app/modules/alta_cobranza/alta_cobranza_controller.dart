@@ -6,15 +6,25 @@ import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../data/models/local_storage/categorias.dart';
+import '../../data/models/local_storage/cobranzas.dart';
+import '../../data/models/local_storage/local_storage.dart';
 import '../../utils/get_injection.dart';
+import '../../utils/literals.dart';
 import '../../widgets/texts/combo_texts.dart';
+import '../cobranza_main/cobranza_main_controller.dart';
 
 class AltaCobranzaController extends GetInjection {
   String tipoCobranza = "";
-  List<String> valuesTipoCobranza = ["ME_DEBEN", "DEBO",];
+  List<String> valuesTipoCobranza = [
+    Literals.tipoCobranzaMeDeben,
+    Literals.tipoCobranzaDebo,
+  ];
   List<String> labelsTipoCobranza = ['Me deben', 'Debo',];
 
   List<BottomSheetAction> listaCategoria = [];
+  String categoriaSelected = "";
+  bool nuevo = true;
+  Cobranzas cobranzaEditar = Cobranzas();
 
   TextEditingController nombre = TextEditingController();
   FocusNode nombreFocus = FocusNode();
@@ -42,15 +52,26 @@ class AltaCobranzaController extends GetInjection {
   }
 
   void _init() {
+    var arguments = Get.arguments;
+    nuevo = arguments['nuevo'] ?? true;
     fechaRegistro.text = DateFormat("dd-MM-yyyy").format(DateTime.now()).toString();
     var categorias = List<Categorias>.from(
       storage.get([Categorias()]).map((json) => Categorias.fromJson(json))
     );
-    listaCategoria = [];
+    listaCategoria = [BottomSheetAction(
+      title: const ComboText(
+        texto: Literals.defaultCategoriaSinTxt,
+      ),
+      onPressed: (context) {
+        categoria.text = Literals.defaultCategoriaSinTxt;
+        categoriaSelected = Literals.defaultCategoriaSin;
+        update();
+        Navigator.of(context).pop();
+      },
+    )];
+    categoria.text = Literals.defaultCategoriaSinTxt;
+    categoriaSelected = Literals.defaultCategoriaSin;
     for(var categoriaItem in categorias) {
-      if(categoria.text == "") {
-        categoria.text = categoriaItem.labelCategoria!;
-      }
       listaCategoria.add(
         BottomSheetAction(
           title: ComboText(
@@ -58,11 +79,17 @@ class AltaCobranzaController extends GetInjection {
           ),
           onPressed: (context) {
             categoria.text = categoriaItem.labelCategoria!;
+            categoriaSelected = categoriaItem.valueCategoria!;
             update();
             Navigator.of(context).pop();
           },
         ),
       );
+    }
+    tipoCobranza = arguments['tipoCobranza'] as String;
+    if(!nuevo) {
+      cobranzaEditar = arguments['cobranza'] as Cobranzas;
+      _editarCobranzaFill(categorias);
     }
   }
 
@@ -87,7 +114,48 @@ class AltaCobranzaController extends GetInjection {
   }
 
   Future<void> guardarNuevaCobranza() async {
-
+    try {
+      if(!_validarForm()) {
+        return;
+      }
+      tool.isBusy(true);
+      var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
+      var cobranzaStorage = List<Cobranzas>.from(
+        storage.get([Cobranzas()]).map((json) => Cobranzas.fromJson(json))
+      );
+      var vencimiento = fechaVencimiento.text;
+      var nuevaCobranza = Cobranzas(
+        idUsuario: localStorage.idUsuario,
+        tipoCobranza: tipoCobranza,
+        categoria: categoriaSelected,
+        nombre: nombre.text,
+        cantidad: tool.str2double(cantidad.text),
+        descripcion: descripcion.text,
+        telefono: telefono.text,
+        direccion: direccion.text,
+        correo: email.text,
+        fechaRegistro: fechaRegistro.text,
+        fechaVencimiento: vencimiento == "" ? Literals.sinVencimiento : vencimiento,
+      );
+      if(nuevo) {
+        nuevaCobranza.idCobranza = tool.guid();
+        cobranzaStorage.add(nuevaCobranza);
+      } else {
+        var index = cobranzaStorage.indexWhere((c) => c.idCobranza == cobranzaEditar.idCobranza!);
+        nuevaCobranza.idCobranza = cobranzaEditar.idCobranza!;
+        cobranzaStorage[index] = nuevaCobranza;
+      }
+      await storage.update(cobranzaStorage);
+      await Future.delayed(1.seconds);
+      tool.isBusy(false);
+      await Get.find<CobranzaMainController>().cargarListaCobranza();
+      Get.back();
+      tool.msg("Registro creado correctamente", 1);
+    } catch(e) {
+      tool.msg("Ocurrió un error al intentar crear nueva cobranza", 3);
+    } finally {
+      
+    }
   }
 
   void cobranzaSelected(String tipo) {
@@ -96,5 +164,45 @@ class AltaCobranzaController extends GetInjection {
 
   void dateSelected() {
     update();
+  }
+
+  void _editarCobranzaFill(List<Categorias> categorias) {
+    var vencimiento = cobranzaEditar.fechaVencimiento!;
+    tipoCobranza = cobranzaEditar.tipoCobranza!;
+    nombre.text = cobranzaEditar.nombre!;
+    cantidad.text = cobranzaEditar.cantidad!.toStringAsFixed(2);
+    descripcion.text = cobranzaEditar.descripcion!;
+    telefono.text = cobranzaEditar.telefono!;
+    direccion.text = cobranzaEditar.direccion!;
+    email.text = cobranzaEditar.correo!;
+    fechaRegistro.text = cobranzaEditar.fechaRegistro!;
+    fechaVencimiento.text = vencimiento == Literals.sinVencimiento ? "" : vencimiento;
+    tipoCobranza = cobranzaEditar.tipoCobranza!;
+    categoriaSelected = cobranzaEditar.tipoCobranza!;
+    for(var categoriaElem in categorias) {
+      if(categoriaElem.valueCategoria == cobranzaEditar.categoria) {
+        categoria.text = categoriaElem.labelCategoria!;
+        categoriaSelected = categoriaElem.valueCategoria!;
+      }
+    }
+    update();
+  }
+
+  bool _validarForm() {
+    var correcto = false;
+    var mensaje = "";
+    if(tool.isNullOrEmpty(nombre)) {
+      mensaje = "Escriba el nombre";
+    } else if(tool.isNullOrEmpty(cantidad)) {
+      mensaje = "Escriba la cantidad";
+    } else if(tool.str2double(cantidad.text) == 0) {
+      mensaje = "Cantidad incorrecta";
+    } else {
+      correcto = true;
+    }
+    if(!correcto) {
+      tool.toast(mensaje);
+    }
+    return correcto;
   }
 }

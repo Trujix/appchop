@@ -8,4 +8,8 @@ class LoginRepository {
   Future<LoginData?> iniciarsesionAsync(LoginForm form) async {
     return await Get.find<LoginProvider>().iniciarsesionAsync(form);
   }
+
+  Future<bool?> actualizarUsuarioAsync(LoginForm form) async {
+    return await Get.find<LoginProvider>().actualizarUsuarioAsync(form);
+  }
 }

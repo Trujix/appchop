@@ -3,10 +3,10 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:get/get.dart';
 
-import '../../data/models/local_storage/categorias.dart';
 import '../../data/models/local_storage/local_storage.dart';
 import '../../routes/app_routes.dart';
 import '../../utils/get_injection.dart';
+import '../../utils/literals.dart';
 import '../../widgets/inkwells/menu_opcion_inkwell.dart';
 import '../cobranza_main/cobranza_main_controller.dart';
 import '../login/login_binding.dart';
@@ -20,12 +20,12 @@ class HomeController extends GetInjection {
   String idUsuario = "";
   
   @override
-  Future<void> onInit() async {
-    await _init();
+  void onInit() {
+    _init();
     super.onInit();
   }
 
-  Future<void> _init() async {
+  void _init() {
     Get.put<CobranzaMainController>(CobranzaMainController());
     var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
     nombre = "${localStorage.nombres} ${localStorage.apellidos}";
@@ -47,9 +47,18 @@ class HomeController extends GetInjection {
         onTap: () => _abrirOpcion(3),
       ),
     ];
-    await _configurarCategorias(localStorage);
+    /*var categorias = List<Categorias>.from(
+      storage.get([Categorias()]).map((json) => Categorias.fromJson(json))
+    );
+    categorias.add(Categorias(
+      idUsuario: localStorage.idUsuario!,
+      idCategoria: tool.guid(),
+      valueCategoria: tool.guid(),
+      labelCategoria: "Prueba",
+      fechaCreacion: "10-03-2024",
+    ));
+    storage.update(categorias);*/
     update();
-    return;
   }
 
   void abrirMenu() {
@@ -59,9 +68,13 @@ class HomeController extends GetInjection {
   void _abrirOpcion(int menu) {
     drawerController.close!.call();
     var pagina = "";
+    dynamic arguments = {};
     switch(menu) {
       case 1:
         pagina = AppRoutes.altaCobranza;
+        arguments = {
+          "tipoCobranza": Literals.tipoCobranzaMeDeben
+        };
       break;
       case 2:
         pagina = "";
@@ -75,7 +88,10 @@ class HomeController extends GetInjection {
     if(pagina == "") {
       return;
     }
-    Get.toNamed(pagina);
+    Get.toNamed(
+      pagina,
+      arguments: arguments,
+    );
   }
 
   Future<void> cerrarSesion() async {
@@ -93,24 +109,6 @@ class HomeController extends GetInjection {
         transition: Transition.cupertino,
         duration: 1.seconds,
       );
-    } finally { }
-  }
-
-  Future<void> _configurarCategorias(LocalStorage localStorage) async {
-    try {
-      var categoriaStorage = List<Categorias>.from(
-        storage.get([Categorias()]).map((json) => Categorias.fromJson(json))
-      );
-      if(categoriaStorage.isEmpty) {
-        categoriaStorage.add(Categorias(
-          idUsuario: localStorage.idUsuario,
-          idCategoria: tool.guid(),
-          valueCategoria: "SIN_CATEGORIA",
-          labelCategoria: "Sin categoria",
-        ));
-        await storage.update(categoriaStorage);
-      }
-      return;
     } finally { }
   }
 }

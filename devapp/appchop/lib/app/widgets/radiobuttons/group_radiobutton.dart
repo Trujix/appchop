@@ -6,6 +6,7 @@ import '../../utils/color_list.dart';
 class GroupRadiobutton extends StatelessWidget {
   final List<String> buttonLables;
   final List<String> buttonValues;
+  final String defaultSelected;
   final void Function(String) radioButtonValue;
   final List<double> ltrbp;
   
@@ -13,6 +14,7 @@ class GroupRadiobutton extends StatelessWidget {
     super.key,
     this.buttonLables = const [""],
     this.buttonValues = const [""],
+    this.defaultSelected = "",
     required this.radioButtonValue,
     this.ltrbp = const [20, 10, 20, 10],
   });
@@ -37,7 +39,7 @@ class GroupRadiobutton extends StatelessWidget {
         unSelectedColor: Theme.of(context).canvasColor,
         buttonLables: buttonLables,
         buttonValues: buttonValues,
-        defaultSelected: buttonValues[0],
+        defaultSelected: defaultSelected,
         selectedColor: Color(ColorList.sys[1]),
         buttonTextStyle: const ButtonTextStyle(
           selectedColor: Colors.white,

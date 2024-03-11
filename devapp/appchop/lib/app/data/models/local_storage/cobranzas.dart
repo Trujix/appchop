@@ -6,6 +6,7 @@ class Cobranzas {
   String? tabla = "cobranzas";
   String? idUsuario;
   String? idCobranza;
+  String? tipoCobranza;
   String? categoria;
   String? nombre;
   double? cantidad;
@@ -20,6 +21,7 @@ class Cobranzas {
   Cobranzas({
     this.idUsuario = "",
     this.idCobranza = "",
+    this.tipoCobranza = "",
     this.categoria = "",
     this.nombre = "",
     this.cantidad = 0.0,
@@ -32,13 +34,14 @@ class Cobranzas {
     this.idCobrador = "",
   });
 
-  static void init() {
+  static Future<void> init() async {
     try {
       var storage = Get.find<StorageService>();
       var verify = storage.verify(Cobranzas());
       if(!verify) {
-        storage.put([Cobranzas()]);
+        var _ = await storage.put([Cobranzas()]);
       }
+      return;
     } finally { }
   }
 
@@ -46,6 +49,7 @@ class Cobranzas {
     'tabla'             : tabla,
     'idUsuario'         : idUsuario,
     'idCobranza'        : idCobranza,
+    'tipoCobranza'      : tipoCobranza,
     'categoria'         : categoria,
     'nombre'            : nombre,
     'cantidad'          : cantidad,
@@ -61,6 +65,7 @@ class Cobranzas {
   factory Cobranzas.fromJson(Map<String, dynamic> json) => Cobranzas(
     idUsuario: json['idUsuario'] ?? "",
     idCobranza: json['idCobranza'] ?? "",
+    tipoCobranza: json['tipoCobranza'] ?? "",
     categoria: json['categoria'] ?? "",
     nombre: json['nombre'] ?? "",
     cantidad: json['cantidad'] ?? 0.0,

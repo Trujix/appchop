@@ -48,6 +48,21 @@ class LoginController extends GetInjection {
         tool.msg('Usuario y/o contraseña incorrecto', 2);
         return;
       }
+      localStorage.token = result.token;
+      bool? actualizar = false;
+      if(result.sesion != Literals.statusIdDispositivo
+        && result.sesion != localStorage.idDispositivo) {
+          tool.msg('No se pudo iniciar sesión (dispositivo incorrecto)', 2);
+          return;
+      } else {
+        loginForm.idUsuario = result.idSistema;
+        await storage.update(localStorage);
+        actualizar = await loginRepository.actualizarUsuarioAsync(loginForm);
+      }
+      if(!actualizar!) {
+        tool.msg('No se pudo actualizar su información en el inicio de sesión', 2);
+        return;
+      }
       localStorage.activo = result.status == Literals.statusActivo;
       if(!localStorage.activo!) {
         tool.msg("Su cuenta de usuario se encuentra como INACTIVA, consulte con el administrador", 2);
@@ -59,7 +74,6 @@ class LoginController extends GetInjection {
       localStorage.password = password.text;
       localStorage.nombres = result.nombres;
       localStorage.apellidos = result.apellidos;
-      localStorage.token = result.token;
       await storage.update(localStorage);
       tool.isBusy(false);
       Get.offAll(

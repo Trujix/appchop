@@ -66,6 +66,7 @@ class ToolService extends GetxController {
   }
 
   void toast([String msg = ""]) {
+    Fluttertoast.cancel();
     Fluttertoast.showToast(
       msg: msg,
       toastLength: Toast.LENGTH_LONG,
@@ -160,6 +161,15 @@ class ToolService extends GetxController {
 
   int str2int(String cadena) {
     return int.tryParse(cadena) ?? 0;
+  }
+
+  DateTime str2date(String cadena) {
+    var dateArr = cadena.split("-");
+    return DateTime.utc(
+      int.parse(dateArr[2]),
+      int.parse(dateArr[1]),
+      int.parse(dateArr[0])
+    );
   }
 
   Future<void> wait([int segundos = 2]) async {

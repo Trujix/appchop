@@ -2,7 +2,7 @@ import 'package:adaptive_action_sheet/adaptive_action_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
-class ComboStandarTextform extends StatelessWidget {
+class SelectionCombo extends StatelessWidget {
   final String texts;
   final List<BottomSheetAction> values;
   final String titulo;
@@ -14,7 +14,8 @@ class ComboStandarTextform extends StatelessWidget {
   final bool mayuscula;
   final bool enabled;
   final double height;
-  const ComboStandarTextform({
+  final TextAlignVertical textAlignVertical;
+  const SelectionCombo({
     super.key,
     this.texts = '',
     this.values = const [],
@@ -27,6 +28,7 @@ class ComboStandarTextform extends StatelessWidget {
     this.mayuscula = true,
     this.enabled = true,
     this.height = 80,
+    this.textAlignVertical = TextAlignVertical.center,
   });
 
   @override
@@ -48,6 +50,7 @@ class ComboStandarTextform extends StatelessWidget {
         ),
         readOnly: true,
         controller: controller,
+        textAlignVertical: textAlignVertical,
         keyboardType: keyboard,
         maxLength: maxLength,
         decoration: InputDecoration(

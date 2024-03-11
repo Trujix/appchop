@@ -4,6 +4,10 @@ import 'package:get/get.dart';
 import 'package:material_color_gen/material_color_gen.dart';
 
 import '../../utils/color_list.dart';
+import '../../widgets/appbars/main_appbar.dart';
+import '../../widgets/combo/selection_combo.dart';
+import '../../widgets/customscrollviews/cobranza_customscrollview.dart';
+import '../../widgets/defaults/small_header.dart';
 import '../home/home_controller.dart';
 import 'cobranza_main_controller.dart';
 
@@ -16,38 +20,49 @@ class CobranzaMainPage extends StatelessWidget with WidgetsBindingObserver {
       builder: (_) => Scaffold(
         resizeToAvoidBottomInset: true,
         backgroundColor: Color(ColorList.sys[3]),
-        appBar: AppBar(
-          backgroundColor: Color(ColorList.sys[3]),
-          title: GestureDetector(
-            onTap: Get.find<HomeController>().abrirMenu,
-            child: Icon(
-              Icons.menu,
-              color: Color(ColorList.sys[0]),
-            ),
-          ),
+        appBar: MainAppbar(
+          controller: _.busqueda,
+          opciones: _.opcionesConsulta,
+          onTap: Get.find<HomeController>().abrirMenu,
+          onTapPopup: _.opcionPopupConsulta,
+          opcionPopup: _.opcionSelected,
+          onChanged: _.busquedaCobranzas,
         ),
-        body: Builder(
-          builder: (context) {
-            if(_.mostrarResultados) {
-              return Column(
-                children: [
-                  Expanded(
-                    child: ListView(
-                      children: _.lll,
+        body: Column(
+          children: [
+            SelectionCombo(
+              titulo: "- Elige categoría -",
+              controller: _.categoria,
+              values: _.listaCategoria,
+              icono: MaterialIcons.list_alt,
+              height: 35,
+              ltrb: const [10, 0, 10, 0,],
+              textAlignVertical: TextAlignVertical.bottom,
+            ),
+            Builder(
+              builder: (context) {
+                if(_.mostrarResultados) {
+                  return Expanded(
+                    child: NestedScrollView(
+                      headerSliverBuilder: (context, isScrolled) {
+                        return [const SmallHeader(height: 15,)];
+                      },
+                      body: CobranzaCustomscrollview(
+                        scrollController: _.scrollController,
+                        listaCobranzas: _.listaCobranzas,
+                        onTap: _.mensajeCobranzaElemento,
+                        onLongPress: _.editarCobranzaElemento,
+                      ),
                     ),
-                  ),
-                ],
-              );
-            } else {
-              return Column(
-                children: [
-                  Expanded(
+                  );
+                } else {
+                  return Expanded(
                     child: Image.asset('assets/home/background.png'),
-                  ),
-                ],
-              );
-            }
-          },
+                  );
+                }
+              },
+            ),
+          ],
         ),
         bottomNavigationBar: Row(
           children: [
@@ -56,7 +71,10 @@ class CobranzaMainPage extends StatelessWidget with WidgetsBindingObserver {
                 height: 60,
                 elevation: 0,
                 selectedIndex: _.opcionDeudaSeleccion,
-                indicatorColor: Color(ColorList.sys[1]),
+                indicatorColor: Color(ColorList.sys[
+                  _.opcionDeudaSeleccion == 0
+                   ? 1 : 2
+                ]),
                 backgroundColor: Color(ColorList.sys[3]),
                 onDestinationSelected: _.opcionDeudaSeleccionar,
                 destinations: <Widget>[

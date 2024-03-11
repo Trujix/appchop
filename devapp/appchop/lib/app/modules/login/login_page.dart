@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
+import 'package:shimmer_animation/shimmer_animation.dart';
 
 import '../../utils/color_list.dart';
 import '../../utils/literals.dart';
@@ -27,9 +28,13 @@ class LoginPage extends StatelessWidget with WidgetsBindingObserver {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Image.asset(
-                    "assets/login/head_login.png",
-                    scale: 1.5,
+                  Shimmer(
+                    color: Color(ColorList.sys[3]),
+                    colorOpacity: 0.8,
+                    child: Image.asset(
+                      "assets/login/head_login.png",
+                      scale: 1.5,
+                    ),
                   ),
                   StandardTextform(
                     controller: _.usuario,

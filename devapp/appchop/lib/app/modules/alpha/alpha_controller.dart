@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../data/models/local_storage/categorias.dart';
+import '../../data/models/local_storage/cobranzas.dart';
 import '../../data/models/local_storage/local_storage.dart';
 import '../../utils/get_injection.dart';
 import '../home/home_binding.dart';
@@ -25,12 +26,12 @@ class AlphaController extends GetInjection {
       await tool.wait();
       var page = localStorage.login! ? const HomePage() : const LoginPage();
       var binding = localStorage.login! ? HomeBinding() : LoginBinding();
-      _localStorageClassInit();
+      await _localStorageClassInit();
       Get.offAll(
         page,
         binding: binding,
         transition: Transition.circularReveal,
-        duration: 1.seconds,
+        duration: 1.5.seconds,
       );
     } catch(e) {
       return;
@@ -39,8 +40,10 @@ class AlphaController extends GetInjection {
     }
   }
 
-  void _localStorageClassInit() {
-    Categorias.init();
+  Future<void> _localStorageClassInit() async {
+    await Categorias.init();
+    await Cobranzas.init();
+    return;
   }
 
   void _verificarPermisos() async {

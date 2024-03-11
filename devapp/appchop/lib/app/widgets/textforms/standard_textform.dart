@@ -12,6 +12,7 @@ class StandardTextform extends StatelessWidget {
   final IconData icon;
   final bool upper;
   final bool enabled;
+  final void Function(String?)? onChanged;
 
   const StandardTextform({
     super.key,
@@ -24,6 +25,7 @@ class StandardTextform extends StatelessWidget {
     this.icon = Icons.keyboard,
     this.upper = false,
     this.enabled = true,
+    this.onChanged,
   });
 
   @override
@@ -63,6 +65,9 @@ class StandardTextform extends StatelessWidget {
               TextPosition(offset: controller!.text.length),
             );
           }
+          try {
+            onChanged!(value);
+          } finally { }
         },
       ),
     );

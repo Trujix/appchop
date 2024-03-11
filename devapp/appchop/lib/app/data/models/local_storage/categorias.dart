@@ -18,13 +18,14 @@ class Categorias {
     this.fechaCreacion = "",
   });
 
-  static void init() {
+  static Future<void> init() async {
     try {
       var storage = Get.find<StorageService>();
       var verify = storage.verify(Categorias());
       if(!verify) {
-        storage.put([Categorias()]);
+        var _ = await storage.put([Categorias()]);
       }
+      return;
     } finally { }
   }
 

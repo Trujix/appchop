@@ -29,9 +29,14 @@ class AltaCobranzaPage extends StatelessWidget with WidgetsBindingObserver {
         ),
         body: ListView(
           children: <Widget>[
+            TituloContainer(
+              texto: "${_.nuevo ? "Nuevo" : "Editar"} Cobranza",
+              ltrbp: const [20, 0, 0, 5],
+            ),
             const TituloContainer(
-              texto: 'Nueva Cobranza',
+              texto: '(*) - Los campos son olbigatorios',
               ltrbp: [20, 0, 0, 5],
+              size: 14,
             ),
             CardContainer(
               fondo: 0xFFFDFEFE,
@@ -39,9 +44,10 @@ class AltaCobranzaPage extends StatelessWidget with WidgetsBindingObserver {
                 GroupRadiobutton(
                   buttonLables: _.labelsTipoCobranza,
                   buttonValues: _.valuesTipoCobranza,
+                  defaultSelected: _.tipoCobranza,
                   radioButtonValue: _.cobranzaSelected,
                 ),
-                ComboStandarTextform(
+                SelectionCombo(
                   titulo: "- Elige categoría -",
                   controller: _.categoria,
                   values: _.listaCategoria,
@@ -53,7 +59,7 @@ class AltaCobranzaPage extends StatelessWidget with WidgetsBindingObserver {
                       child: StandardTextform(
                         controller: _.nombre,
                         focusNode: _.nombreFocus,
-                        text: "Nombre",
+                        text: "Nombre *",
                         icon: MaterialIcons.person,
                       ),
                     ),
@@ -71,11 +77,12 @@ class AltaCobranzaPage extends StatelessWidget with WidgetsBindingObserver {
                   ],
                 ),
                 StandardTextform(
-                  text: "Cantidad",
+                  text: "Cantidad *",
                   controller: _.cantidad,
                   focusNode: _.cantidadFocus,
                   icon: MaterialIcons.attach_money,
                   keyboardType: TextInputType.number,
+                  enabled: _.nuevo,
                 ),
               ],
             ),
@@ -85,8 +92,9 @@ class AltaCobranzaPage extends StatelessWidget with WidgetsBindingObserver {
                 StandardTextform(
                   controller: _.descripcion,
                   focusNode: _.descripcionFocus,
-                  text: "Descripción",
+                  text: "Descripción (80 caract.)",
                   icon: MaterialIcons.description,
+                  maxLength: 80,
                 ),
                 StandardTextform(
                   controller: _.telefono,
@@ -132,7 +140,7 @@ class AltaCobranzaPage extends StatelessWidget with WidgetsBindingObserver {
               ],
             ),
             SolidButton(
-              texto: 'Guardar registro',
+              texto: "Guardar ${_.nuevo ? "registro" : "cambios"}",
               icono: MaterialIcons.save,
               fondoColor: ColorList.sys[2],
               textoColor: ColorList.sys[0],
