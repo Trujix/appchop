@@ -47,17 +47,6 @@ class HomeController extends GetInjection {
         onTap: () => _abrirOpcion(3),
       ),
     ];
-    /*var categorias = List<Categorias>.from(
-      storage.get([Categorias()]).map((json) => Categorias.fromJson(json))
-    );
-    categorias.add(Categorias(
-      idUsuario: localStorage.idUsuario!,
-      idCategoria: tool.guid(),
-      valueCategoria: tool.guid(),
-      labelCategoria: "Prueba",
-      fechaCreacion: "10-03-2024",
-    ));
-    storage.update(categorias);*/
     update();
   }
 
@@ -77,7 +66,7 @@ class HomeController extends GetInjection {
         };
       break;
       case 2:
-        pagina = "";
+        pagina = AppRoutes.altaCategoria;
       break;
       case 3:
         pagina = "";

@@ -9,6 +9,7 @@ class Categorias {
   String? valueCategoria;
   String? labelCategoria;
   String? fechaCreacion;
+  bool? activo;
 
   Categorias({
     this.idUsuario = "",
@@ -16,6 +17,7 @@ class Categorias {
     this.valueCategoria = "",
     this.labelCategoria = "",
     this.fechaCreacion = "",
+    this.activo = true,
   });
 
   static Future<void> init() async {
@@ -36,6 +38,7 @@ class Categorias {
     'valueCategoria'  : valueCategoria,
     'labelCategoria'  : labelCategoria,
     'fechaCreacion'   : fechaCreacion,
+    'activo'          : activo,
   };
 
   factory Categorias.fromJson(Map<String, dynamic> json) => Categorias(
@@ -44,5 +47,6 @@ class Categorias {
     valueCategoria: json['valueCategoria'] ?? "",
     labelCategoria: json['labelCategoria'] ?? "",
     fechaCreacion: json['fechaCreacion'] ?? "",
+    activo: json['activo'] ?? false,
   );
 }

@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 
 import '../modules/alpha/alpha_binding.dart';
 import '../modules/alpha/alpha_page.dart';
+import '../modules/alta_categoria/alta_categoria_binding.dart';
+import '../modules/alta_categoria/alta_categoria_page.dart';
 import '../modules/alta_cobranza/alta_cobranza_binding.dart';
 import '../modules/alta_cobranza/alta_cobranza_page.dart';
 import '../modules/cobranza_main/cobranza_main_binding.dart';
@@ -10,6 +12,8 @@ import '../modules/home/home_binding.dart';
 import '../modules/home/home_page.dart';
 import '../modules/login/login_binding.dart';
 import '../modules/login/login_page.dart';
+import '../modules/pdf_viewer/pdf_viewer_binding.dart';
+import '../modules/pdf_viewer/pdf_viewer_page.dart';
 import 'app_routes.dart';
 
 class AppPages {
@@ -38,6 +42,16 @@ class AppPages {
       name: AppRoutes.altaCobranza,
       page: () => const AltaCobranzaPage(),
       binding: AltaCobranzaBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.altaCategoria,
+      page: () => const AltaCategoriaPage(),
+      binding: AltaCategoriaBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.pdfViewer,
+      page: () => const PdfViewerPage(),
+      binding: PdfViewerBinding(),
     ),
   ];
 }

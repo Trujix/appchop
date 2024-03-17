@@ -12,4 +12,8 @@ class LoginRepository {
   Future<bool?> actualizarUsuarioAsync(LoginForm form) async {
     return await Get.find<LoginProvider>().actualizarUsuarioAsync(form);
   }
+
+  Future<bool?> aceptarTerminosCondicionesAsync(LoginForm form) async {
+    return await Get.find<LoginProvider>().aceptarTerminosCondicionesAsync(form);
+  }
 }

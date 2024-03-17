@@ -32,4 +32,16 @@ class LoginProvider {
       return null;
     }
   }
+
+  Future<bool?> aceptarTerminosCondicionesAsync(LoginForm form) async {
+    try {
+      var result = await _api.post(
+        "api/login/acpetaTerminosCondiciones",
+        form,
+      );
+      return result == Literals.apiTrue;
+    } catch(e) {
+      return null;
+    }
+  }
 }

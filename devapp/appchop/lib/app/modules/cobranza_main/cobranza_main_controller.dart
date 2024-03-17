@@ -1,5 +1,4 @@
 import 'package:adaptive_action_sheet/adaptive_action_sheet.dart';
-import 'package:appchop/app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
@@ -8,14 +7,15 @@ import '../../data/models/cobranza_popup_opciones.dart';
 import '../../data/models/local_storage/categorias.dart';
 import '../../data/models/local_storage/cobranzas.dart';
 import '../../data/models/local_storage/local_storage.dart';
+import '../../routes/app_routes.dart';
 import '../../utils/get_injection.dart';
 import '../../utils/literals.dart';
 import '../../widgets/texts/combo_texts.dart';
+import '../pdf_viewer/pdf_viewer_binding.dart';
+import '../pdf_viewer/pdf_viewer_page.dart';
 
 class CobranzaMainController extends GetInjection {
   ScrollController scrollController = ScrollController();
-  List<BottomSheetAction> listaCategoria = [];
-  String categoriaSelected = "";
   TextEditingController categoria = TextEditingController();
   TextEditingController busqueda = TextEditingController();
   List<CobranzaPopupOpciones> opcionesConsulta = [];
@@ -41,21 +41,53 @@ class CobranzaMainController extends GetInjection {
   bool mostrarResultados = false;
   int opcionDeudaSeleccion = 0;
 
+  List<BottomSheetAction> listaCategoria = [];
+  String categoriaSelected = "";
+  List<String> categoriasOff = [];
+
   List<Cobranzas> listaCobranzas = [];
   List<Cobranzas> _listaCobranzaBusqueda = [];
 
   @override
-  void onInit() {
-    _init();
+  Future<void> onInit() async {
+    await _init();
     super.onInit();
+    return;
+  }
+
+  @override
+  Future<void> onReady() async {
+    await _ready();
+    super.onReady();
+    return;
   }
 
   Future<void> _init() async {
     var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
-    await _configurarCategorias(localStorage);
+    await configurarCategorias(localStorage);
     _cargarOpcionesPopup();
     await cargarListaCobranza();
     return;
+  }
+
+  Future<void> _ready() async {
+    var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
+    if(localStorage.acepta == 0) {
+      var archivo = await tool.downloadPdf(
+        "${Literals.uri}${Literals.terminosCondicionesFile}"
+      );
+      Get.to(
+        const PdfViewerPage(),
+        binding: PdfViewerBinding(),
+        arguments: {
+          "salir": false,
+          "archivo": archivo,
+          "descripcion": "Términos y condiciones",
+          "tipo": "TYC",
+        },
+        transition: Transition.downToUp,
+      );
+    }
   }
 
   void altaCobranza() {
@@ -118,6 +150,10 @@ class CobranzaMainController extends GetInjection {
         cobranzaStorage = cobranzaStorage.where(
           (c) => c.categoria == categoriaSelected
         ).toList();
+      } else {
+        cobranzaStorage = cobranzaStorage.where(
+          (c) => !categoriasOff.contains(c.categoria)
+        ).toList();
       }
       listaCobranzas = cobranzaStorage;
       _listaCobranzaBusqueda = cobranzaStorage;
@@ -129,13 +165,14 @@ class CobranzaMainController extends GetInjection {
     }
   }
 
-  Future<void> _configurarCategorias(LocalStorage localStorage) async {
+  Future<void> configurarCategorias(LocalStorage localStorage) async {
     try {
       var categoriaStorage = List<Categorias>.from(
         storage.get([Categorias()]).map((json) => Categorias.fromJson(json))
       );
       categoria.text = Literals.defaultCategoriaTodoTxt;
       categoriaSelected = Literals.defaultCategoriaTodo;
+      categoriasOff = [];
       listaCategoria = [
         BottomSheetAction(
           title: const ComboText(
@@ -163,6 +200,10 @@ class CobranzaMainController extends GetInjection {
         ),
       ];
       for(var categoriaItem in categoriaStorage) {
+        if(!categoriaItem.activo!) {
+          categoriasOff.add(categoriaItem.valueCategoria!);
+          continue;
+        }
         listaCategoria.add(
           BottomSheetAction(
             title: ComboText(
@@ -179,7 +220,9 @@ class CobranzaMainController extends GetInjection {
         );
       }
       return;
-    } finally { }
+    } finally {
+      update();
+    }
   }
 
   void mensajeCobranzaElemento() {

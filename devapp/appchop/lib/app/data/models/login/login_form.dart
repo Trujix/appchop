@@ -4,6 +4,7 @@ class LoginForm {
   String? idUsuario;
   String? firebase;
   String? sesion;
+  int? acepta;
 
   LoginForm({
     this.usuario = "",
@@ -11,6 +12,7 @@ class LoginForm {
     this.idUsuario = "",
     this.firebase = "",
     this.sesion = "",
+    this.acepta = 0,
   });
 
   Map toJson() => {
@@ -19,5 +21,6 @@ class LoginForm {
     'idUsuario' : idUsuario,
     'firebase'  : firebase,
     'sesion'    : sesion,
+    'acepta'    : acepta,
   };
 }

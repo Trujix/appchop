@@ -72,6 +72,9 @@ class AltaCobranzaController extends GetInjection {
     categoria.text = Literals.defaultCategoriaSinTxt;
     categoriaSelected = Literals.defaultCategoriaSin;
     for(var categoriaItem in categorias) {
+      if(!categoriaItem.activo!) {
+        continue;
+      }
       listaCategoria.add(
         BottomSheetAction(
           title: ComboText(

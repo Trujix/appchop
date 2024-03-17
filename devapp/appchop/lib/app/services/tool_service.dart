@@ -1,10 +1,13 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
+import 'package:http/http.dart' as http;
 
 import '../widgets/dialogs/alerta_dialog.dart';
 import '../widgets/dialogs/loading_dialog.dart';
@@ -175,5 +178,19 @@ class ToolService extends GetxController {
   Future<void> wait([int segundos = 2]) async {
     await Future.delayed(Duration(seconds: segundos));
     return;
+  }
+
+  Future<String?> downloadPdf(String fileUri) async {
+    try {
+      var descarga = await http.get(Uri.parse(fileUri));
+      var archivoBytes = descarga.bodyBytes;
+      var directorio = await getApplicationDocumentsDirectory();
+      var rutaArchivo = "${directorio.path}/downloadpdf.pdf";
+      var pdf = File(rutaArchivo);
+      await pdf.writeAsBytes(archivoBytes, flush: true);
+      return rutaArchivo;
+    } catch(e) {
+      return null;
+    }
   }
 }

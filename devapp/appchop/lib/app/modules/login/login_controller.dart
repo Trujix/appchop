@@ -74,6 +74,7 @@ class LoginController extends GetInjection {
       localStorage.password = password.text;
       localStorage.nombres = result.nombres;
       localStorage.apellidos = result.apellidos;
+      localStorage.acepta = result.acepta;
       await storage.update(localStorage);
       tool.isBusy(false);
       Get.offAll(

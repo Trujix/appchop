@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 class LocalStorage {
-  static const int _localStorageVersion = 1;
+  static const int _localStorageVersion = 2;
 
   String? tabla = "local_storage";
   int? version = _localStorageVersion;
@@ -15,6 +15,7 @@ class LocalStorage {
   bool? activo;
   String? idFirebase;
   String? idDispositivo;
+  int? acepta;
   bool? creado = false;
 
   LocalStorage({
@@ -29,6 +30,7 @@ class LocalStorage {
     this.activo = true,
     this.idFirebase = "",
     this.idDispositivo = "",
+    this.acepta = 0,
     this.creado = false,
   });
 
@@ -45,6 +47,7 @@ class LocalStorage {
     'activo'            : activo,
     'idFirebase'        : idFirebase,
     'idDispositivo'     : idDispositivo,
+    'acepta'            : acepta,
     'creado'            : creado,
   };
   
@@ -62,6 +65,7 @@ class LocalStorage {
       'activo'            : activo,
       'idFirebase'        : idFirebase,
       'idDispositivo'     : idDispositivo,
+      'acepta'            : acepta,
       'creado'            : creado,
     };
   }
@@ -78,6 +82,7 @@ class LocalStorage {
     activo = json['activo'] ?? true;
     idFirebase = json['idFirebase'] ?? "";
     idDispositivo = json['idDispositivo'] ?? "";
+    acepta = json['acepta'] ?? 0;
     creado = json['creado'] ?? true;
   }
 
@@ -92,6 +97,7 @@ class LocalStorage {
     activo = json['activo'] ?? true;
     idFirebase = json['idFirebase'] ?? "";
     idDispositivo = json['idDispositivo'] ?? "";
+    acepta = json['acepta'] ?? 0;
     creado = json['creado'] ?? true;
   }
 
@@ -107,6 +113,7 @@ class LocalStorage {
     activo: json['activo'] ?? true,
     idFirebase: json['idFirebase'] ?? "",
     idDispositivo: json['idDispositivo'] ?? "",
+    acepta: json['acepta'] ?? 0,
     creado: json['creado'] ?? true,
   );
 }
