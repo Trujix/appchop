@@ -52,5 +52,10 @@ class AlphaController extends GetInjection {
         Permission.notification.request();
       }
     });
+    await Permission.storage.isDenied.then((denegado) {
+      if(denegado) {
+        Permission.storage.request();
+      }
+    });
   }
 }

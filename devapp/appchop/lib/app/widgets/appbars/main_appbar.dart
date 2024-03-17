@@ -72,6 +72,9 @@ class MainAppbar extends StatelessWidget implements PreferredSizeWidget {
                   },
                   child: Text(opcion.value!,),
                 ) : PopupMenuItem(
+                  onTap: () {
+                    onTapPopup(opcion.id);
+                  },
                   labelTextStyle: MaterialStateProperty.all(
                     TextStyle(
                       color: Color(ColorList.sys[0]),

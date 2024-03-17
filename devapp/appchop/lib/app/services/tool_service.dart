@@ -180,6 +180,36 @@ class ToolService extends GetxController {
     return;
   }
 
+  String crearCsv(dynamic lista, [List<String> omisiones = const []]) {
+    var listaElementos = jsonDecode(jsonEncode(lista)) as List<dynamic>;
+    var titulo = "";
+    var addTitulo = true;
+    var cuerpo = "";
+    for (var cobranza in listaElementos) {
+      var cobranzaMap = jsonDecode(jsonEncode(cobranza)) as Map<String, dynamic>;
+      cobranzaMap.forEach((key, value) {
+        if(!omisiones.contains(key)) {
+          if(addTitulo) {
+            if(titulo != "") {
+              titulo += ",";
+            }
+            titulo += key.toUpperCase();
+          }
+          if(cuerpo != "") {
+            cuerpo += ",";
+          }
+          cuerpo += value.toString();
+        }
+      });
+      if(addTitulo) {
+        titulo += "\n";
+      }
+      cuerpo += "\n";
+      addTitulo = false;
+    }
+    return "$titulo$cuerpo";
+  }
+
   Future<String?> downloadPdf(String fileUri) async {
     try {
       var descarga = await http.get(Uri.parse(fileUri));
@@ -188,6 +218,18 @@ class ToolService extends GetxController {
       var rutaArchivo = "${directorio.path}/downloadpdf.pdf";
       var pdf = File(rutaArchivo);
       await pdf.writeAsBytes(archivoBytes, flush: true);
+      return rutaArchivo;
+    } catch(e) {
+      return null;
+    }
+  }
+
+  Future<String?> crearArchivo(String contenido, String nombre) async {
+    try {
+      var directorio = await getApplicationDocumentsDirectory();
+      var rutaArchivo = "${directorio.path}/$nombre";
+      var txt = File(rutaArchivo);
+      await txt.writeAsString(contenido, flush: true);
       return rutaArchivo;
     } catch(e) {
       return null;

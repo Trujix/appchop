@@ -2,6 +2,7 @@ import 'package:adaptive_action_sheet/adaptive_action_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
+import 'package:open_file_plus/open_file_plus.dart';
 
 import '../../data/models/cobranza_popup_opciones.dart';
 import '../../data/models/local_storage/categorias.dart';
@@ -107,7 +108,16 @@ class CobranzaMainController extends GetInjection {
     await cargarListaCobranza();
   }
 
-  void opcionPopupConsulta(String? id) {
+  Future<void> opcionPopupConsulta(String? id) async {
+    var clicks = [];
+    for (var i = 0; i < opcionesBase.length; i++) {
+      if(opcionesBase[i].indexOf("~B") > 0) {
+        clicks.add(i.toString());
+      }
+    }
+    if(clicks.contains(id)) {
+      return await operacionPopUp(id!);
+    }
     opcionSelected = id!;
     update();
   }
@@ -116,19 +126,36 @@ class CobranzaMainController extends GetInjection {
     await cargarListaCobranza();
     var busqueda = _listaCobranzaBusqueda.where((c) {
       var query = "";
-      if(opcionSelected == "0") {
-        query = c.nombre!.toLowerCase();
-      } else if(opcionSelected == "1") {
-        query = c.fechaRegistro!.toLowerCase();
-      } else if(opcionSelected == "2") {
-        query = c.cantidad!.toString().toLowerCase();
-      } else if(opcionSelected == "3") {
-        query = c.fechaVencimiento!.toLowerCase();
+      switch(opcionSelected) {
+        case "0":
+          query = c.nombre!.toLowerCase();
+          break;
+        case "1":
+          query = c.fechaRegistro!.toLowerCase();
+          break;
+        case "2":
+          query = c.cantidad!.toString().toLowerCase();
+          break;
+        case "3":
+          query = c.fechaVencimiento!.toLowerCase();
+          break;
       }
       return query.contains(valor!.toLowerCase());
     }).toList();
     listaCobranzas = busqueda;
     update();
+  }
+
+  Future<void> operacionPopUp(String id) async {
+    switch(id) {
+      case "4":
+        break;
+      case "5":
+        await _exportarConsultaCsv();
+        break;
+      default:
+        return;
+    }
   }
 
   Future<void> cargarListaCobranza() async {
@@ -238,6 +265,24 @@ class CobranzaMainController extends GetInjection {
         "cobranza" : cobranza,
       },
     );
+  }
+
+  Future<void> _exportarConsultaCsv() async {
+    try {
+      if(listaCobranzas.isEmpty) {
+        tool.msg("No hay datos que exportar", 0);
+        return;
+      }
+      var contenido = tool.crearCsv(
+        listaCobranzas,
+        ["tabla", "idUsuario", "idCobranza", "idCobrador",]
+      );
+      var arch = await tool.crearArchivo(contenido, "proyecto.csv");
+      await Future.delayed(1.seconds);
+      await OpenFile.open(arch);
+    } catch(e) {
+      tool.msg("Ocurrió un problema al intentar exportar la información", 3);
+    }
   }
 
   void _cargarOpcionesPopup() {

@@ -22,66 +22,69 @@ class LoginPage extends StatelessWidget with WidgetsBindingObserver {
         resizeToAvoidBottomInset: true,
         appBar: const OffAppbar(),
         backgroundColor: Color(ColorList.sys[3]),
-        body: Column(
-          children: [
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Shimmer(
-                    color: Color(ColorList.sys[3]),
-                    colorOpacity: 0.8,
-                    child: Image.asset(
-                      "assets/login/head_login.png",
-                      scale: 1.5,
+        body: SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.all(0),
+            height: MediaQuery.of(context).size.height - 40,
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Expanded(child: SizedBox()),
+                Shimmer(
+                  color: Color(ColorList.sys[3]),
+                  colorOpacity: 0.8,
+                  child: Image.asset(
+                    "assets/login/head_login.png",
+                    scale: 1.5,
+                  ),
+                ),
+                StandardTextform(
+                  controller: _.usuario,
+                  focusNode: _.usuaroFocus,
+                  text: "Usuario",
+                  enabled: _.usuarioTextEnabled,
+                ),
+                PasswordTextform(
+                  controller: _.password,
+                  focusNode: _.passwordFocus,
+                  obscureText: _.ocultarPassword,
+                  obscureTextFunc: _.verPassword,
+                  text: "Contraseña",
+                ),
+                SolidButton(
+                  texto: "Iniciar Sesión",
+                  icono: MaterialIcons.login,
+                  onPressed: _.iniciarSesion,
+                  textoColor: ColorList.sys[1],
+                  fondoColor: ColorList.sys[0],
+                  ltrbm: const [0, 15, 0, 0],
+                  onLongPress: () {},
+                ),
+                SolidButton(
+                  texto: "Recuperar contraseña",
+                  icono: MaterialIcons.rotate_left,
+                  onPressed: _.iniciarSesion,
+                  textoColor: ColorList.sys[0],
+                  fondoColor: ColorList.sys[1],
+                  onLongPress: () {},
+                ),
+                const Expanded(child: SizedBox()),
+                Container(
+                  padding: const EdgeInsets.only(
+                    bottom: 15,
+                  ),
+                  child: AutoSizeText(
+                    "Versión: ${Literals.version}",
+                    style: TextStyle(
+                      color: Color(ColorList.sys[0]),
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
-                  StandardTextform(
-                    controller: _.usuario,
-                    focusNode: _.usuaroFocus,
-                    text: "Usuario",
-                    enabled: _.usuarioTextEnabled,
-                  ),
-                  PasswordTextform(
-                    controller: _.password,
-                    focusNode: _.passwordFocus,
-                    obscureText: _.ocultarPassword,
-                    obscureTextFunc: _.verPassword,
-                    text: "Contraseña",
-                  ),
-                  SolidButton(
-                    texto: "Iniciar Sesión",
-                    icono: MaterialIcons.login,
-                    onPressed: _.iniciarSesion,
-                    textoColor: ColorList.sys[1],
-                    fondoColor: ColorList.sys[0],
-                    ltrbm: const [0, 15, 0, 0],
-                    onLongPress: () {},
-                  ),
-                  SolidButton(
-                    texto: "Recuperar contraseña",
-                    icono: MaterialIcons.rotate_left,
-                    onPressed: _.iniciarSesion,
-                    textoColor: ColorList.sys[0],
-                    fondoColor: ColorList.sys[1],
-                    onLongPress: () {},
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.only(
-                bottom: 15,
-              ),
-              child: AutoSizeText(
-                "Versión: ${Literals.version}",
-                style: TextStyle(
-                  color: Color(ColorList.sys[0]),
-                  fontWeight: FontWeight.w700,
                 ),
-              ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
