@@ -9,6 +9,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
 
+import '../data/models/local_storage/categorias.dart';
+import '../data/models/local_storage/cobranzas.dart';
 import '../widgets/dialogs/alerta_dialog.dart';
 import '../widgets/dialogs/loading_dialog.dart';
 
@@ -180,13 +182,18 @@ class ToolService extends GetxController {
     return;
   }
 
-  String crearCsv(dynamic lista, [List<String> omisiones = const []]) {
-    var listaElementos = jsonDecode(jsonEncode(lista)) as List<dynamic>;
+  String cobranzaCsv(
+    List<Cobranzas> cobranzas,
+    List<Categorias> categorias,
+    List<String> omisiones
+  ) {
+    var listaElementos = jsonDecode(jsonEncode(cobranzas)) as List<dynamic>;
     var titulo = "";
     var addTitulo = true;
     var cuerpo = "";
     for (var cobranza in listaElementos) {
       var cobranzaMap = jsonDecode(jsonEncode(cobranza)) as Map<String, dynamic>;
+      var cuerpoTemp = "";
       cobranzaMap.forEach((key, value) {
         if(!omisiones.contains(key)) {
           if(addTitulo) {
@@ -195,16 +202,23 @@ class ToolService extends GetxController {
             }
             titulo += key.toUpperCase();
           }
-          if(cuerpo != "") {
-            cuerpo += ",";
+          if(cuerpoTemp != "") {
+            cuerpoTemp += ",";
           }
-          cuerpo += value.toString();
+          var valor = "";
+          if(key == "categoria") {
+            var categoria = categorias.where((c) => c.valueCategoria == value).firstOrNull;
+            valor = categoria != null ? categoria.labelCategoria! : value.toString();
+          } else {
+            valor = value.toString();
+          }
+          cuerpoTemp += valor;
         }
       });
       if(addTitulo) {
         titulo += "\n";
       }
-      cuerpo += "\n";
+      cuerpo += "$cuerpoTemp\n";
       addTitulo = false;
     }
     return "$titulo$cuerpo";

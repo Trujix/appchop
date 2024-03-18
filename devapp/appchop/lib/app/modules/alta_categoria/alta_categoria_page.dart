@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 
 import '../../utils/color_list.dart';
 import '../../widgets/appbars/back_appbar.dart';
+import '../../widgets/columns/sin_categorias_column.dart';
 import '../../widgets/containers/card_container.dart';
 import '../../widgets/containers/titulo_container.dart';
 import '../../widgets/defaults/small_header.dart';
@@ -46,57 +47,65 @@ class AltaCategoriaPage extends StatelessWidget with WidgetsBindingObserver {
               ],
             ),
             Expanded(
-              child: CardContainer(
-                fondo: 0xFFFDFEFE,
-                children: <Widget>[
-                  Expanded(
-                    child: NestedScrollView(
-                      headerSliverBuilder: (context, isScrolled) {
-                        return [const SmallHeader(height: 15,)];
-                      },
-                      body: CustomScrollView(
-                        controller: _.scrollController,
-                        slivers: _.listaCategoria.map((categoria) {
-                          return SliverToBoxAdapter(
-                            child: CardContainer(
-                              margin: const EdgeInsets.fromLTRB(0, 5, 0, 5,),
-                              children: <Widget>[
-                                Row(
-                                  children: <Widget>[
-                                    Expanded(
-                                      child: AutoSizeText(
-                                        categoria.labelCategoria!,
-                                        style: TextStyle(
-                                          color: Color(ColorList.sys[0],),
-                                          fontWeight: FontWeight.w500,
-                                        ),
+              child: Builder(
+                builder: (context) {
+                  if(!_.listaCategoria.isNotEmpty) {
+                    return CardContainer(
+                      fondo: 0xFFFDFEFE,
+                      children: <Widget>[
+                        Expanded(
+                          child: NestedScrollView(
+                            headerSliverBuilder: (context, isScrolled) {
+                              return [const SmallHeader(height: 15,)];
+                            },
+                            body: CustomScrollView(
+                              controller: _.scrollController,
+                              slivers: _.listaCategoria.map((categoria) {
+                                return SliverToBoxAdapter(
+                                  child: CardContainer(
+                                    margin: const EdgeInsets.fromLTRB(0, 5, 0, 5,),
+                                    children: <Widget>[
+                                      Row(
+                                        children: <Widget>[
+                                          Expanded(
+                                            child: AutoSizeText(
+                                              categoria.labelCategoria!,
+                                              style: TextStyle(
+                                                color: Color(ColorList.sys[0],),
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ),
+                                          Container(
+                                            padding: const EdgeInsets.all(0),
+                                            child: Transform.scale(
+                                              scale: 0.7,
+                                              child: Switch(
+                                                thumbColor: MaterialStateProperty.all(Color(ColorList.sys[0])),
+                                                activeTrackColor: Color(ColorList.sys[1]),
+                                                inactiveTrackColor: Color(ColorList.sys[2]),
+                                                value: categoria.activo!,
+                                                onChanged: (status) {
+                                                  _.cambiarCategoriaEstatus(status, categoria.idCategoria!);
+                                                },
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ),
-                                    Container(
-                                      padding: const EdgeInsets.all(0),
-                                      child: Transform.scale(
-                                        scale: 0.7,
-                                        child: Switch(
-                                          thumbColor: MaterialStateProperty.all(Color(ColorList.sys[0])),
-                                          activeTrackColor: Color(ColorList.sys[1]),
-                                          inactiveTrackColor: Color(ColorList.sys[2]),
-                                          value: categoria.activo!,
-                                          onChanged: (status) {
-                                            _.cambiarCategoriaEstatus(status, categoria.idCategoria!);
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                    ],
+                                  ),
+                                );
+                              }).toList(),
                             ),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                  ),
-                ],
+                          ),
+                        ),
+                      ],
+                    );
+                  } else {
+                    return const SinCategoriasColumn();
+                  }
+                },
               ),
             ),
           ],

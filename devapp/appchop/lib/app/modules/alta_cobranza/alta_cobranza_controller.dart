@@ -181,12 +181,11 @@ class AltaCobranzaController extends GetInjection {
     fechaRegistro.text = cobranzaEditar.fechaRegistro!;
     fechaVencimiento.text = vencimiento == Literals.sinVencimiento ? "" : vencimiento;
     tipoCobranza = cobranzaEditar.tipoCobranza!;
-    categoriaSelected = cobranzaEditar.tipoCobranza!;
-    for(var categoriaElem in categorias) {
-      if(categoriaElem.valueCategoria == cobranzaEditar.categoria) {
-        categoria.text = categoriaElem.labelCategoria!;
-        categoriaSelected = categoriaElem.valueCategoria!;
-      }
+    categoriaSelected = cobranzaEditar.categoria!;
+    var categoriaEdicion = categorias.where((c) => c.valueCategoria == cobranzaEditar.categoria).firstOrNull;
+    if(categoriaEdicion != null) {
+      categoria.text = categoriaEdicion.labelCategoria!;
+      categoriaSelected = categoriaEdicion.valueCategoria!;
     }
     update();
   }

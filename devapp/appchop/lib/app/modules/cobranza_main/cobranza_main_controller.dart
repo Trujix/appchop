@@ -48,6 +48,7 @@ class CobranzaMainController extends GetInjection {
 
   List<Cobranzas> listaCobranzas = [];
   List<Cobranzas> _listaCobranzaBusqueda = [];
+  List<Cobranzas> _listaCobranzaCsv = [];
 
   @override
   Future<void> onInit() async {
@@ -143,6 +144,7 @@ class CobranzaMainController extends GetInjection {
       return query.contains(valor!.toLowerCase());
     }).toList();
     listaCobranzas = busqueda;
+    _listaCobranzaCsv = busqueda;
     update();
   }
 
@@ -184,6 +186,7 @@ class CobranzaMainController extends GetInjection {
       }
       listaCobranzas = cobranzaStorage;
       _listaCobranzaBusqueda = cobranzaStorage;
+      _listaCobranzaCsv = cobranzaStorage;
       mostrarResultados = cobranzaStorage.isNotEmpty;
     } catch(e) {
       tool.msg("Ocurrió un error al cargar la lista de cobranza", 3);
@@ -269,17 +272,21 @@ class CobranzaMainController extends GetInjection {
 
   Future<void> _exportarConsultaCsv() async {
     try {
-      if(listaCobranzas.isEmpty) {
+      if(_listaCobranzaCsv.isEmpty) {
         tool.msg("No hay datos que exportar", 0);
         return;
       }
-      var contenido = tool.crearCsv(
+      var categoriaStorage = List<Categorias>.from(
+        storage.get([Categorias()]).map((json) => Categorias.fromJson(json))
+      );
+      var contenido = tool.cobranzaCsv(
         listaCobranzas,
+        categoriaStorage,
         ["tabla", "idUsuario", "idCobranza", "idCobrador",]
       );
-      var arch = await tool.crearArchivo(contenido, "proyecto.csv");
-      await Future.delayed(1.seconds);
-      await OpenFile.open(arch);
+      var archivoCsv = await tool.crearArchivo(contenido, "proyecto.csv");
+      await Future.delayed(0.7.seconds);
+      await OpenFile.open(archivoCsv);
     } catch(e) {
       tool.msg("Ocurrió un problema al intentar exportar la información", 3);
     }
