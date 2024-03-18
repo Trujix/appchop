@@ -49,7 +49,7 @@ class AltaCategoriaPage extends StatelessWidget with WidgetsBindingObserver {
             Expanded(
               child: Builder(
                 builder: (context) {
-                  if(!_.listaCategoria.isNotEmpty) {
+                  if(_.listaCategoria.isNotEmpty) {
                     return CardContainer(
                       fondo: 0xFFFDFEFE,
                       children: <Widget>[

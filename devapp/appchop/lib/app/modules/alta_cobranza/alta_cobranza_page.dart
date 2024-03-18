@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../../utils/color_list.dart';
 import '../../widgets/appbars/back_appbar.dart';
 import '../../widgets/buttons/solid_button.dart';
+import '../../widgets/columns/cobranza_googlemap_column.dart';
 import '../../widgets/combo/selection_combo.dart';
+import '../../widgets/containers/basic_bottom_sheet_container.dart';
 import '../../widgets/containers/card_container.dart';
 import '../../widgets/containers/titulo_container.dart';
+import '../../widgets/inkwells/icono_boton_inkwell.dart';
 import '../../widgets/radiobuttons/group_radiobutton.dart';
 import '../../widgets/textforms/date_textform.dart';
 import '../../widgets/textforms/standard_textform.dart';
@@ -63,17 +67,10 @@ class AltaCobranzaPage extends StatelessWidget with WidgetsBindingObserver {
                         icon: MaterialIcons.person,
                       ),
                     ),
-                    InkWell(
+                    IconoBotonInkwell(
                       onTap: _.abrirContactos,
-                      child: Container(
-                        padding: const EdgeInsets.fromLTRB(0, 10, 10, 10),
-                        child: Icon(
-                          MaterialIcons.contact_page,
-                          color: Color(ColorList.sys[0]),
-                          size: 30,
-                        ),
-                      ),
-                    )
+                      icon: MaterialIcons.contact_page,
+                    ),
                   ],
                 ),
                 StandardTextform(
@@ -103,11 +100,55 @@ class AltaCobranzaPage extends StatelessWidget with WidgetsBindingObserver {
                   icon: MaterialIcons.phone_iphone,
                   keyboardType: TextInputType.phone,
                 ),
-                StandardTextform(
-                  controller: _.direccion,
-                  focusNode: _.direccionFocus,
-                  text: "Dirección",
-                  icon: MaterialIcons.home,
+                Row(
+                  children: [
+                    Expanded(
+                      child: StandardTextform(
+                        controller: _.direccion,
+                        focusNode: _.direccionFocus,
+                        text: "Dirección",
+                        icon: MaterialIcons.home,
+                      ),
+                    ),
+                    IconoBotonInkwell(
+                      onTap: () async {
+                        if(await _.abrirMapa()) {
+                          await showMaterialModalBottomSheet(
+                            // ignore: use_build_context_synchronously
+                            context: context,
+                            expand: true,
+                            enableDrag: false,
+                            backgroundColor: Colors.transparent,
+                            builder: (context) => StatefulBuilder(
+                              builder: (context, setState) {
+                                return BasicBottomSheetContainer(
+                                  context: context,
+                                  cerrar: true,
+                                  child: CobranzaGooglemapColumn(
+                                    markers: _.marcadorCliente.values.toSet(),
+                                    target: _.initLocation,
+                                    googleController: _.googleController,
+                                    onTap: (pos) {
+                                      setState(() {
+                                        _.crearClienteMarcador(pos);
+                                      });
+                                    },
+                                    value: _.utilizarUbicacionCliente,
+                                    onChanged: (val) {
+                                      setState(() {
+                                        _.seleccionarUbicacionCliente(val);
+                                      });
+                                    },
+                                  ),
+                                );
+                              }
+                            ),
+                          );
+                        }
+                      },
+                      icon: MaterialIcons.location_on,
+                    ),
+                  ],
                 ),
                 StandardTextform(
                   controller: _.email,

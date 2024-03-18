@@ -1,7 +1,9 @@
 import 'package:adaptive_action_sheet/adaptive_action_sheet.dart';
+import 'package:custom_info_window/custom_info_window.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttercontactpicker/fluttercontactpicker.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -44,6 +46,12 @@ class AltaCobranzaController extends GetInjection {
   FocusNode fechaRegistroFocus = FocusNode();
   TextEditingController fechaVencimiento = TextEditingController();
   FocusNode fechaVencimientoFocus = FocusNode();
+
+  CustomInfoWindowController googleController = CustomInfoWindowController();
+  LatLng initLocation = const LatLng(19.24245061908023, -103.7252647480106);
+  Map<MarkerId, Marker> marcadorCliente = {};
+  String idMarcadorCliente = "";
+  bool utilizarUbicacionCliente = false;
 
   @override
   void onInit() {
@@ -90,6 +98,7 @@ class AltaCobranzaController extends GetInjection {
       );
     }
     tipoCobranza = arguments['tipoCobranza'] as String;
+    crearClienteMarcador(initLocation);
     if(!nuevo) {
       cobranzaEditar = arguments['cobranza'] as Cobranzas;
       _editarCobranzaFill(categorias);
@@ -125,8 +134,9 @@ class AltaCobranzaController extends GetInjection {
       var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
       var cobranzaStorage = List<Cobranzas>.from(
         storage.get([Cobranzas()]).map((json) => Cobranzas.fromJson(json))
-      );
+      ); 
       var vencimiento = fechaVencimiento.text;
+      var latLng = marcadorCliente[MarkerId(idMarcadorCliente)]!.position;
       var nuevaCobranza = Cobranzas(
         idUsuario: localStorage.idUsuario,
         tipoCobranza: tipoCobranza,
@@ -138,6 +148,8 @@ class AltaCobranzaController extends GetInjection {
         direccion: direccion.text,
         correo: email.text,
         fechaRegistro: fechaRegistro.text,
+        latitud: utilizarUbicacionCliente ? latLng.latitude.toString() : "",
+        longitud: utilizarUbicacionCliente ? latLng.longitude.toString() : "",
         fechaVencimiento: vencimiento == "" ? Literals.sinVencimiento : vencimiento,
       );
       if(nuevo) {
@@ -165,6 +177,33 @@ class AltaCobranzaController extends GetInjection {
     tipoCobranza = tipo;
   }
 
+  Future<bool> abrirMapa() async {
+    await Permission.locationWhenInUse.isDenied.then((denegado) {
+      if(denegado) {
+        Permission.locationWhenInUse.request();
+        return false;
+      }
+    });
+    return true;
+  }
+
+  void crearClienteMarcador(LatLng position) {
+    marcadorCliente.clear();
+    idMarcadorCliente = tool.guid();
+    var marcador = Marker(
+      markerId: MarkerId(idMarcadorCliente),
+      position: position,
+    );
+    marcadorCliente[MarkerId(idMarcadorCliente)] = marcador;
+    initLocation = position;
+    update();
+  }
+
+  void seleccionarUbicacionCliente(bool value) {
+    utilizarUbicacionCliente = value;
+    update();
+  }
+
   void dateSelected() {
     update();
   }
@@ -186,6 +225,14 @@ class AltaCobranzaController extends GetInjection {
     if(categoriaEdicion != null) {
       categoria.text = categoriaEdicion.labelCategoria!;
       categoriaSelected = categoriaEdicion.valueCategoria!;
+    }
+    if(cobranzaEditar.latitud != "" && cobranzaEditar.longitud != "") {
+      utilizarUbicacionCliente = true;
+      var editarPosicion = LatLng(
+        tool.str2double(cobranzaEditar.latitud!),
+        tool.str2double(cobranzaEditar.longitud!),
+      );
+      crearClienteMarcador(editarPosicion);
     }
     update();
   }

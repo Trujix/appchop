@@ -16,6 +16,8 @@ class Cobranzas {
   String? correo;
   String? fechaRegistro;
   String? fechaVencimiento;
+  String? latitud;
+  String? longitud;
   String? idCobrador;
 
   Cobranzas({
@@ -31,6 +33,8 @@ class Cobranzas {
     this.correo = "",
     this.fechaRegistro = "",
     this.fechaVencimiento = "",
+    this.latitud = "",
+    this.longitud = "",
     this.idCobrador = "",
   });
 
@@ -59,6 +63,8 @@ class Cobranzas {
     'correo'            : correo,
     'fechaRegistro'     : fechaRegistro,
     'fechaVencimiento'  : fechaVencimiento,
+    'latitud'           : latitud,
+    'longitud'          : longitud,
     'idCobrador'        : idCobrador,
   };
 
@@ -75,6 +81,8 @@ class Cobranzas {
     correo: json['correo'] ?? "",
     fechaRegistro: json['fechaRegistro'] ?? "",
     fechaVencimiento: json['fechaVencimiento'] ?? "",
+    latitud: json['latitud'] ?? "",
+    longitud: json['longitud'] ?? "",
     idCobrador: json['idCobrador'] ?? "",
   );
 }

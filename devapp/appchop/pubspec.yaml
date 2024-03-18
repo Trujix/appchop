@@ -18,6 +18,8 @@ dependencies:
   hive: ^2.2.3
   dio: ^5.4.1
   http: ^1.2.1
+  google_maps_flutter: ^2.6.0
+  custom_info_window: ^1.0.1
   permission_handler: ^11.2.0
   path_provider: ^2.1.2
   fluttertoast: ^8.2.4
@@ -25,6 +27,7 @@ dependencies:
   cached_network_image: ^3.3.1
   custom_radio_grouped_button: ^2.2.1
   adaptive_action_sheet: ^2.0.3
+  modal_bottom_sheet: ^3.0.0
   dotted_border: ^2.1.0
   shimmer: ^3.0.0
   shimmer_animation: ^2.1.0+1
