@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 
 import '../../../services/storage_service.dart';
+import '../../../utils/literals.dart';
 
 class Cobranzas {
   String? tabla = "cobranzas";
@@ -16,8 +17,10 @@ class Cobranzas {
   String? correo;
   String? fechaRegistro;
   String? fechaVencimiento;
+  double? saldo;
   String? latitud;
   String? longitud;
+  String? estatus;
   String? idCobrador;
 
   Cobranzas({
@@ -33,8 +36,10 @@ class Cobranzas {
     this.correo = "",
     this.fechaRegistro = "",
     this.fechaVencimiento = "",
+    this.saldo = 0.0,
     this.latitud = "",
     this.longitud = "",
+    this.estatus = Literals.statusCobranzaPendiente,
     this.idCobrador = "",
   });
 
@@ -63,8 +68,10 @@ class Cobranzas {
     'correo'            : correo,
     'fechaRegistro'     : fechaRegistro,
     'fechaVencimiento'  : fechaVencimiento,
+    'saldo'             : saldo,
     'latitud'           : latitud,
     'longitud'          : longitud,
+    'estatus'           : estatus,
     'idCobrador'        : idCobrador,
   };
 
@@ -81,8 +88,10 @@ class Cobranzas {
     correo: json['correo'] ?? "",
     fechaRegistro: json['fechaRegistro'] ?? "",
     fechaVencimiento: json['fechaVencimiento'] ?? "",
+    saldo: json['saldo'] ?? 0.0,
     latitud: json['latitud'] ?? "",
     longitud: json['longitud'] ?? "",
+    estatus: json['estatus'] ?? "",
     idCobrador: json['idCobrador'] ?? "",
   );
 }

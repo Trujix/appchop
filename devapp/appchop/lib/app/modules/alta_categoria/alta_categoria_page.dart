@@ -19,7 +19,7 @@ class AltaCategoriaPage extends StatelessWidget with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return GetBuilder<AltaCategoriaController>(
       builder: (_) => Scaffold(
-        resizeToAvoidBottomInset: true,
+        resizeToAvoidBottomInset: false,
         backgroundColor: Color(ColorList.sys[3]),
         appBar: BackAppbar(
           cerrar: _.cerrar,

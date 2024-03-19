@@ -153,9 +153,11 @@ class AltaCobranzaController extends GetInjection {
         fechaVencimiento: vencimiento == "" ? Literals.sinVencimiento : vencimiento,
       );
       if(nuevo) {
+        nuevaCobranza.saldo = tool.str2double(cantidad.text);
         nuevaCobranza.idCobranza = tool.guid();
         cobranzaStorage.add(nuevaCobranza);
       } else {
+        nuevaCobranza.saldo = cobranzaEditar.saldo;
         var index = cobranzaStorage.indexWhere((c) => c.idCobranza == cobranzaEditar.idCobranza!);
         nuevaCobranza.idCobranza = cobranzaEditar.idCobranza!;
         cobranzaStorage[index] = nuevaCobranza;
@@ -165,7 +167,7 @@ class AltaCobranzaController extends GetInjection {
       tool.isBusy(false);
       await Get.find<CobranzaMainController>().cargarListaCobranza();
       Get.back();
-      tool.msg("Registro creado correctamente", 1);
+      tool.msg("Registro ${(nuevo ? "creado" : "modificado")} correctamente", 1);
     } catch(e) {
       tool.msg("Ocurrió un error al intentar crear nueva cobranza", 3);
     } finally {

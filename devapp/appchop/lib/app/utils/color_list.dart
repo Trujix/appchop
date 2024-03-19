@@ -8,6 +8,7 @@ class ColorList {
     0xFF87BBD7,
     0xFFF2C864,
     0xFFE0E3E7,
+    0xFF99A3A4,
   ];
 
   static List<int> main = [

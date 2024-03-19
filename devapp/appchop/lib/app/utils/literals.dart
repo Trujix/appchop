@@ -23,6 +23,8 @@ class Literals {
   static const String tipoCobranzaMeDeben = "ME_DEBEN";
   static const String tipoCobranzaDebo = "DEBO";
   static const String tipoCobranzaVencida = "VENCIDAS";
+  static const String statusCobranzaPagada = "PAGADA";
+  static const String statusCobranzaPendiente = "PENDIENTE";
   static const String markerIdClienteCobranza = "COBRANZA_MARKER_CLIENTE";
 
   static const String sinVencimiento = "31-12-2999";

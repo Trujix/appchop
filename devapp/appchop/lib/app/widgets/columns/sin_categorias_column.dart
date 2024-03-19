@@ -15,7 +15,7 @@ class SinCategoriasColumn extends StatelessWidget {
       children: [
         Image.asset(
           "assets/categorias/background.png",
-          scale: 0.5,
+          scale: 0.9,
         ),
         Container(
           padding: const EdgeInsets.fromLTRB(20, 10, 20, 10,),

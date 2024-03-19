@@ -13,6 +13,7 @@ import '../data/models/local_storage/categorias.dart';
 import '../data/models/local_storage/cobranzas.dart';
 import '../widgets/dialogs/alerta_dialog.dart';
 import '../widgets/dialogs/loading_dialog.dart';
+import '../widgets/dialogs/modal_dialog.dart';
 
 class ToolService extends GetxController {
   bool _loadingOpen = false;
@@ -68,6 +69,23 @@ class ToolService extends GetxController {
         },
       );
     } finally { }
+  }
+
+  void modal({
+    List<Widget> widgets = const [],
+    double height = 150
+  }) {
+    var modalContext = Get.context!;
+    showDialog(
+      context: modalContext,
+      builder: (BuildContext context) {
+        context = context;
+        return ModalDialog(
+          widgets: widgets,
+          height: height,
+        );
+      },
+    );
   }
 
   void toast([String msg = ""]) {

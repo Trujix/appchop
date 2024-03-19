@@ -8,6 +8,7 @@ import '../../widgets/appbars/main_appbar.dart';
 import '../../widgets/combo/selection_combo.dart';
 import '../../widgets/customscrollviews/cobranza_customscrollview.dart';
 import '../../widgets/defaults/small_header.dart';
+import '../../widgets/inkwells/saldo_cobranza_inwell.dart';
 import '../home/home_controller.dart';
 import 'cobranza_main_controller.dart';
 
@@ -61,6 +62,10 @@ class CobranzaMainPage extends StatelessWidget with WidgetsBindingObserver {
                   );
                 }
               },
+            ),
+            SaldoCobranzaInkwell(
+              saldoTotal: _.saldoTotal,
+              opcionDeudaSeleccion: _.opcionDeudaSeleccion,
             ),
           ],
         ),

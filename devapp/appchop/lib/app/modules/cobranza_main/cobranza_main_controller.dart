@@ -11,6 +11,7 @@ import '../../data/models/local_storage/local_storage.dart';
 import '../../routes/app_routes.dart';
 import '../../utils/get_injection.dart';
 import '../../utils/literals.dart';
+import '../../widgets/modals/gestion_csv_modal.dart';
 import '../../widgets/texts/combo_texts.dart';
 import '../pdf_viewer/pdf_viewer_binding.dart';
 import '../pdf_viewer/pdf_viewer_page.dart';
@@ -21,6 +22,7 @@ class CobranzaMainController extends GetInjection {
   TextEditingController busqueda = TextEditingController();
   List<CobranzaPopupOpciones> opcionesConsulta = [];
   String opcionSelected = "";
+  String saldoTotal = "\$ 0.00";
   List<String> opcionesBase = [
     "Nombre~R",
     "Fecha~R",
@@ -145,6 +147,7 @@ class CobranzaMainController extends GetInjection {
     }).toList();
     listaCobranzas = busqueda;
     _listaCobranzaCsv = busqueda;
+    _calcularSaldo();
     update();
   }
 
@@ -188,11 +191,20 @@ class CobranzaMainController extends GetInjection {
       _listaCobranzaBusqueda = cobranzaStorage;
       _listaCobranzaCsv = cobranzaStorage;
       mostrarResultados = cobranzaStorage.isNotEmpty;
+      _calcularSaldo();
     } catch(e) {
       tool.msg("Ocurrió un error al cargar la lista de cobranza", 3);
     } finally {
       update();
     }
+  }
+
+  void _calcularSaldo() {
+    var saldo = 0.0;
+    for(var cobranza in listaCobranzas) {
+      saldo +=  cobranza.saldo!;
+    }
+    saldoTotal = "\$ ${saldo.toStringAsFixed(2)}";
   }
 
   Future<void> configurarCategorias(LocalStorage localStorage) async {
@@ -282,11 +294,16 @@ class CobranzaMainController extends GetInjection {
       var contenido = tool.cobranzaCsv(
         listaCobranzas,
         categoriaStorage,
-        ["tabla", "idUsuario", "idCobranza", "idCobrador",]
+        ["tabla", "idUsuario", "idCobranza", "idCobrador", "latitud", "longitud", "estatus",]
       );
       var archivoCsv = await tool.crearArchivo(contenido, "proyecto.csv");
       await Future.delayed(0.7.seconds);
-      await OpenFile.open(archivoCsv);
+      tool.modal(
+        widgets: [GestionCsvModal(
+          abrirAccion: () async => await OpenFile.open(archivoCsv),
+          exportarAccion: () {},
+        ),]
+      );
     } catch(e) {
       tool.msg("Ocurrió un problema al intentar exportar la información", 3);
     }
