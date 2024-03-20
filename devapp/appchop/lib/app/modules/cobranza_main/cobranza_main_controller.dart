@@ -296,12 +296,12 @@ class CobranzaMainController extends GetInjection {
         categoriaStorage,
         ["tabla", "idUsuario", "idCobranza", "idCobrador", "latitud", "longitud", "estatus",]
       );
-      var archivoCsv = await tool.crearArchivo(contenido, "proyecto.csv");
+      var archivoCsv = await tool.crearArchivo(contenido, Literals.reporteCobranzaCsv);
       await Future.delayed(0.7.seconds);
       tool.modal(
         widgets: [GestionCsvModal(
           abrirAccion: () async => await OpenFile.open(archivoCsv),
-          exportarAccion: () {},
+          exportarAccion: () {}/*async => await tool.compartir(archivoCsv!, Literals.reporteCobranzaCsv)*/,
         ),]
       );
     } catch(e) {

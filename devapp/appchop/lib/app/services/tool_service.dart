@@ -6,6 +6,8 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
 
@@ -266,5 +268,16 @@ class ToolService extends GetxController {
     } catch(e) {
       return null;
     }
+  }
+
+  Future<void> compartir(String archivo, String texto) async {
+    // ignore: deprecated_member_use
+    var _ = await Share.shareFiles([(archivo)], text: texto);
+  }
+
+  Future<void> whatsapp(String numero) async {
+    await launchUrl(
+      Uri.parse("https://wa.me/$numero?text="),
+    );
   }
 }
