@@ -1,0 +1,5 @@
+COMMANDOS CREACION DE APK - APPBUNDLE
+---------------------------------------------------------------------------------------------------------------------
+
+flutter build appbundle --release --target-platform android-arm,android-arm64,android-x64
+flutter build apk --release --target-platform android-arm,android-arm64,android-x64
