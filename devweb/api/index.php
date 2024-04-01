@@ -21,7 +21,7 @@
 
     if(isset($_GET['PATH_INFO']) == "") {
         http_response_code(400);
-        die('Api version 1');
+        die('<h1>Api version 1</h1>');
     }
 
     $path_info = explode('/', strval($_GET['PATH_INFO']));
