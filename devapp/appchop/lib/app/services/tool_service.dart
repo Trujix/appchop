@@ -305,4 +305,19 @@ class ToolService extends GetxController {
       Uri.parse("https://wa.me/$numero?text="),
     );
   }
+
+  Future<void> marcar(String numero) async {
+    await launchUrl(
+      Uri.parse("tel://$numero"),
+    );
+  }
+
+  Future<void> googleMaps(String latitud, String longitud) async {
+    var googleMapUri = Uri.parse("https://www.google.com/maps/search/?api=1&query=$latitud,$longitud");
+    if(await canLaunchUrl(googleMapUri)) {
+      await launchUrl(googleMapUri);
+    } else {
+      msg("No fue posible abrir los parametros de la ubicación", 2);
+    }
+  }
 }

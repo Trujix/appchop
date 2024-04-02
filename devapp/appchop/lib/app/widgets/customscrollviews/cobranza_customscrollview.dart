@@ -13,12 +13,16 @@ class CobranzaCustomscrollview extends StatelessWidget {
   final List<Cobranzas> listaCobranzas;
   final void Function() onTap;
   final void Function(Cobranzas) onLongPress;
+  final void Function(Cobranzas) aregarNota;
+  final void Function(Cobranzas) agregarCargoAbono;
   const CobranzaCustomscrollview({
     super.key,
     this.scrollController,
     this.listaCobranzas = const [],
     required this.onTap,
     required this.onLongPress,
+    required this.aregarNota,
+    required this.agregarCargoAbono,
   });
 
   @override
@@ -145,7 +149,9 @@ class CobranzaCustomscrollview extends StatelessWidget {
                               color: ColorList.sys[
                                   cobranza.tipoCobranza == "ME_DEBEN" ? 1 : 2],
                               icono: MaterialIcons.note_add,
-                              onPressed: () {},
+                              onPressed: () {
+                                aregarNota(cobranza);
+                              },
                             ),
                             const SizedBox(
                               width: 5,
@@ -155,7 +161,9 @@ class CobranzaCustomscrollview extends StatelessWidget {
                               color: ColorList.sys[
                                   cobranza.tipoCobranza == "ME_DEBEN" ? 1 : 2],
                               icono: MaterialIcons.monetization_on,
-                              onPressed: () {},
+                              onPressed: () {
+                                agregarCargoAbono(cobranza);
+                              },
                             ),
                           ],
                         ),

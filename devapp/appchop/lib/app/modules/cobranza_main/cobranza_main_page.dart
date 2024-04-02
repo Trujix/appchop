@@ -53,6 +53,8 @@ class CobranzaMainPage extends StatelessWidget with WidgetsBindingObserver {
                         listaCobranzas: _.listaCobranzas,
                         onTap: _.mensajeCobranzaElemento,
                         onLongPress: _.editarCobranzaElemento,
+                        aregarNota: _.agregarNota,
+                        agregarCargoAbono: _.agregarCargoAbono,
                       ),
                     ),
                   );

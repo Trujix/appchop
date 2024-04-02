@@ -267,6 +267,19 @@ class CobranzaMainController extends GetInjection {
     }
   }
 
+  void agregarNota(Cobranzas cobranza) {
+    Get.toNamed(
+      AppRoutes.altaNotas,
+      arguments: {
+        "cobranza" : cobranza,
+      },
+    );
+  }
+
+  void agregarCargoAbono(Cobranzas cobranza) {
+    
+  }
+
   void mensajeCobranzaElemento() {
     tool.toast("Deje presionado para editar");
   }

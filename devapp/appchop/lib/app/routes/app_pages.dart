@@ -6,6 +6,8 @@ import '../modules/alta_categoria/alta_categoria_binding.dart';
 import '../modules/alta_categoria/alta_categoria_page.dart';
 import '../modules/alta_cobranza/alta_cobranza_binding.dart';
 import '../modules/alta_cobranza/alta_cobranza_page.dart';
+import '../modules/alta_notas/alta_notas_binding.dart';
+import '../modules/alta_notas/alta_notas_page.dart';
 import '../modules/cobranza_main/cobranza_main_binding.dart';
 import '../modules/cobranza_main/cobranza_main_page.dart';
 import '../modules/configuracion/configuracion_binding.dart';
@@ -49,6 +51,11 @@ class AppPages {
       name: AppRoutes.altaCobranza,
       page: () => const AltaCobranzaPage(),
       binding: AltaCobranzaBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.altaNotas,
+      page: () => const AltaNotasPage(),
+      binding: AltaNotasBinding(),
     ),
     GetPage(
       name: AppRoutes.altaCategoria,
