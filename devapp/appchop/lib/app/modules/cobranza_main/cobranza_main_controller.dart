@@ -28,9 +28,10 @@ class CobranzaMainController extends GetInjection {
     "Fecha~R",
     "Saldo~R",
     "Vencimiento~R",
-    "Notas Pagadas~B",
+    "Ver Pagadas~B",
     "Exportar~B"
   ];
+  String estatusFiltro = Literals.statusCobranzaPendiente;
   List<String> tiposCobranza = [
     Literals.tipoCobranzaMeDeben,
     Literals.tipoCobranzaDebo,
@@ -38,7 +39,7 @@ class CobranzaMainController extends GetInjection {
   ];
   List<IconData?> opcionesIcono = [
     null, null, null, null,
-    MaterialIcons.attach_money,
+    MaterialIcons.money_off,
     MaterialIcons.get_app,
   ];
   bool mostrarResultados = false;
@@ -125,6 +126,35 @@ class CobranzaMainController extends GetInjection {
     update();
   }
 
+  Future<void> operacionPopUp(String id) async {
+    switch(id) {
+      case "4":
+        await _filtrarNotasEstatus(id);
+        break;
+      case "5":
+        await _exportarConsultaCsv();
+        break;
+      default:
+        return;
+    }
+  }
+
+  Future<void> _filtrarNotasEstatus(String id) async {
+    var textoNotas = opcionesBase[tool.str2int(id)];
+    if(textoNotas.toUpperCase().contains("PAGADAS")) {
+      opcionesBase[tool.str2int(id)] = "Ver Pendientes~B";
+      opcionesIcono[tool.str2int(id)] = MaterialIcons.attach_money;
+      estatusFiltro = Literals.statusCobranzaPagada;
+    } else {
+      opcionesBase[tool.str2int(id)] = "Ver Pagadas~B";
+      opcionesIcono[tool.str2int(id)] = MaterialIcons.money_off;
+      estatusFiltro = Literals.statusCobranzaPendiente;
+    }
+    _cargarOpcionesPopup();
+    await cargarListaCobranza();
+    return;
+  }
+
   void busquedaCobranzas(String? valor) async {
     await cargarListaCobranza();
     var busqueda = _listaCobranzaBusqueda.where((c) {
@@ -151,23 +181,14 @@ class CobranzaMainController extends GetInjection {
     update();
   }
 
-  Future<void> operacionPopUp(String id) async {
-    switch(id) {
-      case "4":
-        break;
-      case "5":
-        await _exportarConsultaCsv();
-        break;
-      default:
-        return;
-    }
-  }
-
   Future<void> cargarListaCobranza() async {
     try {
       var cobranzaStorage = List<Cobranzas>.from(
         storage.get([Cobranzas()]).map((json) => Cobranzas.fromJson(json))
       );
+      cobranzaStorage = cobranzaStorage.where(
+        (c) => c.estatus == estatusFiltro
+      ).toList();
       if(opcionDeudaSeleccion > 1) {
         cobranzaStorage = cobranzaStorage.where(
           (c) => c.fechaVencimiento != Literals.sinVencimiento 
@@ -324,6 +345,7 @@ class CobranzaMainController extends GetInjection {
 
   void _cargarOpcionesPopup() {
     try {
+      opcionesConsulta = [];
       for (var i = 0; i < opcionesBase.length; i++) {
         var opciones = opcionesBase[i].split("~");
         if(opcionSelected == "" && opciones[1] == "R") {
