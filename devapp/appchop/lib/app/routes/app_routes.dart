@@ -1,5 +1,6 @@
 class AppRoutes {
   static const alpha = "/alpha";
+  static const configuracion = "/configuracion";
   static const login = "/login";
   static const home = "/home";
   static const cobranzaMain = "/cobranza_main";

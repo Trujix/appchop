@@ -1,3 +1,4 @@
+/* ------------------------------------------------------------------------------------*/
 DROP PROCEDURE IF EXISTS STP_VERIFICAR_AUTORIZATION;
 DELIMITER $$
 CREATE PROCEDURE STP_VERIFICAR_AUTORIZATION(
@@ -16,7 +17,6 @@ END $$
 DELIMITER ;
 
 /* ------------------------------------------------------------------------------------*/
-
 DROP PROCEDURE IF EXISTS STP_INICIAR_SESION;
 DELIMITER $$
 CREATE PROCEDURE STP_INICIAR_SESION(
@@ -51,7 +51,6 @@ END $$
 DELIMITER ;
 
 /* ------------------------------------------------------------------------------------*/
-
 DROP PROCEDURE IF EXISTS STP_ACTUALIZAR_SESION;
 DELIMITER $$
 CREATE PROCEDURE STP_ACTUALIZAR_SESION(
@@ -69,7 +68,6 @@ DELIMITER ;
 
 
 /* ------------------------------------------------------------------------------------*/
-
 DROP PROCEDURE IF EXISTS STP_ACEPTA_ACTUALIZAR;
 DELIMITER $$
 CREATE PROCEDURE STP_ACEPTA_ACTUALIZAR(

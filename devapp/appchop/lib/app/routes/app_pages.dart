@@ -8,6 +8,8 @@ import '../modules/alta_cobranza/alta_cobranza_binding.dart';
 import '../modules/alta_cobranza/alta_cobranza_page.dart';
 import '../modules/cobranza_main/cobranza_main_binding.dart';
 import '../modules/cobranza_main/cobranza_main_page.dart';
+import '../modules/configuracion/configuracion_binding.dart';
+import '../modules/configuracion/configuracion_page.dart';
 import '../modules/home/home_binding.dart';
 import '../modules/home/home_page.dart';
 import '../modules/login/login_binding.dart';
@@ -22,6 +24,11 @@ class AppPages {
       name: AppRoutes.alpha,
       page: () => const AlphaPage(),
       binding: AlphaBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.configuracion,
+      page: () => const ConfiguracionPage(),
+      binding: ConfiguracionBinding(),
     ),
     GetPage(
       name: AppRoutes.login,

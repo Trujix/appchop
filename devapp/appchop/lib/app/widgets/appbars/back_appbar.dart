@@ -3,10 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 
+import '../../utils/color_list.dart';
+
 class BackAppbar extends StatelessWidget implements PreferredSizeWidget {
   final void Function() cerrar;
   final int fondo;
-  final int iconoColor;
+  final int? iconoColor;
   final String texto;
   final int textoColor;
 
@@ -14,7 +16,7 @@ class BackAppbar extends StatelessWidget implements PreferredSizeWidget {
     super.key,
     required this.cerrar,
     this.fondo = 0xFFFFFFFF,
-    this.iconoColor = 0xFF000000,
+    this.iconoColor,
     this.texto = "",
     this.textoColor = 0xFF000000,
   });
@@ -39,7 +41,7 @@ class BackAppbar extends StatelessWidget implements PreferredSizeWidget {
         onPressed: cerrar,
         icon: Icon(
           MaterialIcons.arrow_back,
-          color: Color(iconoColor),
+          color: Color(iconoColor ?? ColorList.sys[0]),
           size: 30,
         ),
       ),

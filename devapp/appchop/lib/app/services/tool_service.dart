@@ -16,6 +16,7 @@ import '../data/models/local_storage/cobranzas.dart';
 import '../widgets/dialogs/alerta_dialog.dart';
 import '../widgets/dialogs/loading_dialog.dart';
 import '../widgets/dialogs/modal_dialog.dart';
+import '../widgets/dialogs/pregunta_dialog.dart';
 
 class ToolService extends GetxController {
   bool _loadingOpen = false;
@@ -88,6 +89,30 @@ class ToolService extends GetxController {
         );
       },
     );
+  }
+
+  Future<bool> ask(String mensaje, String pregunta) async {
+    try {
+      var askDialog = Get.context!;
+      bool respuesta = false;
+      await showDialog(
+        context: askDialog,
+        builder: (BuildContext context) {
+          context = context;
+          return PreguntaDialog(
+            mensaje: mensaje,
+            pregunta: pregunta,
+            respuesta: (resp) {
+              respuesta = resp;
+              Navigator.of(context).pop();
+            },
+          );
+        }
+      );
+      return respuesta;
+    } catch(e) {
+      return false;
+    }
   }
 
   void toast([String msg = ""]) {

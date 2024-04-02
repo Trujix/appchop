@@ -69,7 +69,7 @@ class HomeController extends GetInjection {
         pagina = AppRoutes.altaCategoria;
       break;
       case 3:
-        pagina = "";
+        pagina = AppRoutes.configuracion;
       break;
       default:
         return;
