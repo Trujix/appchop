@@ -132,6 +132,18 @@ class ToolService extends GetxController {
     return input?.text == "" || input == null;
   }
 
+  bool soloSaltos(String texto) {
+    var caracteres = texto.split("");
+    var prohibidos = ["\n", " "];
+    var letras = 0;
+    for (var caracter in caracteres) {
+      if(!prohibidos.contains(caracter)) {
+        letras++;
+      }
+    }
+    return letras == 0;
+  }
+
   String cadenaAleatoria(int length, [String tipo = 'LNX']) {
     var randomGenerator = Random();
     var caracteresRandom = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';

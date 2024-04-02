@@ -25,8 +25,7 @@ class AltaNotasPage extends StatelessWidget with WidgetsBindingObserver {
           cerrar: _.cerrar,
           fondo: ColorList.sys[3],
         ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        body: ListView(
           children: <Widget>[
             const TituloContainer(
               texto: "Información de la nota",
@@ -59,6 +58,7 @@ class AltaNotasPage extends StatelessWidget with WidgetsBindingObserver {
                   text: "Nota",
                   icon: MaterialIcons.note_add,
                   lines: 5,
+                  maxLength: 500,
                 ),
                 Container(
                   padding: const EdgeInsets.fromLTRB(15, 5, 15, 10,),

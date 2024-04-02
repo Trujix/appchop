@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 
 import '../modules/alpha/alpha_binding.dart';
 import '../modules/alpha/alpha_page.dart';
+import '../modules/alta_cargo_abono/alta_cargo_abono_binding.dart';
+import '../modules/alta_cargo_abono/alta_cargo_abono_page.dart';
 import '../modules/alta_categoria/alta_categoria_binding.dart';
 import '../modules/alta_categoria/alta_categoria_page.dart';
 import '../modules/alta_cobranza/alta_cobranza_binding.dart';
@@ -56,6 +58,11 @@ class AppPages {
       name: AppRoutes.altaNotas,
       page: () => const AltaNotasPage(),
       binding: AltaNotasBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.altaCargoAbono,
+      page: () => const AltaCargoAbonoPage(),
+      binding: AltaCargoAbonoBinding(),
     ),
     GetPage(
       name: AppRoutes.altaCategoria,
