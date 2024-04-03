@@ -21,6 +21,7 @@ class Cobranzas {
   String? latitud;
   String? longitud;
   String? estatus;
+  String? bloqueado;
   String? idCobrador;
 
   Cobranzas({
@@ -40,6 +41,7 @@ class Cobranzas {
     this.latitud = "",
     this.longitud = "",
     this.estatus = Literals.statusCobranzaPendiente,
+    this.bloqueado = Literals.bloqueoNo,
     this.idCobrador = "",
   });
 
@@ -72,6 +74,7 @@ class Cobranzas {
     'latitud'           : latitud,
     'longitud'          : longitud,
     'estatus'           : estatus,
+    'bloqueado'         : bloqueado,
     'idCobrador'        : idCobrador,
   };
 
@@ -92,6 +95,7 @@ class Cobranzas {
     latitud: json['latitud'] ?? "",
     longitud: json['longitud'] ?? "",
     estatus: json['estatus'] ?? "",
+    bloqueado: json['bloqueado'] ?? "",
     idCobrador: json['idCobrador'] ?? "",
   );
 }

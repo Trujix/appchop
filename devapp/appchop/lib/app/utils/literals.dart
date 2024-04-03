@@ -14,6 +14,8 @@ class Literals {
 
   static const String statusActivo = "ACTIVO";
   static const String statusIdDispositivo = "NONE";
+  static const String bloqueoSi = "SI";
+  static const String bloqueoNo = "NO";
 
   static const String defaultCategoriaTodo = "TODO";
   static const String defaultCategoriaTodoTxt = "Mostrar todo";
