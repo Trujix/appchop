@@ -17,6 +17,7 @@ import '../widgets/dialogs/alerta_dialog.dart';
 import '../widgets/dialogs/loading_dialog.dart';
 import '../widgets/dialogs/modal_dialog.dart';
 import '../widgets/dialogs/pregunta_dialog.dart';
+import '../widgets/simplecalculators/default_simplecalculator.dart';
 
 class ToolService extends GetxController {
   bool _loadingOpen = false;
@@ -125,6 +126,19 @@ class ToolService extends GetxController {
       textColor: Colors.white,
       fontSize: 16.0,
       webShowClose: true,
+    );
+  }
+
+  void calculadora() {
+    var calculadoraContext = Get.context!;
+    showModalBottomSheet(
+      context: calculadoraContext,
+      builder: (BuildContext context) {
+        return SizedBox(
+          height: MediaQuery.of(context).size.height * 0.75,
+          child: const DefaultSimplecalculator(),
+        );
+      }
     );
   }
 

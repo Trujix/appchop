@@ -73,13 +73,23 @@ class AltaCobranzaPage extends StatelessWidget with WidgetsBindingObserver {
                     ),
                   ],
                 ),
-                StandardTextform(
-                  text: "Cantidad *",
-                  controller: _.cantidad,
-                  focusNode: _.cantidadFocus,
-                  icon: MaterialIcons.attach_money,
-                  keyboardType: TextInputType.number,
-                  enabled: _.nuevo,
+                Row(
+                  children: [
+                    Expanded(
+                      child: StandardTextform(
+                        text: "Cantidad *",
+                        controller: _.cantidad,
+                        focusNode: _.cantidadFocus,
+                        icon: MaterialIcons.attach_money,
+                        keyboardType: TextInputType.number,
+                        enabled: _.nuevo,
+                      ),
+                    ),
+                    /*IconoBotonInkwell(
+                      onTap: _.abrirCalculadora,
+                      icon: FontAwesome.calculator,
+                    ),*/
+                  ],
                 ),
               ],
             ),

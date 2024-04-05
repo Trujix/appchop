@@ -5,9 +5,11 @@ import 'package:get/get.dart';
 import 'package:open_file_plus/open_file_plus.dart';
 
 import '../../data/models/cobranza_popup_opciones.dart';
+import '../../data/models/local_storage/cargos_abonos.dart';
 import '../../data/models/local_storage/categorias.dart';
 import '../../data/models/local_storage/cobranzas.dart';
 import '../../data/models/local_storage/local_storage.dart';
+import '../../data/models/local_storage/notas.dart';
 import '../../routes/app_routes.dart';
 import '../../utils/get_injection.dart';
 import '../../utils/literals.dart';
@@ -22,7 +24,7 @@ class CobranzaMainController extends GetInjection {
   TextEditingController busqueda = TextEditingController();
   List<CobranzaPopupOpciones> opcionesConsulta = [];
   String opcionSelected = "";
-  String saldoTotal = "\$ 0.00";
+  double saldoTotal = 0.0;
   List<String> opcionesBase = [
     "Nombre~R",
     "Fecha~R",
@@ -221,11 +223,10 @@ class CobranzaMainController extends GetInjection {
   }
 
   void _calcularSaldo() {
-    var saldo = 0.0;
+    saldoTotal = 0.0;
     for(var cobranza in listaCobranzas) {
-      saldo +=  cobranza.saldo!;
+      saldoTotal +=  cobranza.saldo!;
     }
-    saldoTotal = "\$ ${saldo.toStringAsFixed(2)}";
   }
 
   Future<void> configurarCategorias(LocalStorage localStorage) async {
@@ -298,7 +299,42 @@ class CobranzaMainController extends GetInjection {
   }
 
   void agregarCargoAbono(Cobranzas cobranza) {
-    
+    Get.toNamed(
+      AppRoutes.altaCargoAbono,
+      arguments: {
+        "cobranza" : cobranza,
+      },
+    );
+  }
+
+  Future<void> borrarCobranza(Cobranzas cobranza) async {
+    var borrar = await tool.ask("Atención!", "¿Está seguro de querer ELIMINAR definitivamente el registro?");
+    if(!borrar) {
+      return;
+    }
+    try {
+      tool.isBusy();
+      await Future.delayed(1.seconds);
+      var cobranzaStorage = List<Cobranzas>.from(
+        storage.get([Cobranzas()]).map((json) => Cobranzas.fromJson(json))
+      );
+      var notasStorage = List<Notas>.from(
+        storage.get([Notas()]).map((json) => Notas.fromJson(json))
+      );
+      var cargoAbonosStorage = List<CargosAbonos>.from(
+        storage.get([CargosAbonos()]).map((json) => CargosAbonos.fromJson(json))
+      );
+      cobranzaStorage.removeWhere((c) => c.idCobranza == cobranza.idCobranza);
+      notasStorage.removeWhere((n) => n.idCobranza == cobranza.idCobranza);
+      cargoAbonosStorage.removeWhere((c) => c.idCobranza == cobranza.idCobranza);
+      await storage.update(cobranzaStorage);
+      await storage.update(notasStorage);
+      await storage.update(cargoAbonosStorage);
+      await cargarListaCobranza();
+      tool.isBusy(false);
+    } catch(e) {
+      tool.msg("Ocurrió un error al intentar eliminar registro", 3);
+    }
   }
 
   void mensajeCobranzaElemento() {
@@ -316,6 +352,10 @@ class CobranzaMainController extends GetInjection {
     );
   }
 
+  Future<void> abrirTotalDetalle() async {
+    
+  } 
+
   Future<void> _exportarConsultaCsv() async {
     try {
       if(_listaCobranzaCsv.isEmpty) {
@@ -328,7 +368,7 @@ class CobranzaMainController extends GetInjection {
       var contenido = tool.cobranzaCsv(
         listaCobranzas,
         categoriaStorage,
-        ["tabla", "idUsuario", "idCobranza", "idCobrador", "latitud", "longitud", "estatus",]
+        ["tabla", "idUsuario", "idCobranza", "idCobrador", "latitud", "longitud", "estatus", "bloqueado",]
       );
       var archivoCsv = await tool.crearArchivo(contenido, Literals.reporteCobranzaCsv);
       await Future.delayed(0.7.seconds);

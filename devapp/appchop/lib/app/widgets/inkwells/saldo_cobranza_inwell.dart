@@ -5,10 +5,12 @@ import '../../utils/color_list.dart';
 import '../containers/card_container.dart';
 
 class SaldoCobranzaInkwell extends StatelessWidget {
+  final void Function() onTap;
   final String saldoTotal; 
   final int opcionDeudaSeleccion;
   const SaldoCobranzaInkwell({
     super.key,
+    required this.onTap,
     this.saldoTotal = "",
     this.opcionDeudaSeleccion = 0,
   });
@@ -16,7 +18,7 @@ class SaldoCobranzaInkwell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: onTap,
       child: Row(
         children: [
           Expanded(

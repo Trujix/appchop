@@ -125,6 +125,10 @@ class AltaCobranzaController extends GetInjection {
     });
   }
 
+  void abrirCalculadora() {
+    tool.calculadora();
+  }
+
   Future<void> guardarNuevaCobranza() async {
     try {
       if(!_validarForm()) {
@@ -151,6 +155,7 @@ class AltaCobranzaController extends GetInjection {
         latitud: utilizarUbicacionCliente ? latLng.latitude.toString() : "",
         longitud: utilizarUbicacionCliente ? latLng.longitude.toString() : "",
         fechaVencimiento: vencimiento == "" ? Literals.sinVencimiento : vencimiento,
+        saldo: tool.str2double(cantidad.text),
       );
       if(nuevo) {
         nuevaCobranza.saldo = tool.str2double(cantidad.text);

@@ -28,6 +28,8 @@ class Literals {
   static const String statusCobranzaPagada = "PAGADA";
   static const String statusCobranzaPendiente = "PENDIENTE";
   static const String markerIdClienteCobranza = "COBRANZA_MARKER_CLIENTE";
+  static const String movimientoCargo = "CARGO";
+  static const String movimientoAbono = "ABONO";
 
   static const String sinVencimiento = "31-12-2999";
  

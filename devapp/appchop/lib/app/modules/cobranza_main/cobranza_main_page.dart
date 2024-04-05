@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 import 'package:material_color_gen/material_color_gen.dart';
+import 'package:money_formatter/money_formatter.dart';
 
 import '../../utils/color_list.dart';
 import '../../widgets/appbars/main_appbar.dart';
@@ -55,6 +56,7 @@ class CobranzaMainPage extends StatelessWidget with WidgetsBindingObserver {
                         onLongPress: _.editarCobranzaElemento,
                         aregarNota: _.agregarNota,
                         agregarCargoAbono: _.agregarCargoAbono,
+                        borrarCobranza: _.borrarCobranza,
                       ),
                     ),
                   );
@@ -66,7 +68,10 @@ class CobranzaMainPage extends StatelessWidget with WidgetsBindingObserver {
               },
             ),
             SaldoCobranzaInkwell(
-              saldoTotal: _.saldoTotal,
+              onTap: _.abrirTotalDetalle,
+              saldoTotal: MoneyFormatter(
+                amount: _.saldoTotal,
+              ).output.symbolOnLeft,
               opcionDeudaSeleccion: _.opcionDeudaSeleccion,
             ),
           ],

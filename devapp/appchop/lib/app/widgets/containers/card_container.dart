@@ -7,6 +7,7 @@ class CardContainer extends StatelessWidget {
   final EdgeInsetsGeometry margin;
   final CrossAxisAlignment columnAlign;
   final double width;
+  final double radius;
   const CardContainer({
     super.key,
     this.children = const [],
@@ -15,6 +16,7 @@ class CardContainer extends StatelessWidget {
     this.margin = const EdgeInsets.fromLTRB(10, 10, 10, 10),
     this.columnAlign = CrossAxisAlignment.start,
     this.width = double.infinity,
+    this.radius = 20,
   });
 
   @override
@@ -28,8 +30,8 @@ class CardContainer extends StatelessWidget {
         border: Border.all(
           color: Color(fondo),
         ),
-        borderRadius: const BorderRadius.all(
-          Radius.circular(20),
+        borderRadius: BorderRadius.all(
+          Radius.circular(radius),
         ),
       ),
       child: Column(

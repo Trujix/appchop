@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../../data/models/local_storage/cargos_abonos.dart';
 import '../../data/models/local_storage/categorias.dart';
 import '../../data/models/local_storage/cobranzas.dart';
 import '../../data/models/local_storage/local_storage.dart';
@@ -45,6 +46,7 @@ class AlphaController extends GetInjection {
     await Categorias.init();
     await Cobranzas.init();
     await Notas.init();
+    await CargosAbonos.init();
     return;
   }
 
