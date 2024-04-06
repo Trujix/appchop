@@ -1,10 +1,10 @@
 import 'package:flutter/widgets.dart';
 
-class BasgeContainer extends StatelessWidget {
+class BadgeContainer extends StatelessWidget {
   final String texto;
   final int textoColor;
   final int fondoColor;
-  const BasgeContainer({
+  const BadgeContainer({
     super.key,
     this.texto = "",
     this.textoColor = 0xFFFDFEFE,

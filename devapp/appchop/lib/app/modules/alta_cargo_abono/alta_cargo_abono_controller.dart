@@ -8,6 +8,8 @@ import '../../data/models/local_storage/cobranzas.dart';
 import '../../data/models/local_storage/local_storage.dart';
 import '../../utils/get_injection.dart';
 import '../../utils/literals.dart';
+import '../../widgets/reports/estado_cuenta_report.dart';
+import '../../widgets/reports/recibo_abono_report.dart';
 import '../cobranza_main/cobranza_main_controller.dart';
 
 class AltaCargoAbonoController extends GetInjection {
@@ -23,7 +25,12 @@ class AltaCargoAbonoController extends GetInjection {
   double saldoPendiente = 0;
   double saldoCargos = 0;
   double saldoAbonos = 0;
+
   List<CargosAbonos> listaCargosAbonos = [];
+  List<String> cargosAbonosPdfHeader = [
+    "FECHA", "CARGO", "ABONO", "DESCRIPCION",
+  ];
+  List<List<dynamic>> cargosAbonosTabla = [];
 
   @override
   void onInit() {
@@ -46,10 +53,6 @@ class AltaCargoAbonoController extends GetInjection {
     }
     saldoPendiente = cobranzaEditar!.saldo!;
     _cargarListaCargosAbonos();
-  }
-
-  Future<void> crearDetalleCompartirPdf() async {
-
   }
 
   Future<void> marcarCobranzaPagada() async {
@@ -166,7 +169,40 @@ class AltaCargoAbonoController extends GetInjection {
   }
 
   void mostrarDetalleCargoAbono(CargosAbonos cargosAbonos) {
+    
+  }
 
+  Future<void> crearAbonoReportePdf(CargosAbonos cargosAbonos) async {
+    var estadoCuenta = ReciboAbonoReport(
+      fecha: cargosAbonos.fechaRegistro!,
+      monto: MoneyFormatter(amount: cargosAbonos.monto!).output.symbolOnLeft,
+    );
+    var pdf = await tool.crearPdf(estadoCuenta, Literals.reporteEstadoCuentaPdf);
+    await tool.compartir(pdf!, Literals.reporteEstadoCuentaPdf);
+  }
+
+  Future<void> crearEstadoCuentaPdf() async {
+    /*cargosAbonosTabla = [];
+    cargosAbonosTabla.add(cargosAbonosPdfHeader);
+    for(var cargoAbono in listaCargosAbonos) {
+      var monto = MoneyFormatter(amount: cargoAbono.monto!).output.symbolOnLeft;
+      List<String> filaCargoAbono = [
+        cargoAbono.fechaRegistro!,
+        cargoAbono.tipo! == Literals.movimientoCargo ? monto : "\$ 0.00",
+        cargoAbono.tipo! == Literals.movimientoAbono ? monto : "\$ 0.00",
+        cargoAbono.referencia!,
+      ];
+      cargosAbonosTabla.add(filaCargoAbono);
+    }
+    var estadoCuenta = EstadoCuentaReport(
+      tablaCargosAbonos: cargosAbonosTabla,
+      nombre: cobranzaEditar!.nombre!,
+      saldoTotal: saldoPendiente,
+      saldoAbonos: saldoAbonos,
+      saldoCargos: saldoCargos,
+    );
+    var pdf = await tool.crearPdf(estadoCuenta, Literals.reporteEstadoCuentaPdf);
+    await tool.compartir(pdf!, Literals.reporteEstadoCuentaPdf);*/
   }
 
   void _cargarListaCargosAbonos() {

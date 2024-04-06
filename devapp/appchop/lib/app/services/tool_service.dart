@@ -10,6 +10,8 @@ import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
+import 'package:pdf/widgets.dart' as pdfwidget;
+import 'package:pdf/pdf.dart' as pdflib;
 
 import '../data/models/local_storage/categorias.dart';
 import '../data/models/local_storage/cobranzas.dart';
@@ -251,6 +253,28 @@ class ToolService extends GetxController {
   Future<void> wait([int segundos = 2]) async {
     await Future.delayed(Duration(seconds: segundos));
     return;
+  }
+
+  Future<String?> crearPdf(pdfwidget.Widget child, String nombreArchivo) async {
+    var documento = pdfwidget.Document();
+    documento.addPage(
+      pdfwidget.MultiPage(
+        pageTheme: const pdfwidget.PageTheme(
+          pageFormat: pdflib.PdfPageFormat.letter,
+          orientation: pdfwidget.PageOrientation.portrait,
+        ),
+        build: (context) => [pdfwidget.Padding(
+          padding: const pdfwidget.EdgeInsets.only(right: 20),
+          child: child,
+        )],
+      ),
+    );
+    var pdfArchivo = await documento.save();
+    var directorio = await getApplicationDocumentsDirectory();
+    var rutaArchivo = "${directorio.path}/$nombreArchivo";
+    var pdf = File(rutaArchivo);
+    await pdf.writeAsBytes(pdfArchivo, flush: true);
+    return rutaArchivo;
   }
 
   String cobranzaCsv(

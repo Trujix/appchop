@@ -38,6 +38,7 @@ class Literals {
   static const String apiTrue = "true";
 
   static const String reporteCobranzaCsv = "reporte_cobranza.csv";
+  static const String reporteEstadoCuentaPdf = "estado_cuenta.pdf";
 
   /*
   AIzaSyCOsLeoPitgQOiMS6cvoNTdVffvk6-Dcms

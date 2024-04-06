@@ -53,7 +53,7 @@ class CargoAbonoInkwell extends StatelessWidget {
                   ),
                 ),
               ),
-              BasgeContainer(
+              BadgeContainer(
                 texto: MoneyFormatter(
                   amount: cargoAbono.monto!
                 ).output.symbolOnLeft,

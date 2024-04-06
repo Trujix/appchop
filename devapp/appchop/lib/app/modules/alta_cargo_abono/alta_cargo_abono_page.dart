@@ -163,9 +163,10 @@ class AltaCargoAbonoPage extends StatelessWidget with WidgetsBindingObserver {
                 body: CargoAbonoCustomscrollview(
                   scrollController: _.scrollController,
                   listaCargosAbonos: _.listaCargosAbonos,
-                  onLongPress: _.mostrarDetalleCargoAbono,
                   enabledSlider: _.pendiente,
+                  onLongPress: _.mostrarDetalleCargoAbono,
                   onBorrar: _.revertirCargoAbono,
+                  onPdf: _.crearAbonoReportePdf,
                 ),
               ),
             ),
@@ -184,7 +185,7 @@ class AltaCargoAbonoPage extends StatelessWidget with WidgetsBindingObserver {
           ],
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: _.crearDetalleCompartirPdf,
+          onPressed: _.crearEstadoCuentaPdf,
           shape: const CircleBorder(),
           backgroundColor: Color(ColorList.sys[2]),
           child: Icon(

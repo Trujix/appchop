@@ -12,6 +12,7 @@ class CargoAbonoCustomscrollview extends StatelessWidget {
   final List<CargosAbonos> listaCargosAbonos;
   final void Function(CargosAbonos) onLongPress;
   final void Function(CargosAbonos) onBorrar;
+  final void Function(CargosAbonos) onPdf;
   final bool enabledSlider;
   const CargoAbonoCustomscrollview({
     super.key,
@@ -19,6 +20,7 @@ class CargoAbonoCustomscrollview extends StatelessWidget {
     this.listaCargosAbonos = const [],
     required this.onLongPress,
     required this.onBorrar,
+    required this.onPdf,
     this.enabledSlider = true,
   });
 
@@ -29,7 +31,7 @@ class CargoAbonoCustomscrollview extends StatelessWidget {
       slivers: listaCargosAbonos.map((cargoAbono) {
         final index = listaCargosAbonos.indexOf(cargoAbono);
         return SliverToBoxAdapter(
-          child: Builder(
+          /*child: Builder(
             builder: (context) {
               if(index == 0) {
                 return CargoAbonoInkwell(
@@ -39,7 +41,7 @@ class CargoAbonoCustomscrollview extends StatelessWidget {
               } else if(cargoAbono.tipo == Literals.movimientoAbono) {
                 return BorrarPdfSlidable(
                   onBorrar: () => onBorrar(cargoAbono),
-                  onPdf: () {},
+                  onPdf: () => onPdf(cargoAbono),
                   enabled: enabledSlider,
                   child: CargoAbonoInkwell(
                     cargoAbono: cargoAbono,
@@ -57,15 +59,15 @@ class CargoAbonoCustomscrollview extends StatelessWidget {
                 );
               }
             },
-          ),
-          /*child: Container(
+          ),*/
+          child: Container(
             padding: const EdgeInsets.all(15,),
             child: Text(
               MoneyFormatter(
                 amount: cargoAbono.monto!,
               ).output.symbolOnLeft,
             ),
-          ),*/
+          ),
         );
       }).toList(),
     );

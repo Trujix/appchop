@@ -41,7 +41,7 @@ class BorrarPdfSlidable extends StatelessWidget {
             spacing: 1,
             flex: 1,
             onPressed: (_) {
-              onBorrar();
+              onPdf();
             },
             backgroundColor: const Color(0xFF95A5A6),
             foregroundColor: Colors.white,

@@ -57,10 +57,10 @@ class ModalDialog extends StatelessWidget {
                             Navigator.of(context).pop();
                           },
                           child: Container(
-                            padding: const EdgeInsets.fromLTRB(10, 2, 8, 5),
+                            padding: const EdgeInsets.fromLTRB(10, 4, 10, 5),
                             child: Icon(
-                              MaterialIcons.close,
-                              color: Color(ColorList.sys[0]),
+                              MaterialIcons.cancel,
+                              color: Color(ColorList.sys[5]),
                               size: 16,
                             ),
                           ),

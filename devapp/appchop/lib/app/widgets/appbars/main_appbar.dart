@@ -9,6 +9,7 @@ class MainAppbar extends StatelessWidget implements PreferredSizeWidget {
   final void Function() onTap;
   final void Function(String?) onTapPopup;
   final void Function(String?) onChanged;
+  final void Function() onTapClear;
   final List<CobranzaPopupOpciones> opciones;
   final String? opcionPopup;
   final double height;
@@ -18,6 +19,7 @@ class MainAppbar extends StatelessWidget implements PreferredSizeWidget {
     required this.onTap,
     required this.onTapPopup,
     required this.onChanged,
+    required this.onTapClear,
     this.opciones = const [],
     this.opcionPopup = "",
     this.height = 50,
@@ -36,7 +38,7 @@ class MainAppbar extends StatelessWidget implements PreferredSizeWidget {
             MaterialIcons.search,
           ),
           suffixIcon: IconButton(
-            onPressed: controller!.clear, 
+            onPressed: onTapClear, 
             icon: const Icon(
               Icons.clear,
               size: 16,

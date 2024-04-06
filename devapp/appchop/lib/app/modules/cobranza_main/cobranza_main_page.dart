@@ -29,6 +29,7 @@ class CobranzaMainPage extends StatelessWidget with WidgetsBindingObserver {
           onTapPopup: _.opcionPopupConsulta,
           opcionPopup: _.opcionSelected,
           onChanged: _.busquedaCobranzas,
+          onTapClear: _.limpiarBusquedaTexto,
         ),
         body: Column(
           children: [

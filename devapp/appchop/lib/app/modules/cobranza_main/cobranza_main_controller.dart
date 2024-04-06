@@ -55,6 +55,15 @@ class CobranzaMainController extends GetInjection {
   List<Cobranzas> _listaCobranzaBusqueda = [];
   List<Cobranzas> _listaCobranzaCsv = [];
 
+  double saldoMeDeben = 0.0;
+  double saldoDebo = 0.0;
+  int totalMeDeben = 0;
+  int totalDebo = 0;
+  double saldoCargos = 0.0;
+  double saldoAbonos = 0.0;
+  int totalCargos = 0;
+  int totalAbonos = 0;
+
   @override
   Future<void> onInit() async {
     await _init();
@@ -179,18 +188,31 @@ class CobranzaMainController extends GetInjection {
     }).toList();
     listaCobranzas = busqueda;
     _listaCobranzaCsv = busqueda;
-    _calcularSaldo();
+    _calcularSaldos();
     update();
   }
 
   Future<void> cargarListaCobranza() async {
     try {
+      saldoMeDeben = 0.0;
+      saldoDebo = 0.0;
+      totalMeDeben = 0;
+      totalDebo = 0;
       var cobranzaStorage = List<Cobranzas>.from(
         storage.get([Cobranzas()]).map((json) => Cobranzas.fromJson(json))
       );
       cobranzaStorage = cobranzaStorage.where(
         (c) => c.estatus == estatusFiltro
       ).toList();
+      for(var cobranzaElem in cobranzaStorage) {
+        if(cobranzaElem.tipoCobranza == Literals.tipoCobranzaMeDeben) {
+          saldoMeDeben = saldoMeDeben + cobranzaElem.saldo!;
+          totalMeDeben++;
+        } else if(cobranzaElem.tipoCobranza == Literals.tipoCobranzaDebo) {
+          saldoDebo = saldoDebo + cobranzaElem.saldo!;
+          totalDebo++;
+        }
+      }
       if(opcionDeudaSeleccion > 1) {
         cobranzaStorage = cobranzaStorage.where(
           (c) => c.fechaVencimiento != Literals.sinVencimiento 
@@ -214,7 +236,7 @@ class CobranzaMainController extends GetInjection {
       _listaCobranzaBusqueda = cobranzaStorage;
       _listaCobranzaCsv = cobranzaStorage;
       mostrarResultados = cobranzaStorage.isNotEmpty;
-      _calcularSaldo();
+      _calcularSaldos();
     } catch(e) {
       tool.msg("Ocurrió un error al cargar la lista de cobranza", 3);
     } finally {
@@ -222,10 +244,41 @@ class CobranzaMainController extends GetInjection {
     }
   }
 
-  void _calcularSaldo() {
+  Future<void> limpiarBusquedaTexto() async {
+    busqueda.clear();
+    await cargarListaCobranza();
+  }
+
+  void _calcularSaldos() {
     saldoTotal = 0.0;
+    saldoCargos = 0.0;
+    saldoAbonos = 0.0;
+    totalCargos = 0;
+    totalAbonos = 0;
+    List<String> idsCobranzas = [];
     for(var cobranza in listaCobranzas) {
       saldoTotal +=  cobranza.saldo!;
+      idsCobranzas.add(cobranza.idCobranza!);
+      if(cobranza.tipoCobranza == Literals.tipoCobranzaDebo) {
+        saldoAbonos = saldoAbonos + cobranza.cantidad!;
+        totalAbonos++;
+      } else if(cobranza.tipoCobranza == Literals.tipoCobranzaMeDeben) {
+        saldoCargos = saldoCargos + cobranza.cantidad!;
+        totalCargos++;
+      }
+    }
+    var listaCargosAbonos = List<CargosAbonos>.from(
+      storage.get([CargosAbonos()]).map((json) => CargosAbonos.fromJson(json))
+    );
+    listaCargosAbonos = listaCargosAbonos.where((c) => idsCobranzas.contains(c.idCobranza)).toList();
+    for(var cargoAbono in listaCargosAbonos) {
+      if(cargoAbono.tipo == Literals.movimientoCargo) {
+        saldoCargos = saldoCargos + cargoAbono.monto!;
+        totalCargos++;
+      } else if(cargoAbono.tipo == Literals.movimientoAbono) {
+        saldoAbonos = saldoAbonos + cargoAbono.monto!;
+        totalAbonos++;
+      }
     }
   }
 
@@ -352,9 +405,24 @@ class CobranzaMainController extends GetInjection {
     );
   }
 
-  Future<void> abrirTotalDetalle() async {
-    
-  } 
+  void abrirTotalDetalle() {
+    /*tool.modal(
+      widgets: [
+        TotalesModal(
+          estatus: estatusFiltro,
+          saldoMeDeben: saldoMeDeben,
+          saldoDebo: saldoDebo,
+          totalMeDeben: totalMeDeben,
+          totalDebo: totalDebo,
+          saldoCargos: saldoCargos,
+          saldoAbonos: saldoAbonos,
+          totalCargos: totalCargos,
+          totalAbonos: totalAbonos,
+        ),
+      ],
+      height: 250,
+    );*/
+  }
 
   Future<void> _exportarConsultaCsv() async {
     try {
