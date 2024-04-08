@@ -85,10 +85,10 @@ class AltaCobranzaPage extends StatelessWidget with WidgetsBindingObserver {
                         enabled: _.nuevo,
                       ),
                     ),
-                    /*IconoBotonInkwell(
+                    IconoBotonInkwell(
                       onTap: _.abrirCalculadora,
                       icon: FontAwesome.calculator,
-                    ),*/
+                    ),
                   ],
                 ),
               ],

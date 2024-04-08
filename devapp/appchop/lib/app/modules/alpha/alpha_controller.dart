@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -13,7 +14,8 @@ import '../login/login_binding.dart';
 import '../login/login_page.dart';
 
 class AlphaController extends GetInjection {
-
+  late StatelessWidget _page;
+  late Bindings _binding;
   @override
   Future<void> onInit() async {
     await _init();
@@ -23,22 +25,23 @@ class AlphaController extends GetInjection {
   Future<void> _init() async {
     try {
       await storage.init();
-      await firebase.init();
-      var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
       await tool.wait();
-      var page = localStorage.login! ? const HomePage() : const LoginPage();
-      var binding = localStorage.login! ? HomeBinding() : LoginBinding();
+      var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
+      _page = localStorage.login! ? const HomePage() : const LoginPage();
+      _binding = localStorage.login! ? HomeBinding() : LoginBinding();
       await _localStorageClassInit();
-      Get.offAll(
-        page,
-        binding: binding,
-        transition: Transition.circularReveal,
-        duration: 1.5.seconds,
-      );
+      await firebase.init();
+      return;
     } catch(e) {
       return;
     } finally {
       _verificarPermisos();
+      Get.offAll(
+        _page,
+        binding: _binding,
+        transition: Transition.circularReveal,
+        duration: 1.5.seconds,
+      );
     }
   }
 

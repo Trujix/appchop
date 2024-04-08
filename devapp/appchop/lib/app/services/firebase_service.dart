@@ -13,8 +13,7 @@ class FirebaseService {
     try {
       await Firebase.initializeApp();
       var token = await FirebaseMessaging.instance.getToken();
-      _updateFirebaseToken(token!);
-      await FirebaseMessaging.instance.subscribeToTopic(Literals.notificacionTopic);
+      await _updateFirebaseToken(token!);
       FirebaseMessaging.onBackgroundMessage(_onBackgroundMessage);
       FirebaseMessaging.onMessage.listen((RemoteMessage message) {
         _onMessage(message.data);
@@ -22,9 +21,8 @@ class FirebaseService {
       FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
         _onMessage(message.data, true);
       });
-      return;
-    } catch(e) {
-      return;
+    } finally {
+      FirebaseMessaging.instance.subscribeToTopic(Literals.notificacionTopic);
     }
   }
 
@@ -34,11 +32,12 @@ class FirebaseService {
     }
   }
 
-  void _updateFirebaseToken(String token) {
+  Future<void> _updateFirebaseToken(String token) async {
     try {
       var localStorage = LocalStorage.fromJson(_storage.get(LocalStorage()));
       localStorage.idFirebase = token;
-      _storage.update(localStorage);
+      await _storage.update(localStorage);
+      return;
     } finally { }
   }
 }

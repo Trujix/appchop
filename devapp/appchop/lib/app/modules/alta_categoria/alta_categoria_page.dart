@@ -30,7 +30,7 @@ class AltaCategoriaPage extends StatelessWidget with WidgetsBindingObserver {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             const TituloContainer(
-              texto: "Agregar Categoria",
+              texto: "Agregar zona",
               ltrbp: [20, 0, 0, 5],
             ),
             CardContainer(
@@ -41,7 +41,7 @@ class AltaCategoriaPage extends StatelessWidget with WidgetsBindingObserver {
                   focusNode: _.categoriaNode,
                   icon: MaterialIcons.list_alt,
                   icono: MaterialIcons.save,
-                  text: 'Nombre categoria',
+                  text: 'Nombre zona',
                   onTap: _.guardarCategoria,
                 ),
               ],

@@ -1,5 +1,5 @@
 class Literals {
-  static const String version = "1.0.0+1-Alpha";
+  static const String version = "1.1.2+1-Alpha";
   static const String notificacionTopic = "appchop_notif";
 
   static const String storageName = "appchopStorage";
@@ -39,6 +39,8 @@ class Literals {
 
   static const String reporteCobranzaCsv = "reporte_cobranza.csv";
   static const String reporteEstadoCuentaPdf = "estado_cuenta.pdf";
+
+  static const String regexEmail = r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
 
   /*
   AIzaSyCOsLeoPitgQOiMS6cvoNTdVffvk6-Dcms

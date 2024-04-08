@@ -182,7 +182,7 @@ class AltaCargoAbonoController extends GetInjection {
   }
 
   Future<void> crearEstadoCuentaPdf() async {
-    /*cargosAbonosTabla = [];
+    cargosAbonosTabla = [];
     cargosAbonosTabla.add(cargosAbonosPdfHeader);
     for(var cargoAbono in listaCargosAbonos) {
       var monto = MoneyFormatter(amount: cargoAbono.monto!).output.symbolOnLeft;
@@ -202,7 +202,7 @@ class AltaCargoAbonoController extends GetInjection {
       saldoCargos: saldoCargos,
     );
     var pdf = await tool.crearPdf(estadoCuenta, Literals.reporteEstadoCuentaPdf);
-    await tool.compartir(pdf!, Literals.reporteEstadoCuentaPdf);*/
+    await tool.compartir(pdf!, Literals.reporteEstadoCuentaPdf);
   }
 
   void _cargarListaCargosAbonos() {
@@ -225,6 +225,10 @@ class AltaCargoAbonoController extends GetInjection {
         saldoAbonos = saldoAbonos + cargoAbono.monto!;
       }
     }
+  }
+
+  void abrirCalculadora() {
+    tool.calculadora();
   }
 
   void cerrar() {

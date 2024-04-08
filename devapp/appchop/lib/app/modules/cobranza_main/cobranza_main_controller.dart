@@ -14,6 +14,7 @@ import '../../routes/app_routes.dart';
 import '../../utils/get_injection.dart';
 import '../../utils/literals.dart';
 import '../../widgets/modals/gestion_csv_modal.dart';
+import '../../widgets/modals/totales_modal.dart';
 import '../../widgets/texts/combo_texts.dart';
 import '../pdf_viewer/pdf_viewer_binding.dart';
 import '../pdf_viewer/pdf_viewer_page.dart';
@@ -406,7 +407,7 @@ class CobranzaMainController extends GetInjection {
   }
 
   void abrirTotalDetalle() {
-    /*tool.modal(
+    tool.modal(
       widgets: [
         TotalesModal(
           estatus: estatusFiltro,
@@ -421,7 +422,7 @@ class CobranzaMainController extends GetInjection {
         ),
       ],
       height: 250,
-    );*/
+    );
   }
 
   Future<void> _exportarConsultaCsv() async {
@@ -443,7 +444,7 @@ class CobranzaMainController extends GetInjection {
       tool.modal(
         widgets: [GestionCsvModal(
           abrirAccion: () async => await OpenFile.open(archivoCsv),
-          exportarAccion: () {}/*async => await tool.compartir(archivoCsv!, Literals.reporteCobranzaCsv)*/,
+          exportarAccion: () async => await tool.compartir(archivoCsv!, Literals.reporteCobranzaCsv),
         ),]
       );
     } catch(e) {

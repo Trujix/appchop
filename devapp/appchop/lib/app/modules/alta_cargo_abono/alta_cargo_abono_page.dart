@@ -11,6 +11,7 @@ import '../../widgets/containers/card_container.dart';
 import '../../widgets/containers/titulo_container.dart';
 import '../../widgets/customscrollviews/cargo_abono_customscrollview.dart';
 import '../../widgets/defaults/small_header.dart';
+import '../../widgets/inkwells/icono_boton_inkwell.dart';
 import '../../widgets/textforms/standard_textform.dart';
 import '../../widgets/texts/etiqueta_text.dart';
 import 'alta_cargo_abono_controller.dart';
@@ -110,10 +111,10 @@ class AltaCargoAbonoPage extends StatelessWidget with WidgetsBindingObserver {
                           keyboardType: TextInputType.number,
                         ),
                       ),
-                      /*IconoBotonInkwell(
+                      IconoBotonInkwell(
                         onTap: _.abrirCalculadora,
                         icon: FontAwesome.calculator,
-                      ),*/
+                      ),
                     ],
                   ),
                   StandardTextform(

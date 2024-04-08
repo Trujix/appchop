@@ -49,15 +49,15 @@ class AltaNotasController extends GetInjection {
   }
 
   Future<void> abrirWhatsapp() async {
-    //await tool.whatsapp(cobranza!.telefono!);
+    await tool.whatsapp(cobranza!.telefono!);
   }
 
   Future<void> marcarTelefono() async {
-    //await tool.marcar(cobranza!.telefono!);
+    await tool.marcar(cobranza!.telefono!);
   }
 
   Future<void> abrirGoogleMaps() async {
-    //await tool.googleMaps(cobranza!.latitud!, cobranza!.longitud!);
+    await tool.googleMaps(cobranza!.latitud!, cobranza!.longitud!);
   }
 
   Future<void> guardarNota() async {

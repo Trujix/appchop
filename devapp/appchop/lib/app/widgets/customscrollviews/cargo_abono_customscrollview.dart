@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:money_formatter/money_formatter.dart';
 
 import '../../data/models/local_storage/cargos_abonos.dart';
 import '../../utils/literals.dart';
@@ -31,7 +30,7 @@ class CargoAbonoCustomscrollview extends StatelessWidget {
       slivers: listaCargosAbonos.map((cargoAbono) {
         final index = listaCargosAbonos.indexOf(cargoAbono);
         return SliverToBoxAdapter(
-          /*child: Builder(
+          child: Builder(
             builder: (context) {
               if(index == 0) {
                 return CargoAbonoInkwell(
@@ -59,14 +58,6 @@ class CargoAbonoCustomscrollview extends StatelessWidget {
                 );
               }
             },
-          ),*/
-          child: Container(
-            padding: const EdgeInsets.all(15,),
-            child: Text(
-              MoneyFormatter(
-                amount: cargoAbono.monto!,
-              ).output.symbolOnLeft,
-            ),
           ),
         );
       }).toList(),

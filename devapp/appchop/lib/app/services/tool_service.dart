@@ -15,6 +15,7 @@ import 'package:pdf/pdf.dart' as pdflib;
 
 import '../data/models/local_storage/categorias.dart';
 import '../data/models/local_storage/cobranzas.dart';
+import '../utils/literals.dart';
 import '../widgets/dialogs/alerta_dialog.dart';
 import '../widgets/dialogs/loading_dialog.dart';
 import '../widgets/dialogs/modal_dialog.dart';
@@ -43,6 +44,17 @@ class ToolService extends GetxController {
         );
       }
     } finally { }
+  }
+
+  Future<bool> isOnline() async {
+    var conectado = false;
+    try {
+      var coneccion = await InternetAddress.lookup("8.8.8.8");
+      conectado = coneccion.isNotEmpty && coneccion[0].rawAddress.isNotEmpty;
+    } on SocketException catch(_) {
+      conectado = false;
+    }
+    return conectado;
   }
 
   void msg(String mensaje, int tipo) {
@@ -146,6 +158,11 @@ class ToolService extends GetxController {
 
   bool isNullOrEmpty(TextEditingController? input) {
     return input?.text == "" || input == null;
+  }
+
+  bool isEmail(String cadena) {
+    var esEmail = RegExp(Literals.regexEmail).hasMatch(cadena);
+    return esEmail;
   }
 
   bool soloSaltos(String texto) {

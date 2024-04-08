@@ -37,7 +37,7 @@ class HomeController extends GetInjection {
         onTap: () => _abrirOpcion(1),
       ),
       MenuOpcionInkwell(
-        texto: "Agregar categoría",
+        texto: "Agregar zona",
         icono: MaterialIcons.list_alt,
         onTap: () => _abrirOpcion(2),
       ),

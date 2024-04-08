@@ -20,7 +20,7 @@ class SinCategoriasColumn extends StatelessWidget {
         Container(
           padding: const EdgeInsets.fromLTRB(20, 10, 20, 10,),
           child: AutoSizeText(
-            'No tiene categorías registradas',
+            'No tiene zonas registradas',
             maxLines: 2,
             minFontSize: 18,
             style: TextStyle(
