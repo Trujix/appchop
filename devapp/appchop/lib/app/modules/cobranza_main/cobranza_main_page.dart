@@ -34,9 +34,9 @@ class CobranzaMainPage extends StatelessWidget with WidgetsBindingObserver {
         body: Column(
           children: [
             SelectionCombo(
-              titulo: "- Elige categoría -",
-              controller: _.categoria,
-              values: _.listaCategoria,
+              titulo: "- Elige zona -",
+              controller: _.zona,
+              values: _.listaZona,
               icono: MaterialIcons.list_alt,
               height: 35,
               ltrb: const [10, 0, 10, 0,],

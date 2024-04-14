@@ -6,7 +6,7 @@ import 'package:open_file_plus/open_file_plus.dart';
 
 import '../../data/models/cobranza_popup_opciones.dart';
 import '../../data/models/local_storage/cargos_abonos.dart';
-import '../../data/models/local_storage/categorias.dart';
+import '../../data/models/local_storage/zonas.dart';
 import '../../data/models/local_storage/cobranzas.dart';
 import '../../data/models/local_storage/local_storage.dart';
 import '../../data/models/local_storage/notas.dart';
@@ -21,7 +21,7 @@ import '../pdf_viewer/pdf_viewer_page.dart';
 
 class CobranzaMainController extends GetInjection {
   ScrollController scrollController = ScrollController();
-  TextEditingController categoria = TextEditingController();
+  TextEditingController zona = TextEditingController();
   TextEditingController busqueda = TextEditingController();
   List<CobranzaPopupOpciones> opcionesConsulta = [];
   String opcionSelected = "";
@@ -48,9 +48,9 @@ class CobranzaMainController extends GetInjection {
   bool mostrarResultados = false;
   int opcionDeudaSeleccion = 0;
 
-  List<BottomSheetAction> listaCategoria = [];
-  String categoriaSelected = "";
-  List<String> categoriasOff = [];
+  List<BottomSheetAction> listaZona = [];
+  String zonaSelected = "";
+  List<String> zonasOff = [];
 
   List<Cobranzas> listaCobranzas = [];
   List<Cobranzas> _listaCobranzaBusqueda = [];
@@ -81,7 +81,7 @@ class CobranzaMainController extends GetInjection {
 
   Future<void> _init() async {
     var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
-    await configurarCategorias(localStorage);
+    await configurarZonas(localStorage);
     _cargarOpcionesPopup();
     await cargarListaCobranza();
     return;
@@ -224,13 +224,13 @@ class CobranzaMainController extends GetInjection {
           (c) => c.tipoCobranza == tiposCobranza[opcionDeudaSeleccion]
         ).toList();
       }
-      if(categoriaSelected != Literals.defaultCategoriaTodo) {
+      if(zonaSelected != Literals.defaultZonaTodo) {
         cobranzaStorage = cobranzaStorage.where(
-          (c) => c.categoria == categoriaSelected
+          (c) => c.zona == zonaSelected
         ).toList();
       } else {
         cobranzaStorage = cobranzaStorage.where(
-          (c) => !categoriasOff.contains(c.categoria)
+          (c) => !zonasOff.contains(c.zona)
         ).toList();
       }
       listaCobranzas = cobranzaStorage;
@@ -283,22 +283,22 @@ class CobranzaMainController extends GetInjection {
     }
   }
 
-  Future<void> configurarCategorias(LocalStorage localStorage) async {
+  Future<void> configurarZonas(LocalStorage localStorage) async {
     try {
-      var categoriaStorage = List<Categorias>.from(
-        storage.get([Categorias()]).map((json) => Categorias.fromJson(json))
+      var zonaStorage = List<Zonas>.from(
+        storage.get([Zonas()]).map((json) => Zonas.fromJson(json))
       );
-      categoria.text = Literals.defaultCategoriaTodoTxt;
-      categoriaSelected = Literals.defaultCategoriaTodo;
-      categoriasOff = [];
-      listaCategoria = [
+      zona.text = Literals.defaultZonaTodoTxt;
+      zonaSelected = Literals.defaultZonaTodo;
+      zonasOff = [];
+      listaZona = [
         BottomSheetAction(
           title: const ComboText(
-            texto: Literals.defaultCategoriaTodoTxt,
+            texto: Literals.defaultZonaTodoTxt,
           ),
           onPressed: (context) {
-            categoria.text = Literals.defaultCategoriaTodoTxt;
-            categoriaSelected = Literals.defaultCategoriaTodo;
+            zona.text = Literals.defaultZonaTodoTxt;
+            zonaSelected = Literals.defaultZonaTodo;
             update();
             cargarListaCobranza();
             Navigator.of(context).pop();
@@ -306,30 +306,30 @@ class CobranzaMainController extends GetInjection {
         ),
         BottomSheetAction(
           title: const ComboText(
-            texto: Literals.defaultCategoriaSinTxt,
+            texto: Literals.defaultZonaSinTxt,
           ),
           onPressed: (context) {
-            categoria.text = Literals.defaultCategoriaSinTxt;
-            categoriaSelected = Literals.defaultCategoriaSin;
+            zona.text = Literals.defaultZonaSinTxt;
+            zonaSelected = Literals.defaultZonaSin;
             update();
             cargarListaCobranza();
             Navigator.of(context).pop();
           },
         ),
       ];
-      for(var categoriaItem in categoriaStorage) {
-        if(!categoriaItem.activo!) {
-          categoriasOff.add(categoriaItem.valueCategoria!);
+      for(var zonaItem in zonaStorage) {
+        if(!zonaItem.activo!) {
+          zonasOff.add(zonaItem.valueZona!);
           continue;
         }
-        listaCategoria.add(
+        listaZona.add(
           BottomSheetAction(
             title: ComboText(
-              texto: categoriaItem.labelCategoria!,
+              texto: zonaItem.labelZona!,
             ),
             onPressed: (context) {
-              categoria.text = categoriaItem.labelCategoria!;
-              categoriaSelected = categoriaItem.valueCategoria!;
+              zona.text = zonaItem.labelZona!;
+              zonaSelected = zonaItem.valueZona!;
               update();
               cargarListaCobranza();
               Navigator.of(context).pop();
@@ -431,12 +431,12 @@ class CobranzaMainController extends GetInjection {
         tool.msg("No hay datos que exportar", 0);
         return;
       }
-      var categoriaStorage = List<Categorias>.from(
-        storage.get([Categorias()]).map((json) => Categorias.fromJson(json))
+      var zonaStorage = List<Zonas>.from(
+        storage.get([Zonas()]).map((json) => Zonas.fromJson(json))
       );
       var contenido = tool.cobranzaCsv(
         listaCobranzas,
-        categoriaStorage,
+        zonaStorage,
         ["tabla", "idUsuario", "idCobranza", "idCobrador", "latitud", "longitud", "estatus", "bloqueado",]
       );
       var archivoCsv = await tool.crearArchivo(contenido, Literals.reporteCobranzaCsv);

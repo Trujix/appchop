@@ -4,8 +4,8 @@ import '../modules/alpha/alpha_binding.dart';
 import '../modules/alpha/alpha_page.dart';
 import '../modules/alta_cargo_abono/alta_cargo_abono_binding.dart';
 import '../modules/alta_cargo_abono/alta_cargo_abono_page.dart';
-import '../modules/alta_categoria/alta_categoria_binding.dart';
-import '../modules/alta_categoria/alta_categoria_page.dart';
+import '../modules/alta_zona/alta_zona_binding.dart';
+import '../modules/alta_zona/alta_zona_page.dart';
 import '../modules/alta_cobranza/alta_cobranza_binding.dart';
 import '../modules/alta_cobranza/alta_cobranza_page.dart';
 import '../modules/alta_notas/alta_notas_binding.dart';
@@ -65,9 +65,9 @@ class AppPages {
       binding: AltaCargoAbonoBinding(),
     ),
     GetPage(
-      name: AppRoutes.altaCategoria,
-      page: () => const AltaCategoriaPage(),
-      binding: AltaCategoriaBinding(),
+      name: AppRoutes.altaZona,
+      page: () => const AltaZonaPage(),
+      binding: AltaZonaBinding(),
     ),
     GetPage(
       name: AppRoutes.pdfViewer,

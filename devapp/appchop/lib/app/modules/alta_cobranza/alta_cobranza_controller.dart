@@ -7,7 +7,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import '../../data/models/local_storage/categorias.dart';
+import '../../data/models/local_storage/zonas.dart';
 import '../../data/models/local_storage/cobranzas.dart';
 import '../../data/models/local_storage/local_storage.dart';
 import '../../utils/get_injection.dart';
@@ -23,8 +23,8 @@ class AltaCobranzaController extends GetInjection {
   ];
   List<String> labelsTipoCobranza = ['Me deben', 'Debo',];
 
-  List<BottomSheetAction> listaCategoria = [];
-  String categoriaSelected = "";
+  List<BottomSheetAction> listaZona = [];
+  String zonaSelected = "";
   bool nuevo = true;
   Cobranzas cobranzaEditar = Cobranzas();
 
@@ -32,7 +32,7 @@ class AltaCobranzaController extends GetInjection {
   FocusNode nombreFocus = FocusNode();
   TextEditingController cantidad = TextEditingController();
   FocusNode cantidadFocus = FocusNode();
-  TextEditingController categoria = TextEditingController();
+  TextEditingController zona = TextEditingController();
   TextEditingController fechaRegistro = TextEditingController();
 
   TextEditingController descripcion = TextEditingController();
@@ -63,34 +63,34 @@ class AltaCobranzaController extends GetInjection {
     var arguments = Get.arguments;
     nuevo = arguments['nuevo'] ?? true;
     fechaRegistro.text = DateFormat("dd-MM-yyyy").format(DateTime.now()).toString();
-    var categorias = List<Categorias>.from(
-      storage.get([Categorias()]).map((json) => Categorias.fromJson(json))
+    var zonas = List<Zonas>.from(
+      storage.get([Zonas()]).map((json) => Zonas.fromJson(json))
     );
-    listaCategoria = [BottomSheetAction(
+    listaZona = [BottomSheetAction(
       title: const ComboText(
-        texto: Literals.defaultCategoriaSinTxt,
+        texto: Literals.defaultZonaSinTxt,
       ),
       onPressed: (context) {
-        categoria.text = Literals.defaultCategoriaSinTxt;
-        categoriaSelected = Literals.defaultCategoriaSin;
+        zona.text = Literals.defaultZonaSinTxt;
+        zonaSelected = Literals.defaultZonaSin;
         update();
         Navigator.of(context).pop();
       },
     )];
-    categoria.text = Literals.defaultCategoriaSinTxt;
-    categoriaSelected = Literals.defaultCategoriaSin;
-    for(var categoriaItem in categorias) {
-      if(!categoriaItem.activo!) {
+    zona.text = Literals.defaultZonaSinTxt;
+    zonaSelected = Literals.defaultZonaSin;
+    for(var zonaItem in zonas) {
+      if(!zonaItem.activo!) {
         continue;
       }
-      listaCategoria.add(
+      listaZona.add(
         BottomSheetAction(
           title: ComboText(
-            texto: categoriaItem.labelCategoria!,
+            texto: zonaItem.labelZona!,
           ),
           onPressed: (context) {
-            categoria.text = categoriaItem.labelCategoria!;
-            categoriaSelected = categoriaItem.valueCategoria!;
+            zona.text = zonaItem.labelZona!;
+            zonaSelected = zonaItem.valueZona!;
             update();
             Navigator.of(context).pop();
           },
@@ -101,7 +101,7 @@ class AltaCobranzaController extends GetInjection {
     crearClienteMarcador(initLocation);
     if(!nuevo) {
       cobranzaEditar = arguments['cobranza'] as Cobranzas;
-      _editarCobranzaFill(categorias);
+      _editarCobranzaFill(zonas);
     }
   }
 
@@ -144,7 +144,7 @@ class AltaCobranzaController extends GetInjection {
       var nuevaCobranza = Cobranzas(
         idUsuario: localStorage.idUsuario,
         tipoCobranza: tipoCobranza,
-        categoria: categoriaSelected,
+        zona: zonaSelected,
         nombre: nombre.text,
         cantidad: tool.str2double(cantidad.text),
         descripcion: descripcion.text,
@@ -215,7 +215,7 @@ class AltaCobranzaController extends GetInjection {
     update();
   }
 
-  void _editarCobranzaFill(List<Categorias> categorias) {
+  void _editarCobranzaFill(List<Zonas> zonas) {
     var vencimiento = cobranzaEditar.fechaVencimiento!;
     tipoCobranza = cobranzaEditar.tipoCobranza!;
     nombre.text = cobranzaEditar.nombre!;
@@ -227,11 +227,11 @@ class AltaCobranzaController extends GetInjection {
     fechaRegistro.text = cobranzaEditar.fechaRegistro!;
     fechaVencimiento.text = vencimiento == Literals.sinVencimiento ? "" : vencimiento;
     tipoCobranza = cobranzaEditar.tipoCobranza!;
-    categoriaSelected = cobranzaEditar.categoria!;
-    var categoriaEdicion = categorias.where((c) => c.valueCategoria == cobranzaEditar.categoria).firstOrNull;
-    if(categoriaEdicion != null) {
-      categoria.text = categoriaEdicion.labelCategoria!;
-      categoriaSelected = categoriaEdicion.valueCategoria!;
+    zonaSelected = cobranzaEditar.zona!;
+    var zonaEdicion = zonas.where((c) => c.valueZona == cobranzaEditar.zona).firstOrNull;
+    if(zonaEdicion != null) {
+      zona.text = zonaEdicion.labelZona!;
+      zonaSelected = zonaEdicion.valueZona!;
     }
     if(cobranzaEditar.latitud != "" && cobranzaEditar.longitud != "") {
       utilizarUbicacionCliente = true;

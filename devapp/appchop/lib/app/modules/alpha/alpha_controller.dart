@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../data/models/local_storage/cargos_abonos.dart';
-import '../../data/models/local_storage/categorias.dart';
+import '../../data/models/local_storage/zonas.dart';
 import '../../data/models/local_storage/cobranzas.dart';
 import '../../data/models/local_storage/local_storage.dart';
 import '../../data/models/local_storage/notas.dart';
@@ -46,7 +46,7 @@ class AlphaController extends GetInjection {
   }
 
   Future<void> _localStorageClassInit() async {
-    await Categorias.init();
+    await Zonas.init();
     await Cobranzas.init();
     await Notas.init();
     await CargosAbonos.init();

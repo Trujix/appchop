@@ -8,7 +8,7 @@ class Cobranzas {
   String? idUsuario;
   String? idCobranza;
   String? tipoCobranza;
-  String? categoria;
+  String? zona;
   String? nombre;
   double? cantidad;
   String? descripcion;
@@ -28,7 +28,7 @@ class Cobranzas {
     this.idUsuario = "",
     this.idCobranza = "",
     this.tipoCobranza = "",
-    this.categoria = "",
+    this.zona = "",
     this.nombre = "",
     this.cantidad = 0.0,
     this.descripcion = "",
@@ -61,7 +61,7 @@ class Cobranzas {
     'idUsuario'         : idUsuario,
     'idCobranza'        : idCobranza,
     'tipoCobranza'      : tipoCobranza,
-    'categoria'         : categoria,
+    'zona'              : zona,
     'nombre'            : nombre,
     'cantidad'          : cantidad,
     'descripcion'       : descripcion,
@@ -82,7 +82,7 @@ class Cobranzas {
     idUsuario: json['idUsuario'] ?? "",
     idCobranza: json['idCobranza'] ?? "",
     tipoCobranza: json['tipoCobranza'] ?? "",
-    categoria: json['categoria'] ?? "",
+    zona: json['zona'] ?? "",
     nombre: json['nombre'] ?? "",
     cantidad: json['cantidad'] ?? 0.0,
     descripcion: json['descripcion'] ?? "",

@@ -5,19 +5,19 @@ import 'package:get/get.dart';
 
 import '../../utils/color_list.dart';
 import '../../widgets/appbars/back_appbar.dart';
-import '../../widgets/columns/sin_categorias_column.dart';
+import '../../widgets/columns/sin_zonas_column.dart';
 import '../../widgets/containers/card_container.dart';
 import '../../widgets/containers/titulo_container.dart';
 import '../../widgets/defaults/small_header.dart';
 import '../../widgets/textforms/button_textform.dart';
-import 'alta_categoria_controller.dart';
+import 'alta_zona_controller.dart';
 
-class AltaCategoriaPage extends StatelessWidget with WidgetsBindingObserver {
-  const AltaCategoriaPage({super.key});
+class AltaZonaPage extends StatelessWidget with WidgetsBindingObserver {
+  const AltaZonaPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<AltaCategoriaController>(
+    return GetBuilder<AltaZonaController>(
       builder: (_) => Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Color(ColorList.sys[3]),
@@ -37,19 +37,19 @@ class AltaCategoriaPage extends StatelessWidget with WidgetsBindingObserver {
               fondo: 0xFFFDFEFE,
               children: [
                 ButtonTextform(
-                  controller: _.categoria,
-                  focusNode: _.categoriaNode,
+                  controller: _.zona,
+                  focusNode: _.zonaNode,
                   icon: MaterialIcons.list_alt,
                   icono: MaterialIcons.save,
                   text: 'Nombre zona',
-                  onTap: _.guardarCategoria,
+                  onTap: _.guardarZona,
                 ),
               ],
             ),
             Expanded(
               child: Builder(
                 builder: (context) {
-                  if(_.listaCategoria.isNotEmpty) {
+                  if(_.listaZona.isNotEmpty) {
                     return CardContainer(
                       fondo: 0xFFFDFEFE,
                       children: <Widget>[
@@ -60,7 +60,7 @@ class AltaCategoriaPage extends StatelessWidget with WidgetsBindingObserver {
                             },
                             body: CustomScrollView(
                               controller: _.scrollController,
-                              slivers: _.listaCategoria.map((categoria) {
+                              slivers: _.listaZona.map((zona) {
                                 return SliverToBoxAdapter(
                                   child: CardContainer(
                                     margin: const EdgeInsets.fromLTRB(0, 5, 0, 5,),
@@ -69,7 +69,7 @@ class AltaCategoriaPage extends StatelessWidget with WidgetsBindingObserver {
                                         children: <Widget>[
                                           Expanded(
                                             child: AutoSizeText(
-                                              categoria.labelCategoria!,
+                                              zona.labelZona!,
                                               style: TextStyle(
                                                 color: Color(ColorList.sys[0],),
                                                 fontWeight: FontWeight.w500,
@@ -84,9 +84,9 @@ class AltaCategoriaPage extends StatelessWidget with WidgetsBindingObserver {
                                                 thumbColor: MaterialStateProperty.all(Color(ColorList.sys[0])),
                                                 activeTrackColor: Color(ColorList.sys[1]),
                                                 inactiveTrackColor: Color(ColorList.sys[2]),
-                                                value: categoria.activo!,
+                                                value: zona.activo!,
                                                 onChanged: (status) {
-                                                  _.cambiarCategoriaEstatus(status, categoria.idCategoria!);
+                                                  _.cambiarZonaEstatus(status, zona.idZona!);
                                                 },
                                               ),
                                             ),
@@ -103,7 +103,7 @@ class AltaCategoriaPage extends StatelessWidget with WidgetsBindingObserver {
                       ],
                     );
                   } else {
-                    return const SinCategoriasColumn();
+                    return const SinZonasColumn();
                   }
                 },
               ),

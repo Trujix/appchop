@@ -52,9 +52,9 @@ class AltaCobranzaPage extends StatelessWidget with WidgetsBindingObserver {
                   radioButtonValue: _.cobranzaSelected,
                 ),
                 SelectionCombo(
-                  titulo: "- Elige categoría -",
-                  controller: _.categoria,
-                  values: _.listaCategoria,
+                  titulo: "- Elige zona -",
+                  controller: _.zona,
+                  values: _.listaZona,
                   icono: MaterialIcons.list_alt,
                 ),
                 Row(

@@ -2,20 +2,20 @@ import 'package:get/get.dart';
 
 import '../../../services/storage_service.dart';
 
-class Categorias {
-  String? tabla = "categorias";
+class Zonas {
+  String? tabla = "zonas";
   String? idUsuario;
-  String? idCategoria;
-  String? valueCategoria;
-  String? labelCategoria;
+  String? idZona;
+  String? valueZona;
+  String? labelZona;
   String? fechaCreacion;
   bool? activo;
 
-  Categorias({
+  Zonas({
     this.idUsuario = "",
-    this.idCategoria = "",
-    this.valueCategoria = "",
-    this.labelCategoria = "",
+    this.idZona = "",
+    this.valueZona = "",
+    this.labelZona = "",
     this.fechaCreacion = "",
     this.activo = true,
   });
@@ -23,9 +23,9 @@ class Categorias {
   static Future<void> init() async {
     try {
       var storage = Get.find<StorageService>();
-      var verify = storage.verify(Categorias());
+      var verify = storage.verify(Zonas());
       if(!verify) {
-        var _ = await storage.put([Categorias()]);
+        var _ = await storage.put([Zonas()]);
       }
       return;
     } finally { }
@@ -34,18 +34,18 @@ class Categorias {
   Map toJson() => {
     'tabla'           : tabla,
     'idUsuario'       : idUsuario,
-    'idCategoria'     : idCategoria,
-    'valueCategoria'  : valueCategoria,
-    'labelCategoria'  : labelCategoria,
+    'idZona'          : idZona,
+    'valueZona'       : valueZona,
+    'labelZona'       : labelZona,
     'fechaCreacion'   : fechaCreacion,
     'activo'          : activo,
   };
 
-  factory Categorias.fromJson(Map<String, dynamic> json) => Categorias(
+  factory Zonas.fromJson(Map<String, dynamic> json) => Zonas(
     idUsuario: json['idUsuario'] ?? "",
-    idCategoria: json['idCategoria'] ?? "",
-    valueCategoria: json['valueCategoria'] ?? "",
-    labelCategoria: json['labelCategoria'] ?? "",
+    idZona: json['idZona'] ?? "",
+    valueZona: json['valueZona'] ?? "",
+    labelZona: json['labelZona'] ?? "",
     fechaCreacion: json['fechaCreacion'] ?? "",
     activo: json['activo'] ?? false,
   );

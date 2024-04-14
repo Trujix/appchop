@@ -17,10 +17,10 @@ class Literals {
   static const String bloqueoSi = "SI";
   static const String bloqueoNo = "NO";
 
-  static const String defaultCategoriaTodo = "TODO";
-  static const String defaultCategoriaTodoTxt = "Mostrar todo";
-  static const String defaultCategoriaSin = "SIN_CATEGORIA";
-  static const String defaultCategoriaSinTxt = "Sin categoria";
+  static const String defaultZonaTodo = "TODO";
+  static const String defaultZonaTodoTxt = "Mostrar todo";
+  static const String defaultZonaSin = "SIN_ZONA";
+  static const String defaultZonaSinTxt = "Sin zona";
 
   static const String tipoCobranzaMeDeben = "ME_DEBEN";
   static const String tipoCobranzaDebo = "DEBO";

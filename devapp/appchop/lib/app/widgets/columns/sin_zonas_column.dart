@@ -3,8 +3,8 @@ import 'package:flutter/widgets.dart';
 
 import '../../utils/color_list.dart';
 
-class SinCategoriasColumn extends StatelessWidget {
-  const SinCategoriasColumn({
+class SinZonasColumn extends StatelessWidget {
+  const SinZonasColumn({
     super.key,
   });
 
@@ -14,7 +14,7 @@ class SinCategoriasColumn extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Image.asset(
-          "assets/categorias/background.png",
+          "assets/zonas/background.png",
           scale: 0.9,
         ),
         Container(

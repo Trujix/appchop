@@ -7,6 +7,6 @@ class AppRoutes {
   static const altaCobranza = "/alta_cobranza";
   static const altaCargoAbono = "/alta_cargo_abono";
   static const altaNotas = "/alta_notas";
-  static const altaCategoria = "/alta_categoria";
+  static const altaZona = "/alta_zona";
   static const pdfViewer = "/pdf_viewer";
 }

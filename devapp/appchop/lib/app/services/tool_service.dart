@@ -13,7 +13,7 @@ import 'package:http/http.dart' as http;
 import 'package:pdf/widgets.dart' as pdfwidget;
 import 'package:pdf/pdf.dart' as pdflib;
 
-import '../data/models/local_storage/categorias.dart';
+import '../data/models/local_storage/zonas.dart';
 import '../data/models/local_storage/cobranzas.dart';
 import '../utils/literals.dart';
 import '../widgets/dialogs/alerta_dialog.dart';
@@ -296,7 +296,7 @@ class ToolService extends GetxController {
 
   String cobranzaCsv(
     List<Cobranzas> cobranzas,
-    List<Categorias> categorias,
+    List<Zonas> zonas,
     List<String> omisiones
   ) {
     var listaElementos = jsonDecode(jsonEncode(cobranzas)) as List<dynamic>;
@@ -318,9 +318,9 @@ class ToolService extends GetxController {
             cuerpoTemp += ",";
           }
           var valor = "";
-          if(key == "categoria") {
-            var categoria = categorias.where((c) => c.valueCategoria == value).firstOrNull;
-            valor = categoria != null ? categoria.labelCategoria! : value.toString();
+          if(key == "zona") {
+            var zona = zonas.where((c) => c.valueZona == value).firstOrNull;
+            valor = zona != null ? zona.labelZona! : value.toString();
           } else {
             valor = value.toString();
           }
