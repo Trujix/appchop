@@ -12,6 +12,8 @@ class Literals {
   static const String autorization = "Authorization";
   static const String terminosCondicionesFile = "media/documentos/terminos_y_condiciones_de_uso_appchop.pdf";
 
+  static const String perfilAdministrador = "ADMINISTRADOR";
+  static const String perfilCobrador = "COBRADOR";
   static const String statusActivo = "ACTIVO";
   static const String statusIdDispositivo = "NONE";
   static const String bloqueoSi = "SI";
@@ -41,8 +43,4 @@ class Literals {
   static const String reporteEstadoCuentaPdf = "estado_cuenta.pdf";
 
   static const String regexEmail = r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
-
-  /*
-  AIzaSyCOsLeoPitgQOiMS6cvoNTdVffvk6-Dcms
-  */
 }

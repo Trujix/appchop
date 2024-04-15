@@ -15,4 +15,7 @@ abstract class GetInjection extends GetxController {
 
   final loginRepository = Get.find<LoginRepository>();
   final configuracionRepository = Get.find<ConfiguracionRepository>();
+
+  static bool administrador = false;
+  static String perfil = "";
 }

@@ -68,9 +68,12 @@ class LoginController extends GetInjection {
         tool.msg("Su cuenta de usuario se encuentra como INACTIVA, consulte con el administrador", 2);
         return;
       }
+      GetInjection.administrador = result.perfil == Literals.perfilAdministrador;
+      GetInjection.perfil = result.perfil!;
       localStorage.login = true;
       localStorage.idUsuario = result.idSistema;
       localStorage.email = usuario.text;
+      localStorage.perfil = result.perfil!;
       localStorage.password = password.text;
       localStorage.nombres = result.nombres;
       localStorage.apellidos = result.apellidos;

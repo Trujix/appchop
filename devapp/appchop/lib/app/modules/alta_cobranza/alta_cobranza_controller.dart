@@ -53,6 +53,8 @@ class AltaCobranzaController extends GetInjection {
   String idMarcadorCliente = "";
   bool utilizarUbicacionCliente = false;
 
+  bool esAdmin = GetInjection.administrador;
+
   @override
   void onInit() {
     _init();
@@ -156,6 +158,9 @@ class AltaCobranzaController extends GetInjection {
         longitud: utilizarUbicacionCliente ? latLng.longitude.toString() : "",
         fechaVencimiento: vencimiento == "" ? Literals.sinVencimiento : vencimiento,
         saldo: tool.str2double(cantidad.text),
+        ultimoCargo: tool.str2double(cantidad.text),
+        fechaUltimoCargo: DateFormat("dd-MM-yyyy").format(DateTime.now()).toString(),
+        usuarioUltimoCargo: esAdmin ? Literals.perfilAdministrador : localStorage.email,
       );
       if(nuevo) {
         nuevaCobranza.saldo = tool.str2double(cantidad.text);

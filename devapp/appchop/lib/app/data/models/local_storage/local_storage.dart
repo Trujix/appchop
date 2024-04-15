@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 class LocalStorage {
-  static const int _localStorageVersion = 2;
+  static const int _localStorageVersion = 1;
 
   String? tabla = "local_storage";
   int? version = _localStorageVersion;
@@ -11,6 +11,7 @@ class LocalStorage {
   String? apellidos;
   String? password;
   String? email;
+  String? perfil;
   String? token;
   bool? activo;
   String? idFirebase;
@@ -26,6 +27,7 @@ class LocalStorage {
     this.apellidos = "",
     this.password = "",
     this.email = "",
+    this.perfil = "",
     this.token = "-",
     this.activo = true,
     this.idFirebase = "",
@@ -43,6 +45,7 @@ class LocalStorage {
     'apellidos'         : apellidos,
     'password'          : password,
     'email'             : email,
+    'perfil'            : perfil,
     'token'             : token,
     'activo'            : activo,
     'idFirebase'        : idFirebase,
@@ -61,6 +64,7 @@ class LocalStorage {
       'apellidos'         : apellidos,
       'password'          : password,
       'email'             : email,
+      'perfil'            : perfil,
       'token'             : token,
       'activo'            : activo,
       'idFirebase'        : idFirebase,
@@ -78,6 +82,7 @@ class LocalStorage {
     apellidos = json['apellidos'] ?? "";
     password = json['password'] ?? "";
     email = json['email'] ?? "";
+    perfil = json['perfil'] ?? "";
     token = json['token'] ?? "";
     activo = json['activo'] ?? true;
     idFirebase = json['idFirebase'] ?? "";
@@ -93,6 +98,7 @@ class LocalStorage {
     apellidos = json['apellidos'] ?? "";
     password = json['password'] ?? "";
     email = json['email'] ?? "";
+    perfil = json['perfil'] ?? "";
     token = json['token'] ?? "";
     activo = json['activo'] ?? true;
     idFirebase = json['idFirebase'] ?? "";
@@ -109,6 +115,7 @@ class LocalStorage {
     apellidos: json['apellidos'] ?? "",
     password: json['password'] ?? "",
     email: json['email'] ?? "",
+    perfil: json['perfil'] ?? "",
     token: json['token'] ?? "",
     activo: json['activo'] ?? true,
     idFirebase: json['idFirebase'] ?? "",

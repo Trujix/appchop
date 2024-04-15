@@ -4,6 +4,8 @@ import '../modules/alpha/alpha_binding.dart';
 import '../modules/alpha/alpha_page.dart';
 import '../modules/alta_cargo_abono/alta_cargo_abono_binding.dart';
 import '../modules/alta_cargo_abono/alta_cargo_abono_page.dart';
+import '../modules/alta_clientes/alta_clientes_binding.dart';
+import '../modules/alta_clientes/alta_clientes_page.dart';
 import '../modules/alta_zona/alta_zona_binding.dart';
 import '../modules/alta_zona/alta_zona_page.dart';
 import '../modules/alta_cobranza/alta_cobranza_binding.dart';
@@ -30,24 +32,14 @@ class AppPages {
       binding: AlphaBinding(),
     ),
     GetPage(
-      name: AppRoutes.configuracion,
-      page: () => const ConfiguracionPage(),
-      binding: ConfiguracionBinding(),
+      name: AppRoutes.altaCargoAbono,
+      page: () => const AltaCargoAbonoPage(),
+      binding: AltaCargoAbonoBinding(),
     ),
     GetPage(
-      name: AppRoutes.login,
-      page: () => const LoginPage(),
-      binding: LoginBinding(),
-    ),
-    GetPage(
-      name: AppRoutes.home,
-      page: () => const HomePage(),
-      binding: HomeBinding(),
-    ),
-    GetPage(
-      name: AppRoutes.cobranzaMain,
-      page: () => const CobranzaMainPage(),
-      binding: CobranzaMainBinding(),
+      name: AppRoutes.altaClientes,
+      page: () => const AltaClientesPage(),
+      binding: AltaClientesBinding(),
     ),
     GetPage(
       name: AppRoutes.altaCobranza,
@@ -60,14 +52,29 @@ class AppPages {
       binding: AltaNotasBinding(),
     ),
     GetPage(
-      name: AppRoutes.altaCargoAbono,
-      page: () => const AltaCargoAbonoPage(),
-      binding: AltaCargoAbonoBinding(),
-    ),
-    GetPage(
       name: AppRoutes.altaZona,
       page: () => const AltaZonaPage(),
       binding: AltaZonaBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.cobranzaMain,
+      page: () => const CobranzaMainPage(),
+      binding: CobranzaMainBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.configuracion,
+      page: () => const ConfiguracionPage(),
+      binding: ConfiguracionBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.home,
+      page: () => const HomePage(),
+      binding: HomeBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.login,
+      page: () => const LoginPage(),
+      binding: LoginBinding(),
     ),
     GetPage(
       name: AppRoutes.pdfViewer,

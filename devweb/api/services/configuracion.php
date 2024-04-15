@@ -3,7 +3,7 @@
         public static function desvincularDispositivo($params) {
             if(!isset($params[0]) || count($params) == 0) {
                 http_response_code(406);
-                die("Parámetros de usuario incorrectos");
+                die("Parámetros de dispositivo incorrectos");
             }
             $mysql = new Mysql();
             $resultado_desvincular = $mysql->executeNonQuery(

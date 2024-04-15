@@ -79,3 +79,24 @@ BEGIN
     WHERE id_sistema = _IDSISTEMA;
 END $$
 DELIMITER ;
+
+
+/* ------------------------------------------------------------------------------------*/
+DROP PROCEDURE IF EXISTS STP_VERIFICAR_COBRADOR;
+DELIMITER $$
+CREATE PROCEDURE STP_VERIFICAR_COBRADOR(
+    IN _IDSISTEMA VARCHAR(120), IN _USUARIO VARCHAR(150)
+)
+BEGIN
+    DECLARE _VERIFY INT DEFAULT 0;
+    SET _VERIFY = (
+        SELECT 
+            COUNT(*) AS VERIFY
+        FROM appchop.usuarios WHERE 
+            id_sistema = _IDSISTEMA 
+            AND usuario = _USUARIO 
+            AND perfil = 'COBRADOR'
+    );
+    SELECT _VERIFY AS EXISTE;
+END $$
+DELIMITER ;

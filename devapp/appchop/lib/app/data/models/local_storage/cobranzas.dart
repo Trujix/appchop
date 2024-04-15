@@ -20,6 +20,12 @@ class Cobranzas {
   double? saldo;
   String? latitud;
   String? longitud;
+  double? ultimoCargo;
+  String? fechaUltimoCargo;
+  String? usuarioUltimoCargo;
+  double? ultimoAbono;
+  String? fechaUltimoAbono;
+  String? usuarioUltimoAbono;
   String? estatus;
   String? bloqueado;
   String? idCobrador;
@@ -40,6 +46,12 @@ class Cobranzas {
     this.saldo = 0.0,
     this.latitud = "",
     this.longitud = "",
+    this.ultimoCargo = 0.0,
+    this.fechaUltimoCargo = "",
+    this.usuarioUltimoCargo = "",
+    this.ultimoAbono = 0.0,
+    this.fechaUltimoAbono = "",
+    this.usuarioUltimoAbono = "",
     this.estatus = Literals.statusCobranzaPendiente,
     this.bloqueado = Literals.bloqueoNo,
     this.idCobrador = "",
@@ -73,6 +85,12 @@ class Cobranzas {
     'saldo'             : saldo,
     'latitud'           : latitud,
     'longitud'          : longitud,
+    'ultimoCargo'       : ultimoCargo,
+    'fechaUltimoCargo'  : fechaUltimoCargo,
+    'usuarioUltimoCargo': usuarioUltimoCargo,
+    'ultimoAbono'       : ultimoAbono,
+    'fechaUltimoAbono'  : fechaUltimoAbono,
+    'usuarioUltimoAbono': usuarioUltimoAbono,
     'estatus'           : estatus,
     'bloqueado'         : bloqueado,
     'idCobrador'        : idCobrador,
@@ -94,6 +112,12 @@ class Cobranzas {
     saldo: json['saldo'] ?? 0.0,
     latitud: json['latitud'] ?? "",
     longitud: json['longitud'] ?? "",
+    ultimoCargo: json['ultimoCargo'] ?? 0.0,
+    fechaUltimoCargo: json['fechaUltimoCargo'] ?? "",
+    usuarioUltimoCargo: json['usuarioUltimoCargo'] ?? "",
+    ultimoAbono: json['ultimoAbono'] ?? 0.0,
+    fechaUltimoAbono: json['fechaUltimoAbono'] ?? "",
+    usuarioUltimoAbono: json['usuarioUltimoAbono'] ?? "",
     estatus: json['estatus'] ?? "",
     bloqueado: json['bloqueado'] ?? "",
     idCobrador: json['idCobrador'] ?? "",

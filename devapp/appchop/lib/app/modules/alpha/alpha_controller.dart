@@ -8,6 +8,7 @@ import '../../data/models/local_storage/cobranzas.dart';
 import '../../data/models/local_storage/local_storage.dart';
 import '../../data/models/local_storage/notas.dart';
 import '../../utils/get_injection.dart';
+import '../../utils/literals.dart';
 import '../home/home_binding.dart';
 import '../home/home_page.dart';
 import '../login/login_binding.dart';
@@ -29,6 +30,8 @@ class AlphaController extends GetInjection {
       var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
       _page = localStorage.login! ? const HomePage() : const LoginPage();
       _binding = localStorage.login! ? HomeBinding() : LoginBinding();
+      GetInjection.administrador = localStorage.perfil! == Literals.perfilAdministrador;
+      GetInjection.perfil = localStorage.perfil!;
       await _localStorageClassInit();
       await firebase.init();
       return;

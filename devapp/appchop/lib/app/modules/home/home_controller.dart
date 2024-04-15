@@ -18,6 +18,8 @@ class HomeController extends GetInjection {
 
   String nombre = "";
   String idUsuario = "";
+
+  bool esAdmin = GetInjection.administrador;
   
   @override
   void onInit() {
@@ -34,17 +36,26 @@ class HomeController extends GetInjection {
       MenuOpcionInkwell(
         texto: "Nueva Cobranza",
         icono: MaterialIcons.description,
-        onTap: () => _abrirOpcion(1),
+        visible: esAdmin,
+        onTap: () => _abrirOpcion(MenuOpcion.nuevaCobranza),
       ),
       MenuOpcionInkwell(
         texto: "Agregar zona",
         icono: MaterialIcons.list_alt,
-        onTap: () => _abrirOpcion(2),
+        visible: esAdmin,
+        onTap: () => _abrirOpcion(MenuOpcion.agregarZona),
+      ),
+      MenuOpcionInkwell(
+        texto: "Clientes",
+        icono: MaterialIcons.contact_phone,
+        visible: esAdmin,
+        onTap: () => _abrirOpcion(MenuOpcion.clientes),
       ),
       MenuOpcionInkwell(
         texto: "Configuración",
         icono: MaterialIcons.settings,
-        onTap: () => _abrirOpcion(3),
+        visible: esAdmin,
+        onTap: () => _abrirOpcion(MenuOpcion.configuracion),
       ),
     ];
     update();
@@ -54,21 +65,24 @@ class HomeController extends GetInjection {
     drawerController.toggle!.call();
   }
 
-  void _abrirOpcion(int menu) {
+  void _abrirOpcion(MenuOpcion opcion) {
     drawerController.close!.call();
     var pagina = "";
     dynamic arguments = {};
-    switch(menu) {
-      case 1:
+    switch(opcion) {
+      case MenuOpcion.nuevaCobranza:
         pagina = AppRoutes.altaCobranza;
         arguments = {
           "tipoCobranza": Literals.tipoCobranzaMeDeben
         };
       break;
-      case 2:
+      case MenuOpcion.agregarZona:
         pagina = AppRoutes.altaZona;
       break;
-      case 3:
+      case MenuOpcion.clientes:
+        pagina = AppRoutes.altaClientes;
+      break;
+      case MenuOpcion.configuracion:
         pagina = AppRoutes.configuracion;
       break;
       default:
@@ -100,4 +114,11 @@ class HomeController extends GetInjection {
       );
     } finally { }
   }
+}
+
+enum MenuOpcion {
+  nuevaCobranza,
+  agregarZona,
+  clientes,
+  configuracion,
 }

@@ -34,7 +34,7 @@ class AltaCobranzaPage extends StatelessWidget with WidgetsBindingObserver {
         body: ListView(
           children: <Widget>[
             TituloContainer(
-              texto: "${_.nuevo ? "Nuevo" : "Editar"} Cobranza",
+              texto: "${_.nuevo ? "Nueva" : "Editar"} Cobranza",
               ltrbp: const [20, 0, 0, 5],
             ),
             const TituloContainer(
