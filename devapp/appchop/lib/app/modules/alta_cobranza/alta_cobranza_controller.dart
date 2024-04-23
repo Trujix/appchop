@@ -1,15 +1,16 @@
 import 'package:adaptive_action_sheet/adaptive_action_sheet.dart';
 import 'package:custom_info_window/custom_info_window.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttercontactpicker/fluttercontactpicker.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../../data/models/local_storage/clientes.dart';
 import '../../data/models/local_storage/zonas.dart';
 import '../../data/models/local_storage/cobranzas.dart';
 import '../../data/models/local_storage/local_storage.dart';
+import '../../routes/app_routes.dart';
 import '../../utils/get_injection.dart';
 import '../../utils/literals.dart';
 import '../../widgets/texts/combo_texts.dart';
@@ -52,6 +53,8 @@ class AltaCobranzaController extends GetInjection {
   Map<MarkerId, Marker> marcadorCliente = {};
   String idMarcadorCliente = "";
   bool utilizarUbicacionCliente = false;
+
+  bool altaCliente = false;
 
   bool esAdmin = GetInjection.administrador;
 
@@ -111,8 +114,14 @@ class AltaCobranzaController extends GetInjection {
     Get.back();
   }
 
-  Future<void> abrirContactos() async {
-    await Permission.contacts.isDenied.then((denegado) async {
+  Future<void> buscarClientes() async {
+    Get.toNamed(
+      AppRoutes.busqueda,
+      arguments: {
+        "tipoBusqueda": Literals.busquedaClientes,
+      }
+    );
+    /*await Permission.contacts.isDenied.then((denegado) async {
       if (denegado) {
         Permission.contacts.request();
       } else {
@@ -124,7 +133,12 @@ class AltaCobranzaController extends GetInjection {
           tool.msg("No fue posible cargar los datos del contacto seleccionado", 2);
         }
       }
-    });
+    });*/
+  }
+
+  void busquedaClienteResult(Clientes cliente) {
+    nombre.text = cliente.nombre!;
+    telefono.text = cliente.telefono!;
   }
 
   void abrirCalculadora() {
@@ -136,7 +150,12 @@ class AltaCobranzaController extends GetInjection {
       if(!_validarForm()) {
         return;
       }
+      var clienteNuevo = false;
+      if(altaCliente && !tool.isNullOrEmpty(telefono)) {
+        clienteNuevo = await tool.ask("Agregar nuevo cliente", "El teléfono ${telefono.text} no está registrado, ¿Desea guardarlo?");
+      }
       tool.isBusy(true);
+      var fechaHoy = DateFormat("dd-MM-yyyy").format(DateTime.now()).toString();
       var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
       var cobranzaStorage = List<Cobranzas>.from(
         storage.get([Cobranzas()]).map((json) => Cobranzas.fromJson(json))
@@ -159,7 +178,7 @@ class AltaCobranzaController extends GetInjection {
         fechaVencimiento: vencimiento == "" ? Literals.sinVencimiento : vencimiento,
         saldo: tool.str2double(cantidad.text),
         ultimoCargo: tool.str2double(cantidad.text),
-        fechaUltimoCargo: DateFormat("dd-MM-yyyy").format(DateTime.now()).toString(),
+        fechaUltimoCargo: fechaHoy,
         usuarioUltimoCargo: esAdmin ? Literals.perfilAdministrador : localStorage.email,
       );
       if(nuevo) {
@@ -173,6 +192,21 @@ class AltaCobranzaController extends GetInjection {
         cobranzaStorage[index] = nuevaCobranza;
       }
       await storage.update(cobranzaStorage);
+      if(clienteNuevo) {
+        var clientes = List<Clientes>.from(
+          storage.get([Clientes()]).map((json) => Clientes.fromJson(json))
+        );
+        clientes.add(
+          Clientes(
+            idUsuario: localStorage.idUsuario,
+            idCliente: tool.guid(),
+            nombre: nombre.text,
+            telefono: telefono.text,
+            fechaCreacion: fechaHoy,
+          ),
+        );
+        await storage.update(clientes);
+      }
       await Future.delayed(1.seconds);
       tool.isBusy(false);
       await Get.find<CobranzaMainController>().cargarListaCobranza();
@@ -259,6 +293,20 @@ class AltaCobranzaController extends GetInjection {
     } else if(tool.str2double(cantidad.text) == 0) {
       mensaje = "Cantidad incorrecta";
     } else {
+      altaCliente = false;
+      var clientes = List<Clientes>.from(
+        storage.get([Clientes()]).map((json) => Clientes.fromJson(json))
+      );
+      if(clientes.isNotEmpty) {
+        for(var cliente in clientes) {
+          altaCliente = true;
+          if(cliente.telefono == telefono.text) {
+            break;
+          }
+        }
+      } else {
+        altaCliente = true;
+      }
       correcto = true;
     }
     if(!correcto) {

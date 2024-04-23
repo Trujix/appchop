@@ -68,8 +68,8 @@ class AltaCobranzaPage extends StatelessWidget with WidgetsBindingObserver {
                       ),
                     ),
                     IconoBotonInkwell(
-                      onTap: _.abrirContactos,
-                      icon: MaterialIcons.contact_page,
+                      onTap: _.buscarClientes,
+                      icon: MaterialIcons.person_search,
                     ),
                   ],
                 ),

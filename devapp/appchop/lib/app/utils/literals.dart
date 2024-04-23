@@ -33,6 +33,8 @@ class Literals {
   static const String movimientoCargo = "CARGO";
   static const String movimientoAbono = "ABONO";
 
+  static const String busquedaClientes = "BUSCAR-CLIENTES";
+
   static const String sinVencimiento = "31-12-2999";
  
   static const String noneStorage = "NONE";

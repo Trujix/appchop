@@ -93,6 +93,13 @@ class AltaCargoAbonoController extends GetInjection {
           if(pagar) {
             listaCobranzas[i].estatus = Literals.statusCobranzaPagada;
           }
+          if(tipo == Literals.movimientoCargo) {
+            listaCobranzas[i].ultimoCargo = pagar ? saldoPendiente : tool.str2double(cantidad.text);
+            listaCobranzas[i].fechaUltimoCargo = DateFormat("dd-MM-yyyy").format(DateTime.now()).toString();
+          } else if(tipo == Literals.movimientoAbono) {
+            listaCobranzas[i].ultimoAbono = pagar ? saldoPendiente : tool.str2double(cantidad.text);
+            listaCobranzas[i].fechaUltimoAbono = DateFormat("dd-MM-yyyy").format(DateTime.now()).toString();
+          }
         }
       }
       var cargosAbonos = List<CargosAbonos>.from(
