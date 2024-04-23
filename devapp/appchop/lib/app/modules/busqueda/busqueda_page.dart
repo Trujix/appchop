@@ -27,18 +27,22 @@ class BusquedaPage extends StatelessWidget {
         body: Builder(
           builder: (context) {
             if(_.elementosBusqueda.isNotEmpty) {
-              return Expanded(
-                child: NestedScrollView(
-                  headerSliverBuilder: (context, isScrolled) {
-                    return [const SmallHeader(height: 15,)];
-                  },
-                  body: BusquedaCustomscrollview(
-                    scrollController: _.scrollController,
-                    elementos: _.elementosBusqueda,
-                    onLongPress: _.seleccionarElemento,
-                    onTap: _.mensajeTap,
+              return Column(
+                children: [
+                  Expanded(
+                    child: NestedScrollView(
+                      headerSliverBuilder: (context, isScrolled) {
+                        return [const SmallHeader(height: 15,)];
+                      },
+                      body: BusquedaCustomscrollview(
+                        scrollController: _.scrollController,
+                        elementos: _.elementosBusqueda,
+                        onLongPress: _.seleccionarElemento,
+                        onTap: _.mensajeTap,
+                      ),
+                    ),
                   ),
-                ),
+                ],
               );
             } else{
               return SinBusquedaCenter(
