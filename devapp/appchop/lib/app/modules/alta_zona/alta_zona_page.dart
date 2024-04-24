@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
+import 'package:material_color_gen/material_color_gen.dart';
 
 import '../../utils/color_list.dart';
 import '../../widgets/appbars/back_appbar.dart';
@@ -9,7 +10,7 @@ import '../../widgets/columns/sin_zonas_column.dart';
 import '../../widgets/containers/card_container.dart';
 import '../../widgets/containers/titulo_container.dart';
 import '../../widgets/defaults/small_header.dart';
-import '../../widgets/textforms/button_textform.dart';
+import '../../widgets/textforms/standard_textform.dart';
 import 'alta_zona_controller.dart';
 
 class AltaZonaPage extends StatelessWidget with WidgetsBindingObserver {
@@ -31,18 +32,17 @@ class AltaZonaPage extends StatelessWidget with WidgetsBindingObserver {
           children: <Widget>[
             const TituloContainer(
               texto: "Agregar zona",
-              ltrbp: [20, 0, 0, 5],
+              ltrbp: [20, 0, 0, 0],
+              size: 20,
             ),
             CardContainer(
               fondo: 0xFFFDFEFE,
               children: [
-                ButtonTextform(
+                StandardTextform(
                   controller: _.zona,
                   focusNode: _.zonaNode,
                   icon: MaterialIcons.list_alt,
-                  icono: MaterialIcons.save,
                   text: 'Nombre zona',
-                  onTap: _.guardarZona,
                 ),
               ],
             ),
@@ -110,6 +110,16 @@ class AltaZonaPage extends StatelessWidget with WidgetsBindingObserver {
             ),
           ],
         ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: _.guardarZona,
+          shape: const CircleBorder(),
+          backgroundColor: Color(ColorList.sys[2]),
+          child: Icon(
+            MaterialIcons.save,
+            color: Color(ColorList.sys[0]).toMaterialColor(),
+          ),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.miniEndTop,
       ),
     );
   }
