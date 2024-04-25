@@ -56,7 +56,7 @@ class AltaCobranzaController extends GetInjection {
 
   bool altaCliente = false;
 
-  bool esAdmin = GetInjection.administrador;
+  final bool _esAdmin = GetInjection.administrador;
 
   @override
   void onInit() {
@@ -179,7 +179,7 @@ class AltaCobranzaController extends GetInjection {
         saldo: tool.str2double(cantidad.text),
         ultimoCargo: tool.str2double(cantidad.text),
         fechaUltimoCargo: fechaHoy,
-        usuarioUltimoCargo: esAdmin ? Literals.perfilAdministrador : localStorage.email,
+        usuarioUltimoCargo: _esAdmin ? Literals.perfilAdministrador : localStorage.email,
       );
       if(nuevo) {
         nuevaCobranza.saldo = tool.str2double(cantidad.text);
