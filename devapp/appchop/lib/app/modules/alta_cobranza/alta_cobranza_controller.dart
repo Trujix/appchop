@@ -114,26 +114,13 @@ class AltaCobranzaController extends GetInjection {
     Get.back();
   }
 
-  Future<void> buscarClientes() async {
+  void buscarClientes() {
     Get.toNamed(
       AppRoutes.busqueda,
       arguments: {
         "tipoBusqueda": Literals.busquedaClientes,
       }
     );
-    /*await Permission.contacts.isDenied.then((denegado) async {
-      if (denegado) {
-        Permission.contacts.request();
-      } else {
-        try {
-          var contact = await FlutterContactPicker.pickFullContact();
-          nombre.text = contact.name!.firstName!;
-          telefono.text = contact.phones[0].number!.replaceAll(" ", "");
-        } catch(e) {
-          tool.msg("No fue posible cargar los datos del contacto seleccionado", 2);
-        }
-      }
-    });*/
   }
 
   void busquedaClienteResult(Clientes cliente) {
@@ -221,6 +208,7 @@ class AltaCobranzaController extends GetInjection {
 
   void cobranzaSelected(String tipo) {
     tipoCobranza = tipo;
+    update();
   }
 
   Future<bool> abrirMapa() async {

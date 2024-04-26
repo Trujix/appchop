@@ -40,6 +40,9 @@ class BusquedaController extends GetInjection {
         sinResultados = "No hay clientes por mostrar";
         opcionesBase = ["Nombre", "Teléfono"];
         for(var cliente in _listaClientes) {
+          if(!cliente.activo!) {
+            continue;
+          }
           elementosBusqueda.add(BusquedaElementos(
             id: tool.guid(),
             value: "${cliente.nombre} ${cliente.telefono}".toUpperCase(),

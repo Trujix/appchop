@@ -31,6 +31,7 @@ class BusquedaCustomscrollview extends StatelessWidget {
             onTap: onTap,
             onLongPress: () => onLongPress(elemento.elemento),
             child: DotborderContainer(
+              ltrbm: const [10, 0, 10, 0],
               bordeColor: ColorList.sys[0],
               children: <Widget>[
                 Row(

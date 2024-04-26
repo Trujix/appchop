@@ -6,7 +6,7 @@ import 'package:material_color_gen/material_color_gen.dart';
 
 import '../../utils/color_list.dart';
 import '../../widgets/appbars/back_appbar.dart';
-import '../../widgets/columns/sin_zonas_column.dart';
+import '../../widgets/columns/sin_elementos_column.dart';
 import '../../widgets/containers/card_container.dart';
 import '../../widgets/containers/titulo_container.dart';
 import '../../widgets/defaults/small_header.dart';
@@ -103,7 +103,10 @@ class AltaZonaPage extends StatelessWidget with WidgetsBindingObserver {
                       ],
                     );
                   } else {
-                    return const SinZonasColumn();
+                    return const SinElementosColumn(
+                      texto: "Su lista de zonas está vacía",
+                      imagenAsset: "zonas/background.png",
+                    );
                   }
                 },
               ),
