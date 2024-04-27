@@ -164,7 +164,7 @@ class AltaCargoAbonoPage extends StatelessWidget with WidgetsBindingObserver {
                 body: CargoAbonoCustomscrollview(
                   scrollController: _.scrollController,
                   listaCargosAbonos: _.listaCargosAbonos,
-                  enabledSlider: _.pendiente,
+                  enabledSlider: _.pendiente && _.esAdmin,
                   onLongPress: _.mostrarDetalleCargoAbono,
                   onBorrar: _.revertirCargoAbono,
                   onPdf: _.crearAbonoReportePdf,

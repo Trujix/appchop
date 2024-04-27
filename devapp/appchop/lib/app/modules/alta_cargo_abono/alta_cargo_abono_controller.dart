@@ -32,7 +32,7 @@ class AltaCargoAbonoController extends GetInjection {
   ];
   List<List<dynamic>> cargosAbonosTabla = [];
 
-  final bool _esAdmin = GetInjection.administrador;
+  final bool esAdmin = GetInjection.administrador;
 
   @override
   void onInit() {
@@ -98,11 +98,11 @@ class AltaCargoAbonoController extends GetInjection {
           if(tipo == Literals.movimientoCargo) {
             listaCobranzas[i].ultimoCargo = pagar ? saldoPendiente : tool.str2double(cantidad.text);
             listaCobranzas[i].fechaUltimoCargo = DateFormat("dd-MM-yyyy").format(DateTime.now()).toString();
-            listaCobranzas[i].usuarioUltimoCargo = _esAdmin ? Literals.perfilAdministrador : localStorage.email;
+            listaCobranzas[i].usuarioUltimoCargo = esAdmin ? Literals.perfilAdministrador : localStorage.email;
           } else if(tipo == Literals.movimientoAbono) {
             listaCobranzas[i].ultimoAbono = pagar ? saldoPendiente : tool.str2double(cantidad.text);
             listaCobranzas[i].fechaUltimoAbono = DateFormat("dd-MM-yyyy").format(DateTime.now()).toString();
-            listaCobranzas[i].usuarioUltimoAbono = _esAdmin ? Literals.perfilAdministrador : localStorage.email;
+            listaCobranzas[i].usuarioUltimoAbono = esAdmin ? Literals.perfilAdministrador : localStorage.email;
           }
         }
       }
