@@ -68,6 +68,7 @@ class AltaCobranzaController extends GetInjection {
     var arguments = Get.arguments;
     nuevo = arguments['nuevo'] ?? true;
     fechaRegistro.text = DateFormat("dd-MM-yyyy").format(DateTime.now()).toString();
+    fechaVencimiento.text = DateFormat("dd-MM-yyyy").format(DateTime.now().add(1.days)).toString();
     var zonas = List<Zonas>.from(
       storage.get([Zonas()]).map((json) => Zonas.fromJson(json))
     );
@@ -280,6 +281,10 @@ class AltaCobranzaController extends GetInjection {
       mensaje = "Escriba la cantidad";
     } else if(tool.str2double(cantidad.text) == 0) {
       mensaje = "Cantidad incorrecta";
+    } else if(tool.isNullOrEmpty(telefono)) {
+      mensaje = "Escriba el teléfono";
+    } else if(telefono.text.length != 10) {
+      mensaje = "Formato de teléfono incorrecto";
     } else {
       altaCliente = false;
       var clientes = List<Clientes>.from(

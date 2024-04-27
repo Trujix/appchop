@@ -13,6 +13,7 @@ class DateTextform extends StatelessWidget {
   final bool clean;
   final String text;
   final IconData icon;
+  final bool canTap;
 
   const DateTextform({
     super.key,
@@ -24,6 +25,7 @@ class DateTextform extends StatelessWidget {
     this.text = "Fecha",
     this.icon = Icons.lock,
     required this.dateSelected,
+    this.canTap = true,
   });
 
   @override
@@ -39,6 +41,9 @@ class DateTextform extends StatelessWidget {
         onTap: () {
           if(clean) {
             controller!.text = "";
+          }
+          if(canTap) {
+            return;
           }
           showDatePicker(
             cancelText: "Cancelar",
