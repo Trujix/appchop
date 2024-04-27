@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -67,9 +68,12 @@ class AltaCobranzaPage extends StatelessWidget with WidgetsBindingObserver {
                         icon: MaterialIcons.person,
                       ),
                     ),
-                    IconoBotonInkwell(
-                      onTap: _.buscarClientes,
-                      icon: MaterialIcons.person_search,
+                    Visibility(
+                      visible: _.esAdmin,
+                      child: IconoBotonInkwell(
+                        onTap: _.buscarClientes,
+                        icon: MaterialIcons.person_search,
+                      ),
                     ),
                   ],
                 ),
