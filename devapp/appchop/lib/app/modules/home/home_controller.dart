@@ -45,12 +45,12 @@ class HomeController extends GetInjection {
         visible: esAdmin,
         onTap: () => _abrirOpcion(MenuOpcion.agregarZona),
       ),
-      MenuOpcionInkwell(
+      /*MenuOpcionInkwell(
         texto: "Usuarios",
         icono: MaterialIcons.person_add,
         visible: esAdmin,
         onTap: () => _abrirOpcion(MenuOpcion.usuarios),
-      ),
+      ),*/
       MenuOpcionInkwell(
         texto: "Clientes",
         icono: MaterialIcons.contact_phone,
