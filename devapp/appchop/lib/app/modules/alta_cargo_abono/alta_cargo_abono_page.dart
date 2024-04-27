@@ -168,6 +168,7 @@ class AltaCargoAbonoPage extends StatelessWidget with WidgetsBindingObserver {
                   onLongPress: _.mostrarDetalleCargoAbono,
                   onBorrar: _.revertirCargoAbono,
                   onPdf: _.crearAbonoReportePdf,
+                  esAdmin: _.esAdmin,
                 ),
               ),
             ),

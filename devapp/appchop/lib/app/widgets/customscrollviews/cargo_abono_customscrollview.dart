@@ -5,6 +5,7 @@ import '../../utils/literals.dart';
 import '../inkwells/cargo_abono_inkwell.dart';
 import '../slidables/borrar_pdf_slidable.dart';
 import '../slidables/borrar_slidable.dart';
+import '../slidables/pdf_slidable.dart';
 
 class CargoAbonoCustomscrollview extends StatelessWidget {
   final ScrollController? scrollController;
@@ -13,6 +14,7 @@ class CargoAbonoCustomscrollview extends StatelessWidget {
   final void Function(CargosAbonos) onBorrar;
   final void Function(CargosAbonos) onPdf;
   final bool enabledSlider;
+  final bool esAdmin;
   const CargoAbonoCustomscrollview({
     super.key,
     this.scrollController,
@@ -21,6 +23,7 @@ class CargoAbonoCustomscrollview extends StatelessWidget {
     required this.onBorrar,
     required this.onPdf,
     this.enabledSlider = true,
+    this.esAdmin = true,
   });
 
   @override
@@ -38,15 +41,27 @@ class CargoAbonoCustomscrollview extends StatelessWidget {
                   onLongPress: () => onLongPress(cargoAbono),
                 );
               } else if(cargoAbono.tipo == Literals.movimientoAbono) {
-                return BorrarPdfSlidable(
-                  onBorrar: () => onBorrar(cargoAbono),
-                  onPdf: () => onPdf(cargoAbono),
-                  enabled: enabledSlider,
-                  child: CargoAbonoInkwell(
-                    cargoAbono: cargoAbono,
-                    onLongPress: () => onLongPress(cargoAbono),
-                  ),
-                );
+                if(esAdmin) {
+                  return BorrarPdfSlidable(
+                    onBorrar: () => onBorrar(cargoAbono),
+                    onPdf: () => onPdf(cargoAbono),
+                    enabled: enabledSlider,
+                    child: CargoAbonoInkwell(
+                      cargoAbono: cargoAbono,
+                      onLongPress: () => onLongPress(cargoAbono),
+                    ),
+                  );
+                } else {
+                  return PdfSlidable(
+                    onPdf: () => onPdf(cargoAbono),
+                    enabled: true,
+                    child: CargoAbonoInkwell(
+                      cargoAbono: cargoAbono,
+                      onLongPress: () => onLongPress(cargoAbono),
+                    ),
+                  );
+                }
+                
               } else {
                 return BorrarSlidable(
                   onBorrar: () => onBorrar(cargoAbono),
