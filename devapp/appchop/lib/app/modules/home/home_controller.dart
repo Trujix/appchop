@@ -36,7 +36,7 @@ class HomeController extends GetInjection {
       MenuOpcionInkwell(
         texto: "Nueva Cobranza",
         icono: MaterialIcons.description,
-        visible: esAdmin,
+        visible: true,
         onTap: () => _abrirOpcion(MenuOpcion.nuevaCobranza),
       ),
       MenuOpcionInkwell(
