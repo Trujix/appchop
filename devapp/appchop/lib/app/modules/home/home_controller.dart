@@ -54,7 +54,7 @@ class HomeController extends GetInjection {
       MenuOpcionInkwell(
         texto: "Configuración",
         icono: MaterialIcons.settings,
-        visible: esAdmin,
+        visible: true,
         onTap: () => _abrirOpcion(MenuOpcion.configuracion),
       ),
     ];

@@ -37,8 +37,9 @@ class LoginController extends GetInjection {
       }
       tool.isBusy();
       var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
+      var usuarioLogin = tool.isEmail(usuario.text) ? usuario.text.toLowerCase() : usuario.text.toUpperCase();
       var loginForm = LoginForm(
-        usuario: usuario.text,
+        usuario: usuarioLogin,
         password: password.text,
         firebase: localStorage.idFirebase,
         sesion: localStorage.idDispositivo,
@@ -72,7 +73,7 @@ class LoginController extends GetInjection {
       GetInjection.perfil = result.perfil!;
       localStorage.login = true;
       localStorage.idUsuario = result.idSistema;
-      localStorage.email = usuario.text;
+      localStorage.email = usuarioLogin;
       localStorage.perfil = result.perfil!;
       localStorage.password = password.text;
       localStorage.nombres = result.nombres;
