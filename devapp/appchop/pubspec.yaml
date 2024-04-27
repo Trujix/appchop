@@ -2,7 +2,11 @@ name: appchop
 description: "AppChop"
 publish_to: 'none'
 
+<<<<<<< Updated upstream
 version: 1.0.3+3
+=======
+version: 1.0.2+2
+>>>>>>> Stashed changes
 
 environment:
   sdk: '>=3.2.6 <4.0.0'
