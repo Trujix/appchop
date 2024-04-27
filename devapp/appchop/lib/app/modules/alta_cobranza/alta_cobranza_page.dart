@@ -109,7 +109,7 @@ class AltaCobranzaPage extends StatelessWidget with WidgetsBindingObserver {
                 StandardTextform(
                   controller: _.telefono,
                   focusNode: _.telefonoFocus,
-                  text: "Teléfono",
+                  text: "Teléfono *",
                   icon: MaterialIcons.phone_iphone,
                   keyboardType: TextInputType.phone,
                   maxLength: 10,
