@@ -11,4 +11,5 @@ class AppRoutes {
   static const home = "/home";
   static const login = "/login";
   static const pdfViewer = "/pdf_viewer";
+  static const usuarios = "/usuarios";
 }

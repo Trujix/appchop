@@ -46,6 +46,12 @@ class HomeController extends GetInjection {
         onTap: () => _abrirOpcion(MenuOpcion.agregarZona),
       ),
       MenuOpcionInkwell(
+        texto: "Usuarios",
+        icono: MaterialIcons.person_add,
+        visible: esAdmin,
+        onTap: () => _abrirOpcion(MenuOpcion.usuarios),
+      ),
+      MenuOpcionInkwell(
         texto: "Clientes",
         icono: MaterialIcons.contact_phone,
         visible: esAdmin,
@@ -78,6 +84,9 @@ class HomeController extends GetInjection {
       break;
       case MenuOpcion.agregarZona:
         pagina = AppRoutes.altaZona;
+      break;
+      case MenuOpcion.usuarios:
+        pagina = AppRoutes.usuarios;
       break;
       case MenuOpcion.clientes:
         pagina = AppRoutes.altaClientes;
@@ -119,6 +128,7 @@ class HomeController extends GetInjection {
 enum MenuOpcion {
   nuevaCobranza,
   agregarZona,
+  usuarios,
   clientes,
   configuracion,
 }
