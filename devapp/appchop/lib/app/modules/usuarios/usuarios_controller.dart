@@ -13,6 +13,10 @@ class UsuariosController extends GetInjection {
 
   }
 
+  void agregarNuevoUsuario() {
+    
+  }
+
   void cerrar() {
     Get.back();
   }
