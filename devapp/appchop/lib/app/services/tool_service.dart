@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -24,6 +25,7 @@ import '../widgets/simplecalculators/default_simplecalculator.dart';
 
 class ToolService extends GetxController {
   bool _loadingOpen = false;
+  final Connectivity _conneccion = Connectivity();
 
   void isBusy([bool open = true]) {
     try {
@@ -47,17 +49,17 @@ class ToolService extends GetxController {
   }
 
   Future<bool> isOnline() async {
-    var conectado = false;
     try {
-      var coneccion = await InternetAddress.lookup("8.8.8.8");
-      conectado = coneccion.isNotEmpty && coneccion[0].rawAddress.isNotEmpty;
-    } on SocketException catch(_) {
-      conectado = false;
+      var coneccion = await _conneccion.checkConnectivity();
+      var wifi = coneccion.contains(ConnectivityResult.wifi);
+      var datosMobiles = coneccion.contains(ConnectivityResult.mobile);
+      return wifi || datosMobiles;
+    } catch(_) {
+      return false;
     }
-    return conectado;
   }
 
-  void msg(String mensaje, int tipo) {
+  void msg(String mensaje, [int tipo = 0]) {
     try {
       var thisContext = Get.context;
       if(_loadingOpen) {

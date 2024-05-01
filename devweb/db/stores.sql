@@ -16,6 +16,7 @@ BEGIN
 END $$
 DELIMITER ;
 
+
 /* ------------------------------------------------------------------------------------*/
 DROP PROCEDURE IF EXISTS STP_INICIAR_SESION;
 DELIMITER $$
@@ -98,5 +99,64 @@ BEGIN
             AND perfil = 'COBRADOR'
     );
     SELECT _VERIFY AS EXISTE;
+END $$
+DELIMITER ;
+
+
+/* ------------------------------------------------------------------------------------*/
+DROP PROCEDURE IF EXISTS STP_ALTA_COBRADOR;
+DELIMITER $$
+CREATE PROCEDURE STP_ALTA_COBRADOR(
+    IN _IDSISTEMA VARCHAR(120), IN _USUARIO VARCHAR(150), IN _PASSWORD VARCHAR(150),
+    IN _NOMBRES VARCHAR(150), IN _APELLIDOS VARCHAR(150) 
+)
+BEGIN
+    DECLARE _IDAUTORIZACION INT DEFAULT 0;
+    SET _IDAUTORIZACION = (
+        SELECT 
+            id_autorization 
+        FROM appchop.usuarios WHERE
+            id_sistema = _IDSISTEMA
+    );
+    IF _IDAUTORIZACION > 0 THEN
+        INSERT INTO usuarios (
+            id_sistema,
+            usuario,
+            password,
+            status,
+            id_autorization,
+            nombres,
+            apellidos,
+            perfil
+        ) VALUES (
+            _IDSISTEMA,
+            _USUARIO,
+            MD5(_PASSWORD),
+            'ACTIVO',
+            _IDAUTORIZACION,
+            _NOMBRES,
+            _APELLIDOS,
+            'COBRADOR'
+        );
+    ELSE
+        SELECT 0;
+    END IF;
+END $$
+DELIMITER ;
+
+
+/* ------------------------------------------------------------------------------------*/
+DROP PROCEDURE IF EXISTS STP_ACTUALIZAR_PASSWORD_COBRADOR;
+DELIMITER $$
+CREATE PROCEDURE STP_ACTUALIZAR_PASSWORD_COBRADOR(
+    IN _IDSISTEMA VARCHAR(120),
+    IN _USUARIO VARCHAR(150),
+    IN _PASSWORD VARCHAR(150)
+)
+BEGIN
+    UPDATE appchop.usuarios SET 
+        password = MD5(_PASSWORD) 
+    WHERE id_sistema = _IDSISTEMA
+        AND usuario = _USUARIO;
 END $$
 DELIMITER ;

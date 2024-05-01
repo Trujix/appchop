@@ -4,10 +4,12 @@ import 'package:permission_handler/permission_handler.dart';
 
 import '../../data/models/local_storage/cargos_abonos.dart';
 import '../../data/models/local_storage/clientes.dart';
+import '../../data/models/local_storage/usuarios.dart';
 import '../../data/models/local_storage/zonas.dart';
 import '../../data/models/local_storage/cobranzas.dart';
 import '../../data/models/local_storage/local_storage.dart';
 import '../../data/models/local_storage/notas.dart';
+import '../../data/models/local_storage/zonas_usuarios.dart';
 import '../../utils/get_injection.dart';
 import '../../utils/literals.dart';
 import '../home/home_binding.dart';
@@ -55,6 +57,8 @@ class AlphaController extends GetInjection {
     await Cobranzas.init();
     await Notas.init();
     await CargosAbonos.init();
+    await Usuarios.init();
+    await ZonasUsuarios.init();
     return;
   }
 

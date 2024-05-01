@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 
+import '../data/repositories/cobradores_repository.dart';
 import '../data/repositories/configuracion_repository.dart';
 import '../data/repositories/login_repository.dart';
 import '../services/api_service.dart';
@@ -15,6 +16,7 @@ abstract class GetInjection extends GetxController {
 
   final loginRepository = Get.find<LoginRepository>();
   final configuracionRepository = Get.find<ConfiguracionRepository>();
+  final cobradoresRepository = Get.find<CobradoresRepository>();
 
   static bool administrador = false;
   static String perfil = "";

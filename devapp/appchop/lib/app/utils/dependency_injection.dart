@@ -1,7 +1,9 @@
 import 'package:get/get.dart';
 
+import '../data/providers/cobradores_provider.dart';
 import '../data/providers/configuracion_provider.dart';
 import '../data/providers/login_provider.dart';
+import '../data/repositories/cobradores_repository.dart';
 import '../data/repositories/configuracion_repository.dart';
 import '../data/repositories/login_repository.dart';
 import '../services/api_service.dart';
@@ -20,5 +22,7 @@ class DependencyInjection {
     Get.put<LoginRepository>(LoginRepository());
     Get.put<ConfiguracionProvider>(ConfiguracionProvider());
     Get.put<ConfiguracionRepository>(ConfiguracionRepository());
+    Get.put<CobradoresProvider>(CobradoresProvider());
+    Get.put<CobradoresRepository>(CobradoresRepository());
   }
 }
