@@ -1,11 +1,21 @@
 <?php
     Class Firebase {
         public static function enviarNotificacion($params) {
+            $notif_form = (object)$params;
+            if(!isset($notif_form->titulo) 
+                || !isset($notif_form->cuerpo)
+                || !isset($notif_form->ids)
+                || !isset($notif_form->data)) {
+                http_response_code(406);
+                die("Parámetros de notificación incorrectos");
+            }
             $key_fcm = getenv('FCMKEY');
             $api = new Api();
             $msg = self::crearNotificacionMsg(
-                "Titulo de prueba",
-                "Cuerpo de prueba"
+                $notif_form->titulo,
+                $notif_form->cuerpo,
+                $notif_form->ids,
+                $notif_form->data
             );
             $key_header = array("Authorization: key=$key_fcm");
             $result = $api->call(
@@ -17,17 +27,16 @@
             return json_encode($result);
         }
 
-        static function crearNotificacionMsg($titulo, $cuerpo) {
+        static function crearNotificacionMsg($titulo, $cuerpo, $ids, $data) {
             $id_notificacion = bin2hex(openssl_random_pseudo_bytes(16));
             $notificacion = new stdClass();
             $notificacion->title = $titulo;
             $notificacion->body = $cuerpo;
             $android = new stdClass();
             $android->priority = "high";
-            $data = new stdClass();
-            $data->idnotificacion = $id_notificacion;
+            $data['idnotificacion'] = $id_notificacion;
             $msg = new stdClass();
-            $msg->registration_ids = array("eZ0P-jsDQG-TrvXMguE45Y:APA91bH-UZB_dnmpBo_kd1OY22ZQaCoktPc9BMo28EdDBkvUAF5McelMpiEgx8Ld8OEdKf9O-pxWFRJiWzFR3V9RldNCPne4j5EKMY8bIDpyG6tCmO2hAUS1uWFhU_aPkLbtLzcG6ayZ");
+            $msg->registration_ids = $ids;
             $msg->notification = $notificacion;
             $msg->data = $data;
             $msg->priority = "high";
