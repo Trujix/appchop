@@ -4,8 +4,10 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import '../../data/models/local_storage/usuarios.dart';
 import '../../data/models/local_storage/zonas.dart';
 import '../../data/models/local_storage/zonas_usuarios.dart';
+import '../../utils/color_list.dart';
+import '../buttons/circular_buttons.dart';
 import '../containers/card_container.dart';
-import '../slidables/borrar_slidable.dart';
+import '../slidables/activo_inactivo_slidable.dart';
 import '../texts/etiqueta_text.dart';
 
 class UsuariosCustomscrollview extends StatelessWidget {
@@ -16,6 +18,8 @@ class UsuariosCustomscrollview extends StatelessWidget {
   final IconData icono;
   final void Function() onTap;
   final void Function(dynamic) onLongPress;
+  final void Function(Usuarios) actualizarPassword;
+  final void Function(bool) cambiarEstatus;
   const UsuariosCustomscrollview({
     super.key,
     this.scrollController,
@@ -25,6 +29,8 @@ class UsuariosCustomscrollview extends StatelessWidget {
     this.icono = MaterialIcons.person,
     required this.onTap,
     required this.onLongPress,
+    required this.actualizarPassword,
+    required this.cambiarEstatus,
   });
   @override
   Widget build(BuildContext context) {
@@ -43,9 +49,12 @@ class UsuariosCustomscrollview extends StatelessWidget {
           child: InkWell(
             onTap: onTap,
             onLongPress: () {},
-            child: BorrarSlidable(
-              onBorrar: () {},
-              enabled: false,
+            child: ActivoInactivoSlidable(
+              cambiar: () {
+                cambiarEstatus(usuario.activo!);
+              },
+              enabled: true,
+              activo: usuario.activo!,
               child: CardContainer(
                 fondo: 0xFFFDFEFE,
                 margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
@@ -64,6 +73,44 @@ class UsuariosCustomscrollview extends StatelessWidget {
                               texto1: "ZONA: ",
                               texto2: zona,
                               icono: MaterialIcons.list_alt,
+                            ),
+                            const SizedBox(height: 10,),
+                            Row(
+                              children: [
+                                Icon(
+                                  usuario.activo! ? MaterialIcons.check_circle : MaterialIcons.cancel,
+                                  color: Color(ColorList.theme[usuario.activo! ? 1 : 3]),
+                                ),
+                                const SizedBox(width: 5,),
+                                Text(
+                                  usuario.activo! ? "ACTIVO" : "INACTIVO",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w800,
+                                    color: Color(ColorList.sys[0]),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      Visibility(
+                        visible: usuario.activo!,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Row(
+                              children: [
+                                CircularButton(
+                                  colorIcono: ColorList.sys[0],
+                                  color: ColorList.sys[2],
+                                  icono: MaterialIcons.lock,
+                                  onPressed: () {
+                                    actualizarPassword(usuario);
+                                  },
+                                ),
+                              ],
                             ),
                           ],
                         ),

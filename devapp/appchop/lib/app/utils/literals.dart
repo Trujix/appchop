@@ -35,6 +35,8 @@ class Literals {
 
   static const String busquedaClientes = "BUSCAR-CLIENTES";
 
+  static const String notificacionUsuarioPassword = "USUARIO-PASSWORD";
+
   static const String sinVencimiento = "31-12-2999";
  
   static const String noneStorage = "NONE";
@@ -43,6 +45,8 @@ class Literals {
 
   static const String reporteCobranzaCsv = "reporte_cobranza.csv";
   static const String reporteEstadoCuentaPdf = "estado_cuenta.pdf";
+
+  static const String msgOffline = "Es necesario estar conectado a internet para esta acción";
 
   static const String regexEmail = r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
 }

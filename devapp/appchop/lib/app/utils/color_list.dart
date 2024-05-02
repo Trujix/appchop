@@ -13,6 +13,13 @@ class ColorList {
     0xFFFDFEFE,
   ];
 
+  static List<int> theme = [
+    0xFF2E86C1,
+    0xFF239B56,
+    0xFFEB984E,
+    0xFFE74C3C,
+  ];
+
   static List<int> main = [
     0xFF0B4251,
   ];

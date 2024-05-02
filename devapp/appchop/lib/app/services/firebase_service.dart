@@ -1,15 +1,16 @@
-import 'dart:convert';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
 
 import '../data/models/local_storage/local_storage.dart';
 import '../utils/literals.dart';
+import '../widgets/modals/notificacion_usuario_password_modal.dart';
 import 'storage_service.dart';
+import 'tool_service.dart';
 
 class FirebaseService {
   final StorageService _storage = Get.find<StorageService>();
+  final ToolService _tool = Get.find<ToolService>();
 
   Future<void> init() async {
     try {
@@ -21,18 +22,29 @@ class FirebaseService {
         _onMessage(message.data);
       });
       FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-        _onMessage(message.data, true);
+        _onMessageOpen(message.data);
       });
     } finally {
       FirebaseMessaging.instance.subscribeToTopic(Literals.notificacionTopic);
     }
   }
 
-  void _onMessage(Map<String, dynamic> notificacion, [bool open = false]) {
-    print(jsonEncode(notificacion));
-    if(open) {
+  void _onMessage(Map<String, dynamic> notificacion) {
+    try {
+      var accion = notificacion['accion'];
+      switch(accion) {
+        case null:
+        break;
+        case Literals.notificacionUsuarioPassword:
+          _usuarioPassword(notificacion);
+        default:
+        break;
+      }
+    } finally { }
+  }
 
-    }
+  void _onMessageOpen(Map<String, dynamic> notificacion,) {
+    
   }
 
   Future<void> _updateFirebaseToken(String token) async {
@@ -42,6 +54,18 @@ class FirebaseService {
       await _storage.update(localStorage);
       return;
     } finally { }
+  }
+
+  void _usuarioPassword(dynamic data) {
+    var password = data['password'];
+    _tool.modal(
+      widgets: [
+        NotificacionUsuarioPasswordModal(
+          password: password,
+        ),
+      ],
+      height: 170,
+    );
   }
 }
 

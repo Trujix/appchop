@@ -16,6 +16,7 @@ import 'package:pdf/pdf.dart' as pdflib;
 
 import '../data/models/local_storage/zonas.dart';
 import '../data/models/local_storage/cobranzas.dart';
+import '../utils/color_list.dart';
 import '../utils/literals.dart';
 import '../widgets/dialogs/alerta_dialog.dart';
 import '../widgets/dialogs/loading_dialog.dart';
@@ -72,10 +73,10 @@ class ToolService extends GetxController {
         MaterialIcons.error,
       ];
       List<int> colores = [
-        0xFF2E86C1,
-        0xFF239B56,
-        0xFFEB984E,
-        0xFFE74C3C,
+        ColorList.theme[0],
+        ColorList.theme[1],
+        ColorList.theme[2],
+        ColorList.theme[3],
       ];
       showDialog(
         context: thisContext!,
@@ -106,6 +107,11 @@ class ToolService extends GetxController {
         );
       },
     );
+  }
+
+  void modalClose() {
+    var altaContext = Get.context!;
+    Navigator.of(altaContext).pop(true);
   }
 
   Future<bool> ask(String mensaje, String pregunta) async {

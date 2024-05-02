@@ -49,6 +49,8 @@ class UsuariosPage extends StatelessWidget {
                       zonasUsuarios: _.listaZonasUsuarios,
                       onTap: () {},
                       onLongPress: (d) {},
+                      actualizarPassword: _.actualizarPassword,
+                      cambiarEstatus: _.cambiarEstatus,
                     );
                   } else {
                     return const SinElementosColumn(
@@ -166,7 +168,7 @@ class UsuariosPage extends StatelessWidget {
           shape: const CircleBorder(),
           backgroundColor: Color(ColorList.sys[2]),
           child: Icon(
-            MaterialIcons.add,
+            MaterialIcons.person_add,
             color: Color(ColorList.sys[0]).toMaterialColor(),
           ),
         ),
