@@ -54,4 +54,16 @@ class CobradoresProvider {
       return null;
     }
   }
+
+  Future<bool?> actualizarEstatusAsync(AltaCobrador cobrador) async {
+    try {
+      var result = await _api.post(
+        "api/cobradores/actualizarEstatus",
+        cobrador
+      );
+      return result == Literals.apiTrue;
+    } catch(e) {
+      return null;
+    }
+  }
 }

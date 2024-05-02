@@ -15,6 +15,7 @@ class Literals {
   static const String perfilAdministrador = "ADMINISTRADOR";
   static const String perfilCobrador = "COBRADOR";
   static const String statusActivo = "ACTIVO";
+  static const String statusInactivo = "INACTIVO";
   static const String statusIdDispositivo = "NONE";
   static const String bloqueoSi = "SI";
   static const String bloqueoNo = "NO";

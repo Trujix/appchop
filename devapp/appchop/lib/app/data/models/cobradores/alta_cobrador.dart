@@ -4,6 +4,7 @@ class AltaCobrador {
   String? password;
   String? nombres;
   String? apellidos;
+  String? estatus;
 
   AltaCobrador({
     this.idUsuario = "",
@@ -11,6 +12,7 @@ class AltaCobrador {
     this.password = "",
     this.nombres = "",
     this.apellidos = "",
+    this.estatus = "ACTIVO",
   });
 
   Map toJson() => {
@@ -19,5 +21,6 @@ class AltaCobrador {
     'password'    : password,
     'nombres'     : nombres,
     'apellidos'   : apellidos,
+    'estatus'     : estatus,
   };
 }

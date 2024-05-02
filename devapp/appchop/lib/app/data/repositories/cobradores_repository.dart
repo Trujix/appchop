@@ -20,4 +20,8 @@ class CobradoresRepository {
   Future<LoginData?> consultarCobradorInfoAsync(String idUsuario, String usuario) async {
     return await Get.find<CobradoresProvider>().consultarCobradorInfoAsync(idUsuario, usuario);
   }
+
+  Future<bool?> actualizarEstatusAsync(AltaCobrador cobrador) async {
+    return await Get.find<CobradoresProvider>().actualizarEstatusAsync(cobrador);
+  }
 }

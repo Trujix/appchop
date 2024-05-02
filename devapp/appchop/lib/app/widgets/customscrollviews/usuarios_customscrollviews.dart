@@ -19,7 +19,7 @@ class UsuariosCustomscrollview extends StatelessWidget {
   final void Function() onTap;
   final void Function(dynamic) onLongPress;
   final void Function(Usuarios) actualizarPassword;
-  final void Function(bool) cambiarEstatus;
+  final void Function(Usuarios) cambiarEstatus;
   const UsuariosCustomscrollview({
     super.key,
     this.scrollController,
@@ -51,7 +51,7 @@ class UsuariosCustomscrollview extends StatelessWidget {
             onLongPress: () {},
             child: ActivoInactivoSlidable(
               cambiar: () {
-                cambiarEstatus(usuario.activo!);
+                cambiarEstatus(usuario);
               },
               enabled: true,
               activo: usuario.activo!,

@@ -188,8 +188,41 @@ class UsuariosController extends GetInjection {
     }
   }
 
-  Future<void> cambiarEstatus(bool estatusActual) async {
-
+  Future<void> cambiarEstatus(Usuarios usuario) async {
+    try {
+      var modificar = await tool.ask("${usuario.activo! ? "INACTIVAR" : "ACTIVAR"} Usuario ${usuario.usuario}", "¿Desea continuar?");
+      if(!modificar) {
+        return;
+      }
+      tool.isBusy();
+      var online = await tool.isOnline();
+      if(!online) {
+        tool.msg(Literals.msgOffline, 2);
+        return;
+      }
+      var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
+      var cobrador = AltaCobrador(
+        idUsuario: localStorage.idUsuario,
+        usuario: usuario.usuario,
+        estatus: usuario.activo! ? Literals.statusInactivo : Literals.statusActivo,
+      );
+      var actualizar = await cobradoresRepository.actualizarEstatusAsync(cobrador);
+      if(actualizar == null || !actualizar) {
+        throw Exception();
+      }
+      await Future.delayed(1.seconds);
+      for(var usuarioIn in listaUsuarios) {
+        if(usuarioIn.usuario == usuario.usuario) {
+          usuarioIn.activo = !usuario.activo!;
+        }
+      }
+      await storage.update(listaUsuarios);
+      tool.msg("El usuario fue actualizado correctamente", 1);
+    } catch(e) {
+      tool.msg("Ocurrió un error al intentar actualizar info. del usuario", 3);
+    } finally {
+      update();
+    }
   }
 
   void cerrar() {
