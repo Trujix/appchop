@@ -7,6 +7,8 @@ import '../../utils/color_list.dart';
 class PreguntaDialog extends StatelessWidget {
   final String mensaje;
   final String pregunta;
+  final String siBoton;
+  final String noBoton;
   final void Function(bool) respuesta;
   final IconData icono;
   const PreguntaDialog({
@@ -15,6 +17,8 @@ class PreguntaDialog extends StatelessWidget {
     this.pregunta = "",
     required this.respuesta,
     this.icono = Icons.info_outline_rounded,
+    this.siBoton = "Aceptar",
+    this.noBoton = "Cancelar",
   });
 
   @override
@@ -100,7 +104,7 @@ class PreguntaDialog extends StatelessWidget {
                             InkWell(
                               onTap: () => respuesta(true),
                               child: Text(
-                                'Aceptar',
+                                siBoton,
                                 style: TextStyle(
                                   fontWeight: FontWeight.w600,
                                   color: Color(ColorList.sys[0]),
@@ -111,7 +115,7 @@ class PreguntaDialog extends StatelessWidget {
                             InkWell(
                               onTap: () => respuesta(false),
                               child: Text(
-                                'Cancelar',
+                                noBoton,
                                 style: TextStyle(
                                   fontWeight: FontWeight.w600,
                                   color: Color(ColorList.sys[5]),

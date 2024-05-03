@@ -43,13 +43,17 @@ class UsuariosPage extends StatelessWidget {
                 builder: (context) {
                   if(_.listaUsuarios.isNotEmpty) {
                     return UsuariosCustomscrollview(
+                      zonasController: _.zona,
                       scrollController: _.scrollController,
                       usuarios: _.listaUsuarios,
                       zonas: _.zonasLista,
                       zonasUsuarios: _.listaZonasUsuarios,
+                      zonasLista: _.listaZonas,
                       onTap: () {},
                       onLongPress: (d) {},
                       actualizarPassword: _.actualizarPassword,
+                      modificarZona: _.modificarZona,
+                      verificarZonas: _.clearForm,
                       cambiarEstatus: _.cambiarEstatus,
                     );
                   } else {
@@ -162,7 +166,7 @@ class UsuariosPage extends StatelessWidget {
                     ],
                   ),
                 );
-              }),
+              },),
             );
           },
           shape: const CircleBorder(),

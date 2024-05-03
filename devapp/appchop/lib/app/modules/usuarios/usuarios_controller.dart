@@ -102,6 +102,8 @@ class UsuariosController extends GetInjection {
       tool.msg("El usuario registrado correctamente", 1);
     } catch(e) {
       tool.msg("Ocurrió un error al intentar guardar el nuevo usuario", 3);
+    } finally {
+      update();
     }
   }
 
@@ -194,6 +196,11 @@ class UsuariosController extends GetInjection {
       if(!modificar) {
         return;
       }
+      var borrarZona = false;
+      var usuarioZonaVerif = _verificarUsuarioZona(usuario.usuario!);
+      if(usuarioZonaVerif && usuario.activo!) {
+        borrarZona = await tool.ask("Remover Zona asignada al usuario", "¿Desea continuar?", si: "Si", no: "No");
+      }
       tool.isBusy();
       var online = await tool.isOnline();
       if(!online) {
@@ -210,16 +217,69 @@ class UsuariosController extends GetInjection {
       if(actualizar == null || !actualizar) {
         throw Exception();
       }
-      await Future.delayed(1.seconds);
       for(var usuarioIn in listaUsuarios) {
         if(usuarioIn.usuario == usuario.usuario) {
           usuarioIn.activo = !usuario.activo!;
         }
       }
       await storage.update(listaUsuarios);
+      if(borrarZona) {
+        listaZonasUsuarios.removeWhere((zu) => zu.usuario == usuario.usuario);
+        if(listaZonasUsuarios.isNotEmpty) {
+          await storage.update(listaZonasUsuarios);
+        } else {
+          var _ = await storage.put([ZonasUsuarios()]);
+        }
+      }
+      _cargarZonas();
+      await Future.delayed(1.seconds);
       tool.msg("El usuario fue actualizado correctamente", 1);
     } catch(e) {
       tool.msg("Ocurrió un error al intentar actualizar info. del usuario", 3);
+    } finally {
+      update();
+    }
+  }
+
+  Future<void> modificarZona(Usuarios usuario, bool agregar) async {
+    try {
+      if(agregar) {
+        if(tool.isNullOrEmpty(zona)) {
+          tool.toast("Elige la Zona");
+          return;
+        }
+      } else {
+        var removerZona = await tool.ask("Remover zona a ${usuario.usuario}", "¿Desea continuar?");
+        if(!removerZona) {
+          return;
+        }
+      }
+      tool.isBusy();
+      if(agregar) {
+        var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
+        listaZonasUsuarios.add(ZonasUsuarios(
+          idUsuario: localStorage.idUsuario!,
+          idZona: zonaSelected,
+          usuario: usuario.usuario,
+        ));
+      } else {
+        listaZonasUsuarios.removeWhere((zu) => zu.usuario == usuario.usuario);
+      }
+      if(listaZonasUsuarios.isNotEmpty) {
+        await storage.update(listaZonasUsuarios);
+      } else {
+        var _ = await storage.put([ZonasUsuarios()]);
+      }
+      _cargarZonas();
+      await Future.delayed(1.seconds);
+      if(agregar) {
+        var altaContext = Get.context!;
+        // ignore: use_build_context_synchronously
+        Navigator.of(altaContext, rootNavigator: true).pop(true);
+      }
+      tool.msg("Usuario configurado correctamente", 1);
+    } catch(e) {
+      tool.msg("Ocurrió un error al intentar actualizar config. del usuario", 3);
     } finally {
       update();
     }
@@ -238,6 +298,7 @@ class UsuariosController extends GetInjection {
     );
     zonasLista = zonas;
     List<String> zonasAsiggnadas = [];
+    listaZonas = [];
     for(var zonaUsuario in listaZonasUsuarios) {
       zonasAsiggnadas.add(zonaUsuario.idZona!);
     }
@@ -260,11 +321,24 @@ class UsuariosController extends GetInjection {
     }
   }
 
+  bool _verificarUsuarioZona(String usuario) {
+    var verificar = listaZonasUsuarios.where((zu) => zu.usuario == usuario).firstOrNull;
+    return verificar != null;
+  }
+
   bool _validarForm() {
     var correcto = false;
     var mensaje = "";
+    var espacios = 0;
+    for (var i = 0; i < usuario.text.length; i++) {
+      if(usuario.text[i] == " ") {
+        espacios++;
+      }
+    }
     if(tool.isNullOrEmpty(usuario)) {
       mensaje = "Escriba el usuario";
+    } else if(espacios > 0) {
+      mensaje = "El usuario NO puede contener espacios";
     } else if(tool.isNullOrEmpty(password)) {
       mensaje = "Escriba la contraseña";
     } else if(tool.isNullOrEmpty(nombres)) {
