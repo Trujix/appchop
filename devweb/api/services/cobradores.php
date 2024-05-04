@@ -52,5 +52,46 @@
             );
             return json_encode($actualizar == 1);
         }
+
+        public static function consultarCobradorInfo($params) {
+            if(!isset($params[0]) || !isset($params[1]) || count($params) == 0) {
+                http_response_code(406);
+                die("Parámetros de cobrador incorrectos");
+            }
+            $id_usuario = $params[0];
+            $usuario = $params[1];
+            $mysql = new Mysql();
+            $cobrador_info = $mysql->executeReader(
+                "CALL STP_OBTENER_COBRADOR_INFO(
+                    '$id_usuario', '$usuario'
+                )",
+                true
+            );
+            return json_encode($cobrador_info);
+        }
+
+        public static function actualizarEstatus($params) {
+            $estatus_form = (object)$params;
+            if(!isset($estatus_form->idUsuario) 
+                || !isset($estatus_form->usuario)
+                || !isset($estatus_form->estatus)) {
+                http_response_code(406);
+                die("Parámetros de usuario incorrectos");
+            }
+            $mysql = new Mysql();
+            $actualizar = $mysql->executeNonQuery(
+                "CALL STP_ACTUALIZAR_ESTATUS_COBRADOR(
+                    '$estatus_form->idUsuario', '$estatus_form->usuario',
+                    '$estatus_form->estatus'
+                )"
+            );
+            return json_encode($actualizar == 1);
+        }
+
+        public static function prueba($params) {
+            $email = new Email();
+            $gg = $email->enviar();
+            return json_encode($gg);
+        }
     }
 ?>

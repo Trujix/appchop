@@ -117,6 +117,8 @@ BEGIN
             id_autorization 
         FROM appchop.usuarios WHERE
             id_sistema = _IDSISTEMA
+            AND perfil = 'ADMINISTRADOR' 
+        LIMIT 1
     );
     IF _IDAUTORIZACION > 0 THEN
         INSERT INTO usuarios (
@@ -156,6 +158,45 @@ CREATE PROCEDURE STP_ACTUALIZAR_PASSWORD_COBRADOR(
 BEGIN
     UPDATE appchop.usuarios SET 
         password = MD5(_PASSWORD) 
+    WHERE id_sistema = _IDSISTEMA
+        AND usuario = _USUARIO;
+END $$
+DELIMITER ;
+
+
+/* ------------------------------------------------------------------------------------*/
+DROP PROCEDURE IF EXISTS STP_OBTENER_COBRADOR_INFO;
+DELIMITER $$
+CREATE PROCEDURE STP_OBTENER_COBRADOR_INFO(
+    IN _IDSISTEMA VARCHAR(120), IN _USUARIO VARCHAR(150)
+)
+BEGIN
+    SELECT
+        US1.id,
+        US1.id_sistema,
+        US1.usuario,
+        US1.status,
+        US1.nombres,
+        US1.apellidos,
+        US1.id_firebase
+    FROM appchop.usuarios AS US1
+        WHERE US1.id_sistema = _IDSISTEMA
+            AND US1.usuario = _USUARIO;
+END $$
+DELIMITER ;
+
+
+/* ------------------------------------------------------------------------------------*/
+DROP PROCEDURE IF EXISTS STP_ACTUALIZAR_ESTATUS_COBRADOR;
+DELIMITER $$
+CREATE PROCEDURE STP_ACTUALIZAR_ESTATUS_COBRADOR(
+    IN _IDSISTEMA VARCHAR(120),
+    IN _USUARIO VARCHAR(150),
+    IN _STATUS VARCHAR(15)
+)
+BEGIN
+    UPDATE appchop.usuarios SET 
+        status = _STATUS 
     WHERE id_sistema = _IDSISTEMA
         AND usuario = _USUARIO;
 END $$
