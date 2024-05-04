@@ -96,9 +96,7 @@ class UsuariosController extends GetInjection {
       ));
       await storage.update(listaZonasUsuarios);
       await Future.delayed(1.seconds);
-      var altaContext = Get.context!;
-      // ignore: use_build_context_synchronously
-      Navigator.of(altaContext, rootNavigator: true).pop(true);
+      tool.closeBottomSheet();
       tool.msg("El usuario registrado correctamente", 1);
     } catch(e) {
       tool.msg("Ocurrió un error al intentar guardar el nuevo usuario", 3);
@@ -273,9 +271,7 @@ class UsuariosController extends GetInjection {
       _cargarZonas();
       await Future.delayed(1.seconds);
       if(agregar) {
-        var altaContext = Get.context!;
-        // ignore: use_build_context_synchronously
-        Navigator.of(altaContext, rootNavigator: true).pop(true);
+        tool.closeBottomSheet();
       }
       tool.msg("Usuario configurado correctamente", 1);
     } catch(e) {

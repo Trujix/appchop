@@ -114,6 +114,11 @@ class ToolService extends GetxController {
     Navigator.of(altaContext).pop(true);
   }
 
+  void closeBottomSheet() {
+    var altaContext = Get.context!;
+    Navigator.of(altaContext, rootNavigator: true).pop(true);
+  }
+
   Future<bool> ask(String mensaje, String pregunta, {String si = "Aceptar", String no = "Cancelar"}) async {
     try {
       var askDialog = Get.context!;
