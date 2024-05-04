@@ -131,10 +131,10 @@ class UsuariosCustomscrollview extends StatelessWidget {
                               color: ColorList.sys[zona == "Sin Zona" ? 1 : 2],
                               icono: zona == "Sin Zona" ? MaterialIcons.list_alt : Icons.playlist_remove,
                               onPressed: () {
-                                if(!verificarZonas()) {
-                                  return;
-                                }
                                 if(zona == "Sin Zona") {
+                                  if(!verificarZonas()) {
+                                    return;
+                                  }
                                   showMaterialModalBottomSheet(
                                     context: context,
                                     expand: true,
