@@ -5,6 +5,7 @@ import 'package:material_color_gen/material_color_gen.dart';
 
 import '../../utils/color_list.dart';
 import '../../widgets/appbars/back_appbar.dart';
+import '../../widgets/containers/card_container.dart';
 import 'inventarios_controller.dart';
 
 class InventariosPage extends StatelessWidget {
@@ -21,7 +22,15 @@ class InventariosPage extends StatelessWidget {
           fondo: ColorList.sys[3],
         ),
         body: Column(
-          children: [],
+          children: _.inventarios.map((inventario) {
+            return CardContainer(
+              children: [
+                Text(inventario.codigoArticulo!),
+                Text(inventario.descripcion!),
+                Text(inventario.fechaCambio!),
+              ],
+            );
+          }).toList(),
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: _.elegir,

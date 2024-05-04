@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -375,6 +376,16 @@ class ToolService extends GetxController {
     } catch(e) {
       return null;
     }
+  }
+
+  Future<String> abrirCsv() async {
+    var selectArchivo = await FilePicker.platform.pickFiles();
+    if(selectArchivo == null) {
+      return "";
+    }
+    var archivo = File(selectArchivo.files.single.path!);
+    var contenido = archivo.readAsStringSync();
+    return contenido;
   }
 
   Future<void> compartir(String archivo, String texto) async {
