@@ -9,6 +9,7 @@ class AppRoutes {
   static const cobranzaMain = "/cobranza_main";
   static const configuracion = "/configuracion";
   static const home = "/home";
+  static const inventarios = "/inventarios";
   static const login = "/login";
   static const pdfViewer = "/pdf_viewer";
   static const usuarios = "/usuarios";

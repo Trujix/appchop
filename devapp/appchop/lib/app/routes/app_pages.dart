@@ -20,6 +20,8 @@ import '../modules/configuracion/configuracion_binding.dart';
 import '../modules/configuracion/configuracion_page.dart';
 import '../modules/home/home_binding.dart';
 import '../modules/home/home_page.dart';
+import '../modules/inventarios/inventarios_binding.dart';
+import '../modules/inventarios/inventarios_page.dart';
 import '../modules/login/login_binding.dart';
 import '../modules/login/login_page.dart';
 import '../modules/pdf_viewer/pdf_viewer_binding.dart';
@@ -79,6 +81,11 @@ class AppPages {
       name: AppRoutes.home,
       page: () => const HomePage(),
       binding: HomeBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.inventarios,
+      page: () => const InventariosPage(),
+      binding: InventariosBinding(),
     ),
     GetPage(
       name: AppRoutes.login,

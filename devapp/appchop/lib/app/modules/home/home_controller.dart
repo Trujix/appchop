@@ -58,6 +58,12 @@ class HomeController extends GetInjection {
         onTap: () => _abrirOpcion(MenuOpcion.clientes),
       ),
       MenuOpcionInkwell(
+        texto: "Inventarios",
+        icono: MaterialIcons.inventory,
+        visible: esAdmin,
+        onTap: () => _abrirOpcion(MenuOpcion.inventarios),
+      ),
+      MenuOpcionInkwell(
         texto: "Configuración",
         icono: MaterialIcons.settings,
         visible: true,
@@ -90,6 +96,9 @@ class HomeController extends GetInjection {
       break;
       case MenuOpcion.clientes:
         pagina = AppRoutes.altaClientes;
+      break;
+      case MenuOpcion.inventarios:
+        pagina = AppRoutes.inventarios;
       break;
       case MenuOpcion.configuracion:
         pagina = AppRoutes.configuracion;
@@ -130,5 +139,6 @@ enum MenuOpcion {
   agregarZona,
   usuarios,
   clientes,
+  inventarios,
   configuracion,
 }
