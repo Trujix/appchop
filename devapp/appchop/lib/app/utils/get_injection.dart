@@ -1,5 +1,13 @@
 import 'package:get/get.dart';
 
+import '../data/models/local_storage/cargos_abonos.dart';
+import '../data/models/local_storage/clientes.dart';
+import '../data/models/local_storage/cobranzas.dart';
+import '../data/models/local_storage/configuracion.dart';
+import '../data/models/local_storage/notas.dart';
+import '../data/models/local_storage/usuarios.dart';
+import '../data/models/local_storage/zonas.dart';
+import '../data/models/local_storage/zonas_usuarios.dart';
 import '../data/repositories/cobradores_repository.dart';
 import '../data/repositories/configuracion_repository.dart';
 import '../data/repositories/firebase_repository.dart';
@@ -22,4 +30,16 @@ abstract class GetInjection extends GetxController {
 
   static bool administrador = false;
   static String perfil = "";
+
+  Future<void> localStorageClassInit() async {
+    await Zonas.init();
+    await Clientes.init();
+    await Cobranzas.init();
+    await Notas.init();
+    await CargosAbonos.init();
+    await Usuarios.init();
+    await ZonasUsuarios.init();
+    await Configuracion.init();
+    return;
+  }
 }

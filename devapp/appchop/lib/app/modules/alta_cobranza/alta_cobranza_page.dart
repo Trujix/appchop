@@ -120,7 +120,7 @@ class AltaCobranzaPage extends StatelessWidget with WidgetsBindingObserver {
                       child: StandardTextform(
                         controller: _.direccion,
                         focusNode: _.direccionFocus,
-                        text: "Dirección",
+                        text: "Dirección / Referencia",
                         icon: MaterialIcons.home,
                       ),
                     ),

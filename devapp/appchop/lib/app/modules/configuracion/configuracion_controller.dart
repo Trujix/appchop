@@ -25,13 +25,20 @@ class ConfiguracionController extends GetInjection {
 
   Future<bool> desvincularDispositivo() async {
     try {
+      var validar = await tool.ask("Desvincular dispositivo", "¿Desea continuar?");
+      if(!validar) {
+        Get.back();
+        return false;
+      }
       tool.isBusy();
       var desvincular = await configuracionRepository.desvincularDispositivoAsync(idUsuario);
       if(!desvincular!) {
         throw Exception();
       }
-      await storage.update(LocalStorage());
+      await storage.clearAll();
+      //await storage.update(LocalStorage());
       await storage.init();
+      await localStorageClassInit();
       await firebase.init();
       tool.isBusy(false);
       Get.offAll(
@@ -40,6 +47,7 @@ class ConfiguracionController extends GetInjection {
         transition: Transition.cupertino,
         duration: 1.seconds,
       );
+      update();
       return true;
     } catch(e) {
       Get.back();

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:get/get.dart';
 
 import '../../data/models/local_storage/inventarios.dart';
@@ -21,7 +19,6 @@ class InventariosController extends GetInjection {
   Future<void> elegir() async {
     var csvArhivo = await tool.abrirCsv();
     var csvInventario = csvArhivo.split("\n");
-    print(csvInventario);
     inventarios = [];
     var primer = true;
     for(var inventario in csvInventario) {

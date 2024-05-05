@@ -64,6 +64,10 @@ class LoginController extends GetInjection {
         tool.msg('No se pudo actualizar su información en el inicio de sesión', 2);
         return;
       }
+      var configuracion = await configuracionRepository.obtenerConfiguracionUsuarioAsync(result.idSistema!);
+      if(configuracion == null) {
+
+      }
       localStorage.activo = result.status == Literals.statusActivo;
       if(!localStorage.activo!) {
         tool.msg("Su cuenta de usuario se encuentra como INACTIVA, consulte con el administrador", 2);

@@ -84,6 +84,12 @@ class StorageService {
     } finally { }
   }
 
+  Future<void> clearAll() async {
+    try {
+      await _storage!.deleteFromDisk();
+    } finally { }
+  }
+
   LocalStorage? _nuevoLocalStorage({
     LocalStorage? actual,
   }) {

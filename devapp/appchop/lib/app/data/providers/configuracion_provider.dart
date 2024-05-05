@@ -1,7 +1,9 @@
+import 'dart:convert';
 import 'package:get/get.dart';
 
 import '../../services/api_service.dart';
 import '../../utils/literals.dart';
+import '../models/local_storage/configuracion.dart';
 
 class ConfiguracionProvider {
   final ApiService _api = Get.find<ApiService>();
@@ -12,6 +14,17 @@ class ConfiguracionProvider {
         "api/configuracion/desvincularDispositivo/$idUsuario",
       );
       return result == Literals.apiTrue;
+    } catch(e) {
+      return null;
+    }
+  }
+
+  Future<Configuracion?> obtenerConfiguracionUsuarioAsync(String idUsuario) async {
+    try {
+      var result = await _api.get(
+        "api/configuracion/obtenerConfiguracionUsuario/$idUsuario",
+      );
+      return Configuracion.fromApi(jsonDecode(result!));
     } catch(e) {
       return null;
     }
