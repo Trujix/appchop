@@ -41,7 +41,7 @@ class PreguntaDialog extends StatelessWidget {
                     left: 15,
                     right: 15,
                   ),
-                  height: 150,
+                  height: 160,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     shape: BoxShape.rectangle,
@@ -92,7 +92,7 @@ class PreguntaDialog extends StatelessWidget {
                               color: Color(ColorList.sys[0]),
                               fontWeight: FontWeight.bold,
                             ),
-                            minFontSize: 12,
+                            minFontSize: 10,
                             maxLines: 3,
                             textAlign: TextAlign.center,
                           ),

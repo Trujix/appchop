@@ -381,9 +381,21 @@ class CobranzaMainController extends GetInjection {
       cobranzaStorage.removeWhere((c) => c.idCobranza == cobranza.idCobranza);
       notasStorage.removeWhere((n) => n.idCobranza == cobranza.idCobranza);
       cargoAbonosStorage.removeWhere((c) => c.idCobranza == cobranza.idCobranza);
-      await storage.update(cobranzaStorage);
-      await storage.update(notasStorage);
-      await storage.update(cargoAbonosStorage);
+      if(cobranzaStorage.isNotEmpty) {
+        await storage.update(cobranzaStorage);
+      } else {
+        var _ = await storage.put([Cobranzas()]);
+      }
+      if(notasStorage.isNotEmpty) {
+        await storage.update(notasStorage);
+      } else {
+        var _ = await storage.put([Notas()]);
+      }
+      if(cargoAbonosStorage.isNotEmpty) {
+        await storage.update(cargoAbonosStorage);
+      } else {
+        var _ = await storage.put([CargosAbonos()]);
+      }
       await cargarListaCobranza();
       tool.isBusy(false);
     } catch(e) {

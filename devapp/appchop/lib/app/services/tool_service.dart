@@ -181,6 +181,10 @@ class ToolService extends GetxController {
     return esEmail;
   }
 
+  bool isInteger(num value) {
+    return (value % 1) == 0;
+  }
+
   bool soloSaltos(String texto) {
     var caracteres = texto.split("");
     var prohibidos = ["\n", " "];

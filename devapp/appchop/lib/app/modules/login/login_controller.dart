@@ -84,6 +84,7 @@ class LoginController extends GetInjection {
       localStorage.apellidos = result.apellidos;
       localStorage.acepta = result.acepta;
       await storage.update(localStorage);
+      await storage.update(configuracion);
       tool.isBusy(false);
       Get.offAll(
         const HomePage(),

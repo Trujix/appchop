@@ -5,6 +5,7 @@ import 'package:money_formatter/money_formatter.dart';
 
 import '../../data/models/local_storage/cargos_abonos.dart';
 import '../../data/models/local_storage/cobranzas.dart';
+import '../../data/models/local_storage/configuracion.dart';
 import '../../data/models/local_storage/local_storage.dart';
 import '../../utils/get_injection.dart';
 import '../../utils/literals.dart';
@@ -32,6 +33,8 @@ class AltaCargoAbonoController extends GetInjection {
   ];
   List<List<dynamic>> cargosAbonosTabla = [];
 
+  Configuracion configuracion = Configuracion();
+
   final bool esAdmin = GetInjection.administrador;
 
   @override
@@ -47,6 +50,7 @@ class AltaCargoAbonoController extends GetInjection {
       Get.back();
       tool.msg("Ocurrió un problema al cargar datos de Cargo y abono", 3);
     }
+    configuracion = Configuracion.fromJson(storage.get(Configuracion()));
     pendiente = cobranzaEditar!.estatus == Literals.statusCobranzaPendiente;
     if(cobranzaEditar!.tipoCobranza! == Literals.tipoCobranzaMeDeben) {
       etiqueta = "Me debe: ";
@@ -58,10 +62,30 @@ class AltaCargoAbonoController extends GetInjection {
   }
 
   Future<void> marcarCobranzaPagada() async {
-    var pagar = await tool.ask("Pagar totalmente", "¿Desea registrar el pago total (${MoneyFormatter(amount: saldoPendiente).output.symbolOnLeft})?");
-    if(pagar) {
-      await _crearRegistroCargoAbono(Literals.movimientoAbono, 0, true);
+    var mensaje = "¿Desea registrar el pago total (~MONTOTOTAL~)?";
+    var montoBonificacion = 0.0;
+    if(!tool.str2date(cobranzaEditar!.fechaVencimiento!).isBefore(DateTime.now())) {
+      montoBonificacion = (saldoPendiente * (configuracion.porcentajeBonificacion! / 100));
+      var saldoBonificacion = saldoPendiente - montoBonificacion;
+      mensaje = mensaje.replaceAll("~MONTOTOTAL~", MoneyFormatter(amount: saldoBonificacion).output.symbolOnLeft);
+      var bonificacion = tool.isInteger(configuracion.porcentajeBonificacion!) 
+        ? configuracion.porcentajeBonificacion!.toInt().toString() 
+        : configuracion.porcentajeBonificacion!.toString();
+      mensaje += "\nSe bonificará $bonificacion% (${MoneyFormatter(amount: montoBonificacion).output.symbolOnLeft})";
+    } else {
+      mensaje = mensaje.replaceAll("~MONTOTOTAL~", MoneyFormatter(amount: saldoPendiente).output.symbolOnLeft);
     }
+    var pagar = await tool.ask("Pagar totalmente", mensaje);
+    if(!pagar) {
+      return;
+    }
+    if(montoBonificacion > 0) {
+      cantidad.text = montoBonificacion.toString();
+      referencia.text = "Bonificacion pronto pago";
+      var nuevoSaldo = saldoPendiente - montoBonificacion;
+      await _crearRegistroCargoAbono(Literals.movimientoAbono, nuevoSaldo);
+    }
+    await _crearRegistroCargoAbono(Literals.movimientoAbono, 0, pagar: true);
   }
 
   Future<void> crearCargo() async {
@@ -78,7 +102,7 @@ class AltaCargoAbonoController extends GetInjection {
     await _crearRegistroCargoAbono(Literals.movimientoAbono, nuevoSaldo);
   }
 
-  Future<void> _crearRegistroCargoAbono(String tipo, double nuevoSaldo, [bool pagar = false]) async {
+  Future<void> _crearRegistroCargoAbono(String tipo, double nuevoSaldo, {bool pagar = false}) async {
     try {
       if(!_validarForm(pagar)) {
         return;
@@ -131,6 +155,9 @@ class AltaCargoAbonoController extends GetInjection {
       } else {
         _limpiaForm();
         _cargarListaCargosAbonos();
+      }
+      if(!tool.str2date(cobranzaEditar!.fechaVencimiento!).isBefore(DateTime.now()) && !pagar) {
+        return;
       }
       tool.msg("Registro generado correctamente ($tipo)", 1);
     } catch(e) {

@@ -39,7 +39,7 @@ class CobranzaCustomscrollview extends StatelessWidget {
             onTap: onTap,
             onLongPress: () => onLongPress(cobranza),
             child: BorrarSlidable(
-              enabled: false,
+              enabled: cobranza.estatus! == Literals.statusCobranzaPagada,
               onBorrar: () => borrarCobranza(cobranza),
               child: DotborderContainer(
                 fondo: 0xFFF8F9F9,

@@ -286,17 +286,12 @@ class AltaCobranzaController extends GetInjection {
     } else if(telefono.text.length != 10) {
       mensaje = "Formato de teléfono incorrecto";
     } else {
-      altaCliente = false;
       var clientes = List<Clientes>.from(
         storage.get([Clientes()]).map((json) => Clientes.fromJson(json))
       );
       if(clientes.isNotEmpty) {
-        for(var cliente in clientes) {
-          altaCliente = true;
-          if(cliente.telefono == telefono.text) {
-            break;
-          }
-        }
+        var verificarCliente = clientes.where((c) => c.telefono == telefono.text).firstOrNull;
+        altaCliente = verificarCliente == null;
       } else {
         altaCliente = true;
       }
