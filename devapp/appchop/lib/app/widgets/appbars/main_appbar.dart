@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
-import '../../data/models/cobranza_popup_opciones.dart';
+import '../../data/models/menu_popup_opciones.dart';
 import '../../utils/color_list.dart';
 
 class MainAppbar extends StatelessWidget implements PreferredSizeWidget {
@@ -10,7 +10,7 @@ class MainAppbar extends StatelessWidget implements PreferredSizeWidget {
   final void Function(String?) onTapPopup;
   final void Function(String?) onChanged;
   final void Function() onTapClear;
-  final List<CobranzaPopupOpciones> opciones;
+  final List<MenuPopupOpciones> opciones;
   final String? opcionPopup;
   final double height;
   const MainAppbar({
@@ -58,7 +58,7 @@ class MainAppbar extends StatelessWidget implements PreferredSizeWidget {
         PopupMenuButton(
           onSelected: (value) {},
           itemBuilder: (BuildContext context) {
-            return opciones.map((CobranzaPopupOpciones opcion) {
+            return opciones.map((MenuPopupOpciones opcion) {
               return opcion.tipo == "R" 
                 ? CheckedPopupMenuItem(
                   checked: opcionPopup == opcion.id,

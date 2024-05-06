@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
-import '../../data/models/busqueda_popup_opciones.dart';
+import '../../data/models/menu_popup_opciones.dart';
 import '../../utils/color_list.dart';
 
 class OptionsAppbar extends StatelessWidget implements PreferredSizeWidget {
@@ -10,7 +10,7 @@ class OptionsAppbar extends StatelessWidget implements PreferredSizeWidget {
   final void Function(String?) onTapPopup;
   final void Function(String?) onChanged;
   final void Function() onTapClear;
-  final List<BusquedaPopupOpciones> opciones;
+  final List<MenuPopupOpciones> opciones;
   final String? opcionPopup;
   final double height;
   final int? iconoColor;
@@ -63,21 +63,39 @@ class OptionsAppbar extends StatelessWidget implements PreferredSizeWidget {
         PopupMenuButton(
           onSelected: (value) {},
           itemBuilder: (BuildContext context) {
-            return opciones.map((BusquedaPopupOpciones opcion) {
-              return CheckedPopupMenuItem(
-                checked: opcionPopup == opcion.id,
-                value: opcion.id,
-                labelTextStyle: MaterialStateProperty.all(
-                  TextStyle(
-                    color: Color(ColorList.sys[0]),
-                    fontWeight: FontWeight.w600,
+            return opciones.map((MenuPopupOpciones opcion) {
+              return opcion.tipo == "R" 
+                ? CheckedPopupMenuItem(
+                  checked: opcionPopup == opcion.id,
+                  value: opcion.id,
+                  labelTextStyle: MaterialStateProperty.all(
+                    TextStyle(
+                      color: Color(ColorList.sys[0]),
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                ),
-                onTap: () {
-                  onTapPopup(opcion.id);
-                },
-                child: Text(opcion.value!,),
-              );
+                  onTap: () {
+                    onTapPopup(opcion.id);
+                  },
+                  child: Text(opcion.value!,),
+                ) : PopupMenuItem(
+                  onTap: () {
+                    onTapPopup(opcion.id);
+                  },
+                  labelTextStyle: MaterialStateProperty.all(
+                    TextStyle(
+                      color: Color(ColorList.sys[0]),
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  child: ListTile(
+                    leading: Icon(
+                      opcion.icono,
+                      color: Color(ColorList.sys[0]),
+                    ),
+                    title: Text(opcion.value!,),
+                  ),
+                );
             }).toList();
           },
         ),

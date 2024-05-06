@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class CobranzaPopupOpciones {
+class MenuPopupOpciones {
   String? id;
   String? value;
   IconData? icono;
   String? tipo;
 
-  CobranzaPopupOpciones({
+  MenuPopupOpciones({
     this.id = "",
     this.value = "",
     this.icono = Icons.add,

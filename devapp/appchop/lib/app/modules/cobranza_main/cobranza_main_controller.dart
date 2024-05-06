@@ -4,7 +4,7 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 import 'package:open_file_plus/open_file_plus.dart';
 
-import '../../data/models/cobranza_popup_opciones.dart';
+import '../../data/models/menu_popup_opciones.dart';
 import '../../data/models/local_storage/cargos_abonos.dart';
 import '../../data/models/local_storage/zonas.dart';
 import '../../data/models/local_storage/cobranzas.dart';
@@ -23,7 +23,7 @@ class CobranzaMainController extends GetInjection {
   ScrollController scrollController = ScrollController();
   TextEditingController zona = TextEditingController();
   TextEditingController busqueda = TextEditingController();
-  List<CobranzaPopupOpciones> opcionesConsulta = [];
+  List<MenuPopupOpciones> opcionesConsulta = [];
   String opcionSelected = "";
   double saldoTotal = 0.0;
   List<String> opcionesBase = [
@@ -472,7 +472,7 @@ class CobranzaMainController extends GetInjection {
         if(opcionSelected == "" && opciones[1] == "R") {
           opcionSelected = i.toString();
         }
-        opcionesConsulta.add(CobranzaPopupOpciones(
+        opcionesConsulta.add(MenuPopupOpciones(
           id: i.toString(),
           value: opciones[0],
           tipo: opciones[1],

@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:material_color_gen/material_color_gen.dart';
 
 import '../../utils/color_list.dart';
-import '../../widgets/appbars/back_appbar.dart';
+import '../../widgets/appbars/options_appbar.dart';
 import '../../widgets/containers/card_container.dart';
 import 'inventarios_controller.dart';
 
@@ -17,8 +17,14 @@ class InventariosPage extends StatelessWidget {
       builder: (_) => Scaffold(
         resizeToAvoidBottomInset: true,
         backgroundColor: Color(ColorList.sys[3]),
-        appBar: BackAppbar(
-          cerrar: _.cerrar,
+        appBar: OptionsAppbar(
+          controller: _.busqueda,
+          onTap: _.cerrar,
+          onTapClear: _.limpiarBusquedaTexto,
+          onTapPopup: _.opcionPopupConsulta,
+          onChanged: (e) {},
+          opcionPopup: _.opcionSelected,
+          opciones: _.opcionesConsulta,
           fondo: ColorList.sys[3],
         ),
         body: Column(
@@ -33,15 +39,15 @@ class InventariosPage extends StatelessWidget {
           }).toList(),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: _.elegir,
+          onPressed: () {},
           shape: const CircleBorder(),
           backgroundColor: Color(ColorList.sys[2]),
           child: Icon(
-            MaterialIcons.post_add,
+            MaterialIcons.add_shopping_cart,
             color: Color(ColorList.sys[0]).toMaterialColor(),
           ),
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.miniEndDocked,
+        floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
       ),
     );
   }
