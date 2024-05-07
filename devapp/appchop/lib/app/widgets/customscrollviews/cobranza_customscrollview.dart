@@ -42,7 +42,7 @@ class CobranzaCustomscrollview extends StatelessWidget {
               enabled: cobranza.estatus! == Literals.statusCobranzaPagada,
               onBorrar: () => borrarCobranza(cobranza),
               child: DotborderContainer(
-                fondo: 0xFFF8F9F9,
+                fondo: ColorList.ui[3],
                 bordeColor:
                     ColorList.sys[cobranza.tipoCobranza == Literals.tipoCobranzaMeDeben ? 1 : 2],
                 ltrbm: const [10, 0, 10, 0],

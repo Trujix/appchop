@@ -2,6 +2,8 @@ import 'package:adaptive_action_sheet/adaptive_action_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
+import '../../utils/color_list.dart';
+
 class SelectionCombo extends StatelessWidget {
   final String texts;
   final List<BottomSheetAction> values;
@@ -61,7 +63,7 @@ class SelectionCombo extends StatelessWidget {
           ),
           prefixIcon: Icon(
             icono,
-            color: const Color(0xFF315B6B),
+            color: Color(ColorList.sys[0]),
           ),
           hintText: texts,
         ),

@@ -70,7 +70,7 @@ class UsuariosCustomscrollview extends StatelessWidget {
               enabled: true,
               activo: usuario.activo!,
               child: CardContainer(
-                fondo: 0xFFFDFEFE,
+                fondo: ColorList.ui[3],
                 margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
                 children: [
                   Row(

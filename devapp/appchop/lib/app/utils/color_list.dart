@@ -1,7 +1,7 @@
 import 'package:flutter/animation.dart';
 
 class ColorList {
-  var probador = const Color(0x42000000);
+  var probador = const Color(0xFFFDFEFE);
 
   static List<int> sys = [
     0xFF0B4251,
@@ -13,6 +13,7 @@ class ColorList {
     0xFFFFFFFF,
     0xFFE0E3E7,
     0x42000000,
+    0xFFFDFEFE,
   ];
 
   static List<int> theme = [

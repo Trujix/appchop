@@ -72,7 +72,10 @@ class SolidButton extends StatelessWidget {
                 }
               }
             ),
-            const SizedBox(width: 15,),
+            Visibility(
+              visible: icono != null && texto != "",
+              child: const SizedBox(width: 15,),
+            ),
             Text(
               texto,
               style: TextStyle(

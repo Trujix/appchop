@@ -20,8 +20,8 @@ class MenuDrawer extends StatelessWidget {
       controller: controller,
       menuScreen: Container(
         height: MediaQuery.of(context).size.height,
-        decoration: const BoxDecoration(
-          color: Color(0xFF0B4251),
+        decoration: BoxDecoration(
+          color: Color(ColorList.sys[0]),
         ),
         child: Column(
           children: menuScreen,

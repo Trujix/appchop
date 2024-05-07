@@ -34,7 +34,7 @@ class AltaNotasPage extends StatelessWidget with WidgetsBindingObserver {
             ),
             CardContainer(
               padding: const EdgeInsets.fromLTRB(20, 10, 20, 10,),
-              fondo: 0xFFF8F9F9,
+              fondo: ColorList.ui[3],
               children: [
                 EtiquetaText(
                   texto1: "Nombre persona/contacto:\n",
@@ -50,7 +50,7 @@ class AltaNotasPage extends StatelessWidget with WidgetsBindingObserver {
             ),
             CardContainer(
               padding: const EdgeInsets.all(10,),
-              fondo: 0xFFF8F9F9,
+              fondo: ColorList.ui[3],
               children: <Widget>[
                 MultilineTextform(
                   controller: _.nota,

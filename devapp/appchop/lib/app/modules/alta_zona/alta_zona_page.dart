@@ -36,7 +36,7 @@ class AltaZonaPage extends StatelessWidget with WidgetsBindingObserver {
               size: 20,
             ),
             CardContainer(
-              fondo: 0xFFFDFEFE,
+              fondo: ColorList.ui[3],
               children: [
                 StandardTextform(
                   controller: _.zona,
@@ -51,7 +51,7 @@ class AltaZonaPage extends StatelessWidget with WidgetsBindingObserver {
                 builder: (context) {
                   if(_.listaZona.isNotEmpty) {
                     return CardContainer(
-                      fondo: 0xFFFDFEFE,
+                      fondo: ColorList.ui[3],
                       children: <Widget>[
                         Expanded(
                           child: NestedScrollView(

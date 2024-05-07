@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
+import '../../utils/color_list.dart';
+
 class BasicBottomSheetContainer extends StatelessWidget {
   final BuildContext? context;
   final ScrollController? scrollController;
@@ -19,9 +21,9 @@ class BasicBottomSheetContainer extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.fromLTRB(0, 80, 0, 0),
       decoration: BoxDecoration(
-        color: const Color(0xFFFFFFFF),
+        color: Color(ColorList.ui[0]),
         border: Border.all(
-          color: const Color(0xFFFFFFFF),
+          color: Color(ColorList.ui[0]),
         ),
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(30),
@@ -44,9 +46,9 @@ class BasicBottomSheetContainer extends StatelessWidget {
                   height: 8,
                   margin: const EdgeInsets.fromLTRB(0, 10, 0, 20),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFDADFE4),
+                    color: Color(ColorList.ui[1]),
                     border: Border.all(
-                      color: const Color(0xFFDADFE4),
+                      color: Color(ColorList.ui[1]),
                     ),
                     borderRadius: const BorderRadius.all(Radius.circular(5)),
                   ),

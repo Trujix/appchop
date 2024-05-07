@@ -34,7 +34,7 @@ class ConfiguracionPage extends StatelessWidget with WidgetsBindingObserver {
             ),
             CardContainer(
               padding: const EdgeInsets.all(20,),
-              fondo: 0xFFF8F9F9,
+              fondo: ColorList.ui[3],
               children: [
                 EtiquetaText(
                   texto1: "Id de registro\n",

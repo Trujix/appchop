@@ -43,7 +43,7 @@ class AltaCobranzaPage extends StatelessWidget with WidgetsBindingObserver {
               size: 14,
             ),
             CardContainer(
-              fondo: 0xFFFDFEFE,
+              fondo: ColorList.ui[3],
               children: [
                 GroupRadiobutton(
                   buttonLables: _.labelsTipoCobranza,
@@ -97,7 +97,7 @@ class AltaCobranzaPage extends StatelessWidget with WidgetsBindingObserver {
               ],
             ),
             CardContainer(
-              fondo: 0xFFFDFEFE,
+              fondo: ColorList.ui[3],
               children: [
                 StandardTextform(
                   controller: _.descripcion,

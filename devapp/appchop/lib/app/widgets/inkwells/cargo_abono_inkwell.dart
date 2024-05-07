@@ -26,7 +26,7 @@ class CargoAbonoInkwell extends StatelessWidget {
       child: CardContainer(
         margin: const EdgeInsets.fromLTRB(10, 2, 10, 2),
         radius: 5,
-        fondo: 0xFFFDFEFE,
+        fondo: ColorList.ui[3],
         children: [
           const SizedBox(
             height: 3,

@@ -36,7 +36,7 @@ class AltaClientesPage extends StatelessWidget {
               size: 18,
             ),
             CardContainer(
-              fondo: 0xFFFDFEFE,
+              fondo: ColorList.ui[3],
               children: [
                 Row(
                   children: <Widget>[

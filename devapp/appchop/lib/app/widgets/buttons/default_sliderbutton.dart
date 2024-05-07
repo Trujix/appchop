@@ -40,7 +40,7 @@ class DefaultSliderbutton extends StatelessWidget {
           MaterialIcons.arrow_forward_ios,
           color: Color(ColorList.sys[0]),
         ),
-        backgroundColor: const Color(0xFFF2F4F4),
+        backgroundColor: Color(ColorList.ui[3]),
         buttonColor: Color(ColorList.sys[1]),
         baseColor: Color(ColorList.sys[0]),
       ),

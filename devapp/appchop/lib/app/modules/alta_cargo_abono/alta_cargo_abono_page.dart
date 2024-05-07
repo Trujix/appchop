@@ -98,7 +98,7 @@ class AltaCargoAbonoPage extends StatelessWidget with WidgetsBindingObserver {
             Visibility(
               visible: _.pendiente,
               child: CardContainer(
-                fondo: 0xFFFDFEFE,
+                fondo: ColorList.ui[3],
                 children: <Widget>[
                   Row(
                     children: [
