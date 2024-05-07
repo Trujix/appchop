@@ -5,6 +5,7 @@ import '../../../services/storage_service.dart';
 class Inventarios {
   String? tabla = "inventarios";
   String? idUsuario;
+  String? idArticulo;
   String? codigoArticulo;
   String? descripcion;
   double? precioCompra;
@@ -16,6 +17,7 @@ class Inventarios {
 
   Inventarios({
     this.idUsuario = "",
+    this.idArticulo = "",
     this.codigoArticulo = "",
     this.descripcion = "",
     this.precioCompra = 0.0,
@@ -40,6 +42,7 @@ class Inventarios {
   Map toJson() => {
     'tabla'           : tabla,
     'idUsuario'       : idUsuario,
+    'idArticulo'      : idArticulo,
     'codigoArticulo'  : codigoArticulo,
     'descripcion'     : descripcion,
     'precioCompra'    : precioCompra,
@@ -52,6 +55,7 @@ class Inventarios {
 
   factory Inventarios.fromJson(Map<String, dynamic> json) => Inventarios(
     idUsuario: json['idUsuario'] ?? "",
+    idArticulo: json['idArticulo'] ?? "",
     codigoArticulo: json['codigoArticulo'] ?? "",
     descripcion: json['descripcion'] ?? "",
     precioCompra: json['precioCompra'] ?? 0.0,

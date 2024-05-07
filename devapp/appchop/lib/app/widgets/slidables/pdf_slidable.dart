@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
+import '../../utils/color_list.dart';
+
 class PdfSlidable extends StatelessWidget {
   final Widget child;
   final void Function() onPdf;
@@ -26,8 +28,8 @@ class PdfSlidable extends StatelessWidget {
             onPressed: (_) {
               onPdf();
             },
-            backgroundColor: const Color(0xFF95A5A6),
-            foregroundColor: Colors.white,
+            backgroundColor: Color(ColorList.theme[4]),
+            foregroundColor: Color(ColorList.ui[0]),
             icon: MaterialIcons.picture_as_pdf,
             label: 'Exportar',
             borderRadius: const BorderRadius.only(

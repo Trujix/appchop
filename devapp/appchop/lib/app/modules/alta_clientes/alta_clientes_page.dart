@@ -22,10 +22,10 @@ class AltaClientesPage extends StatelessWidget {
     return GetBuilder<AltaClientesController>(
       builder: (_) => Scaffold(
         resizeToAvoidBottomInset: true,
-        backgroundColor: Color(ColorList.sys[3]),
+        backgroundColor: Color(ColorList.ui[1]),
         appBar: BackAppbar(
           cerrar: _.cerrar,
-          fondo: ColorList.sys[3],
+          fondo: ColorList.ui[1],
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

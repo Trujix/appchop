@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
+import '../../utils/color_list.dart';
+
 class BorrarSlidable extends StatelessWidget {
   final Widget child;
   final void Function() onBorrar;
@@ -26,8 +28,8 @@ class BorrarSlidable extends StatelessWidget {
             onPressed: (_) {
               onBorrar();
             },
-            backgroundColor: const Color(0xFFE74C3C),
-            foregroundColor: Colors.white,
+            backgroundColor: Color(ColorList.theme[3]),
+            foregroundColor: Color(ColorList.ui[0]),
             icon: MaterialIcons.delete_outline,
             label: 'Eliminar',
             borderRadius: const BorderRadius.only(

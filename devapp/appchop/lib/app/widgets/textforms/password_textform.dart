@@ -47,7 +47,7 @@ class PasswordTextform extends StatelessWidget {
           ),
           prefixIcon: Icon(
             icon,
-            color: Color(ColorList.textforms[0]),
+            color: Color(ColorList.sys[0]),
           ),
           hintText: text,
           suffixIcon: InkWell(
@@ -56,7 +56,7 @@ class PasswordTextform extends StatelessWidget {
               obscureText
                 ? FontAwesome.eye
                 : FontAwesome.eye_slash,
-              color: Color(ColorList.textforms[0]),
+              color: Color(ColorList.sys[0]),
             ),
           ),
         ),

@@ -18,7 +18,7 @@ class PdfViewerPage extends StatelessWidget with WidgetsBindingObserver {
         canPop: _.salir,
         child: Scaffold(
           resizeToAvoidBottomInset: true,
-          backgroundColor: Color(ColorList.sys[3]),
+          backgroundColor: Color(ColorList.ui[1]),
           appBar: PreferredSize(
             preferredSize: _.salir ? Size(Get.width, kToolbarHeight) : const Size.fromHeight(0),
             child: Builder(
@@ -26,7 +26,7 @@ class PdfViewerPage extends StatelessWidget with WidgetsBindingObserver {
                 if(_.salir) {
                   return BackAppbar(
                     cerrar: _.cerrar,
-                    fondo: ColorList.sys[3],
+                    fondo: ColorList.ui[1],
                   );
                 } else {
                   return const OffAppbar();

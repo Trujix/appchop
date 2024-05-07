@@ -4,6 +4,7 @@ import '../data/models/local_storage/cargos_abonos.dart';
 import '../data/models/local_storage/clientes.dart';
 import '../data/models/local_storage/cobranzas.dart';
 import '../data/models/local_storage/configuracion.dart';
+import '../data/models/local_storage/inventarios.dart';
 import '../data/models/local_storage/notas.dart';
 import '../data/models/local_storage/usuarios.dart';
 import '../data/models/local_storage/zonas.dart';
@@ -38,6 +39,7 @@ abstract class GetInjection extends GetxController {
     await Notas.init();
     await CargosAbonos.init();
     await Usuarios.init();
+    await Inventarios.init();
     await ZonasUsuarios.init();
     await Configuracion.init();
     return;

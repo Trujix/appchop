@@ -34,14 +34,14 @@ class ModalDialog extends StatelessWidget {
                 ),
                 height: height,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Color(ColorList.ui[0]),
                   shape: BoxShape.rectangle,
                   borderRadius: BorderRadius.circular(20),
-                  boxShadow: const <BoxShadow>[
+                  boxShadow: <BoxShadow>[
                     BoxShadow(
-                      color: Colors.black26,
+                      color: Color(ColorList.ui[2]),
                       blurRadius: 10,
-                      offset: Offset(0, 10),
+                      offset: const Offset(0, 10),
                     ),
                   ],
                 ),
@@ -60,7 +60,7 @@ class ModalDialog extends StatelessWidget {
                             padding: const EdgeInsets.fromLTRB(10, 4, 10, 5),
                             child: Icon(
                               MaterialIcons.cancel,
-                              color: Color(ColorList.sys[5]),
+                              color: Color(ColorList.theme[3]),
                               size: 16,
                             ),
                           ),

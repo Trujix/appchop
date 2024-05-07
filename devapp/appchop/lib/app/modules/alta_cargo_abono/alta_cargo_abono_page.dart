@@ -24,10 +24,10 @@ class AltaCargoAbonoPage extends StatelessWidget with WidgetsBindingObserver {
     return GetBuilder<AltaCargoAbonoController>(
       builder: (_) => Scaffold(
         resizeToAvoidBottomInset: true,
-        backgroundColor: Color(ColorList.sys[3]),
+        backgroundColor: Color(ColorList.ui[1]),
         appBar: BackAppbar(
           cerrar: _.cerrar,
-          fondo: ColorList.sys[3],
+          fondo: ColorList.ui[1],
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -178,7 +178,7 @@ class AltaCargoAbonoPage extends StatelessWidget with WidgetsBindingObserver {
                 texto: "Marcar como pagada",
                 icono: MaterialIcons.done_all,
                 fondoColor: ColorList.sys[0],
-                textoColor: ColorList.sys[6],
+                textoColor: ColorList.ui[0],
                 ltrbm: const [0, 0, 0, 15,],
                 onPressed: _.marcarCobranzaPagada,
                 onLongPress: () {},

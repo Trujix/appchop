@@ -10,7 +10,7 @@ import '../../widgets/buttons/solid_button.dart';
 import '../../widgets/columns/sin_elementos_column.dart';
 import '../../widgets/combo/selection_combo.dart';
 import '../../widgets/containers/basic_bottom_sheet_container.dart';
-import '../../widgets/containers/card_container.dart';
+import '../../widgets/containers/card_scrollable_container.dart';
 import '../../widgets/containers/titulo_container.dart';
 import '../../widgets/customscrollviews/usuarios_customscrollviews.dart';
 import '../../widgets/inkwells/icono_boton_inkwell.dart';
@@ -25,10 +25,10 @@ class UsuariosPage extends StatelessWidget {
     return GetBuilder<UsuariosController>(
       builder: (_) => Scaffold(
         resizeToAvoidBottomInset: true,
-        backgroundColor: Color(ColorList.sys[3]),
+        backgroundColor: Color(ColorList.ui[1]),
         appBar: BackAppbar(
           cerrar: _.cerrar,
-          fondo: ColorList.sys[3],
+          fondo: ColorList.ui[1],
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -90,7 +90,7 @@ class UsuariosPage extends StatelessWidget {
                         size: 16,
                       ),
                       Expanded(
-                        child: CardContainer(
+                        child: CardScrollableContainer(
                           margin: const EdgeInsets.fromLTRB(0, 10, 0, 0,),
                           children: [
                             StandardTextform(

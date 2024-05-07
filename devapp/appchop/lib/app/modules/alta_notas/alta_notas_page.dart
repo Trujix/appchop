@@ -20,10 +20,10 @@ class AltaNotasPage extends StatelessWidget with WidgetsBindingObserver {
     return GetBuilder<AltaNotasController>(
       builder: (_) => Scaffold(
         resizeToAvoidBottomInset: true,
-        backgroundColor: Color(ColorList.sys[3]),
+        backgroundColor: Color(ColorList.ui[1]),
         appBar: BackAppbar(
           cerrar: _.cerrar,
-          fondo: ColorList.sys[3],
+          fondo: ColorList.ui[1],
         ),
         body: ListView(
           children: <Widget>[

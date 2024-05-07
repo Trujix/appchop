@@ -48,7 +48,7 @@ class ButtonTextform extends StatelessWidget {
           ),
           prefixIcon: Icon(
             icon,
-            color: Color(ColorList.textforms[0]),
+            color: Color(ColorList.sys[0]),
           ),
           hintText: text,
           suffixIcon: InkWell(
@@ -65,7 +65,7 @@ class ButtonTextform extends StatelessWidget {
               ),
               child: Icon(
                 icono,
-                color: Color(ColorList.textforms[0]),
+                color: Color(ColorList.sys[0]),
                 size: 20,
               ),
             ),

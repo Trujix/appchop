@@ -21,10 +21,10 @@ class AltaZonaPage extends StatelessWidget with WidgetsBindingObserver {
     return GetBuilder<AltaZonaController>(
       builder: (_) => Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: Color(ColorList.sys[3]),
+        backgroundColor: Color(ColorList.ui[1]),
         appBar: BackAppbar(
           cerrar: _.cerrar,
-          fondo: ColorList.sys[3],
+          fondo: ColorList.ui[1],
           iconoColor: ColorList.sys[0],
         ),
         body: Column(

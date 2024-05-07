@@ -41,14 +41,14 @@ class AlertaDialog extends StatelessWidget {
                   ),
                   height: 150,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Color(ColorList.ui[0]),
                     shape: BoxShape.rectangle,
                     borderRadius: BorderRadius.circular(20),
-                    boxShadow: const <BoxShadow>[
+                    boxShadow: <BoxShadow>[
                       BoxShadow(
-                        color: Colors.black26,
+                        color: Color(ColorList.ui[2]),
                         blurRadius: 10,
-                        offset: Offset(0, 10),
+                        offset: const Offset(0, 10),
                       ),
                     ],
                   ),

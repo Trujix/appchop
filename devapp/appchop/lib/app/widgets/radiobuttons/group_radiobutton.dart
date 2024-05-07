@@ -41,10 +41,12 @@ class GroupRadiobutton extends StatelessWidget {
         buttonValues: buttonValues,
         defaultSelected: defaultSelected,
         selectedColor: Color(ColorList.sys[1]),
-        buttonTextStyle: const ButtonTextStyle(
-          selectedColor: Colors.white,
-          unSelectedColor: Colors.black,
-          textStyle: TextStyle(fontSize: 16),
+        buttonTextStyle: ButtonTextStyle(
+          selectedColor: Color(ColorList.ui[0]),
+          unSelectedColor: Color(ColorList.ui[2]),
+          textStyle: const TextStyle(
+            fontSize: 16,
+          ),
         ),
         radioButtonValue: radioButtonValue,
       ),

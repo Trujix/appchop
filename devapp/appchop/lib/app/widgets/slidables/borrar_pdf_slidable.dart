@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
+import '../../utils/color_list.dart';
+
 class BorrarPdfSlidable extends StatelessWidget {
   final Widget child;
   final void Function() onBorrar;
@@ -28,8 +30,8 @@ class BorrarPdfSlidable extends StatelessWidget {
             onPressed: (_) {
               onBorrar();
             },
-            backgroundColor: const Color(0xFFE74C3C),
-            foregroundColor: Colors.white,
+            backgroundColor: Color(ColorList.theme[3]),
+            foregroundColor: Color(ColorList.ui[0]),
             icon: MaterialIcons.delete_outline,
             label: 'Eliminar',
             borderRadius: const BorderRadius.only(
@@ -43,8 +45,8 @@ class BorrarPdfSlidable extends StatelessWidget {
             onPressed: (_) {
               onPdf();
             },
-            backgroundColor: const Color(0xFF95A5A6),
-            foregroundColor: Colors.white,
+            backgroundColor: Color(ColorList.theme[4]),
+            foregroundColor: Color(ColorList.ui[0]),
             icon: MaterialIcons.picture_as_pdf,
             label: 'Exportar',
             borderRadius: const BorderRadius.only(

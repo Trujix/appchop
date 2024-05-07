@@ -1,15 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../data/models/local_storage/inventarios.dart';
+import '../../data/models/local_storage/local_storage.dart';
 import '../../data/models/menu_popup_opciones.dart';
 import '../../utils/get_injection.dart';
 
 class InventariosController extends GetInjection {
+  ScrollController scrollController = ScrollController();
+  ScrollController formScrollController = ScrollController();
   TextEditingController busqueda = TextEditingController();
+  TextEditingController codigoArticulo = TextEditingController();
+  FocusNode codigoArticuloFocus = FocusNode();
+  TextEditingController descripcion = TextEditingController();
+  FocusNode descripcionFocus = FocusNode();
+  TextEditingController precioCompra = TextEditingController();
+  FocusNode precioCompraFocus = FocusNode();
+  TextEditingController precioVenta = TextEditingController();
+  FocusNode precioVentaFocus = FocusNode();
+  TextEditingController existencia = TextEditingController();
+  FocusNode existenciaFocus = FocusNode();
+  TextEditingController maximo = TextEditingController();
+  FocusNode maximoFocus = FocusNode();
+  TextEditingController minimo = TextEditingController();
+  FocusNode minimoFocus = FocusNode();
 
-  List<Inventarios> inventarios = [];
+  List<Inventarios> inventariosLista = [];
+  List<Inventarios> _inventariosListaImportados = [];
   String opcionSelected = "";
   List<String> opcionesBase = [
     "Descripcion~R",
@@ -25,21 +44,43 @@ class InventariosController extends GetInjection {
     MaterialIcons.file_upload,
     MaterialIcons.file_download,
   ];
+  int totalElementosInventario = 0;
+  bool elementosImportados = false;
+
+  int opcionInventarioSeleccion = 0;
   
   @override
-  void onInit() {
-    _init();
+  Future<void> onInit() async {
+    await _init();
     super.onInit();
   }
 
-  void _init() {
+  Future<void> _init() async {
+    await cargarListaInventario();
     _cargarOpcionesPopup();
   }
 
-  Future<void> opcionDeudaSeleccionar(int opcion) async {
-    //opcionDeudaSeleccion = opcion;
+  Future<void> opcionInventarioSeleccionar(int opcion) async {
+    if(elementosImportados) {
+      return;
+    }
+    opcionInventarioSeleccion = opcion;
     update();
-    //await cargarListaCobranza();
+    await cargarListaInventario();
+  }
+
+  Future<void> cargarListaInventario() async {
+    try {
+      var inventarioStorage = List<Inventarios>.from(
+        storage.get([Inventarios()]).map((json) => Inventarios.fromJson(json))
+      );
+      if(opcionInventarioSeleccion == 1) {
+        inventarioStorage = inventarioStorage.where((i) => i.existencia! <= i.minimo!).toList();
+      }
+      inventariosLista = inventarioStorage;
+    } finally {
+      update();
+    }
   }
 
   Future<void> opcionPopupConsulta(String? id) async {
@@ -59,10 +100,10 @@ class InventariosController extends GetInjection {
   Future<void> operacionPopUp(String id) async {
     switch(id) {
       case "4":
-        await elegir();
+        await importarInventario();
         break;
       case "5":
-        
+        await exportarInventario();
         break;
       default:
         return;
@@ -71,33 +112,232 @@ class InventariosController extends GetInjection {
 
   Future<void> limpiarBusquedaTexto() async {
     busqueda.clear();
-    //await cargarListaCobranza();
+    await cargarListaInventario();
   }
 
-  Future<void> elegir() async {
-    var csvArhivo = await tool.abrirCsv();
-    var csvInventario = csvArhivo.split("\n");
-    inventarios = [];
-    var primer = true;
-    for(var inventario in csvInventario) {
-      if(primer) {
-        primer = false;
-        continue;
+  Future<void> importarInventario() async {
+    try {
+      elementosImportados = false;
+      var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
+      var csvArhivo = await tool.abrirCsv();
+      if(csvArhivo == "") {
+        return;
       }
-      var elementos = inventario.split(",");
-      inventarios.add(
-        Inventarios(
-          codigoArticulo: elementos[0],
-          descripcion: elementos[1],
-          fechaCambio: elementos[7],
-        )
-      );
+      busqueda.clear();
+      opcionInventarioSeleccion = 0;
+      var csvInventario = csvArhivo.split("\n");
+      inventariosLista = [];
+      var primer = true;
+      for(var inventario in csvInventario) {
+        if(primer) {
+          primer = false;
+          continue;
+        }
+        var elementos = inventario.split(",");
+        if(elementos.length == 1) {
+          continue;
+        }
+        var verificar = inventariosLista.where((i) => i.codigoArticulo == elementos[0]).firstOrNull;
+        if(verificar != null) {
+          continue;
+        }
+        var idArticulo = tool.guid();
+        inventariosLista.add(
+          Inventarios(
+            idUsuario: localStorage.idUsuario,
+            idArticulo: idArticulo,
+            codigoArticulo: elementos[0],
+            descripcion: elementos[1],
+            precioCompra: tool.str2double(elementos[2]),
+            precioVenta: tool.str2double(elementos[3]),
+            existencia: tool.str2double(elementos[4]),
+            maximo: tool.str2double(elementos[5]),
+            minimo: tool.str2double(elementos[6]),
+            fechaCambio: elementos[7],
+          ),
+        );
+        _inventariosListaImportados = inventariosLista;
+      }
+      if(inventariosLista.isEmpty) {
+        tool.msg("No se encontraron elementos en la importación");
+        return;
+      }
+      elementosImportados = true;
+    } catch(e) {
+      inventariosLista = [];
+      tool.msg("No fue posible importar el documento (revise el formato que sea el correcto)", 3);
+    } finally {
       update();
+    }
+  }
+
+  Future<void> exportarInventario() async {
+    try {
+      if(elementosImportados) {
+        tool.msg("Esta información no puede ser exportada");
+        return;
+      }
+      if(inventariosLista.isEmpty) {
+        tool.msg("No tiene información de inventario para exportar");
+        return;
+      }
+    } catch(e) {
+      tool.msg("Ocurrió un error al intentar exportar información de inventario", 3);
+    } finally { }
+  }
+
+  Future<void> guardarElementoInventario() async {
+    try {
+      tool.isBusy();
+      var articulo = nuevoElementoFromForm();
+      inventariosLista.add(articulo);
+      await storage.update(inventariosLista);
+      await cargarListaInventario();
+      await Future.delayed(1.seconds);
+      tool.closeBottomSheet();
+      tool.msg("Artículo agregado al inventario correctamente", 1);
+    } catch(e) {
+      tool.msg("Ocurrió un error al intentar guardar nuevo artículo", 3);
+    } finally {
+      update();
+    }
+  }
+
+  Future<void> agregarElementoInventario() async {
+    try {
+      var articulo = nuevoElementoFromForm();
+      inventariosLista.add(articulo);
+      tool.closeBottomSheet();
+    } catch(e) {
+      tool.msg("Ocurrió un error al intentar agregar artículo al inventario", 3);
+    } finally {
+      update();
+    }
+  }
+
+  Future<void> borrarElementoInventario(Inventarios inventario) async {
+    try {
+      var validar = await tool.ask("Eliminar elemento", "Codigo: ${inventario.codigoArticulo}\n¿Desea continuar?");
+      if(!validar) {
+        return;
+      }
+      inventariosLista.removeWhere((i) => i.codigoArticulo == inventario.codigoArticulo);
+      if(!elementosImportados) {
+        if(inventariosLista.isNotEmpty) {
+          await storage.update(inventariosLista);
+        } else {
+          var _ = await storage.put([Inventarios()]);
+        }
+      } else {
+        if(inventariosLista.isEmpty) {
+          elementosImportados = false;
+          await cargarListaInventario();
+        }
+      }
+    } catch(e) {
+      tool.msg("Ocurrió un error al intentar remover elemento de inventario", 3);
+    } finally {
+      update();
+    }
+  }
+
+  Future<void> agregarImportacion() async {
+    try {
+      await _validarBusquedaEscrita();
+      var validar = await tool.ask(
+        "Agregar ${_inventariosListaImportados.length} elemento${(_inventariosListaImportados.length > 1 ?  "s" : "")}",
+        "Los elementos repetidos serán omitidos\n¿Desea continuar?"
+      );
+      if(!validar) {
+        return;
+      }
+    } catch(e) {
+      tool.msg("Ocurrió un error al intentar reemplazar elemento de inventario", 3);
+    } finally {
+      update();
+    }
+  }
+
+  Future<void> reemplazarImportacion() async {
+    try {
+      await _validarBusquedaEscrita();
+      var validar = await tool.ask("Reemplazar Inventario", "TODOS los elementos del actual inventario se sustituirán\n¿Desea continuar?");
+      if(!validar) {
+        return;
+      }
+      tool.isBusy();
+      elementosImportados = false;
+      await storage.update(inventariosLista);
+      await Future.delayed(1.seconds);
+      tool.isBusy(false);
+      tool.msg("Inventario actualizado correctamente", 1);
+    } catch(e) {
+      tool.msg("Ocurrió un error al intentar reemplazar elemento de inventario", 3);
+    } finally {
+      update();
+    }
+  }
+
+  Future<void> cancelarImportar() async {
+    try {
+      await _validarBusquedaEscrita();
+      var cancelar = await tool.ask("Cancelar Importación", "¿Desea continuar?");
+      if(!cancelar) {
+        return;
+      }
+      elementosImportados = false;
+      await cargarListaInventario();
+    } catch(e) {
+      return;
     }
   }
 
   void cerrar() {
     Get.back();
+  }
+
+  Inventarios nuevoElementoFromForm() {
+    var idArticulo = tool.guid();
+    return Inventarios(
+      idArticulo: idArticulo,
+      codigoArticulo: codigoArticulo.text,
+      descripcion: descripcion.text,
+      precioCompra: tool.str2double(precioCompra.text),
+      precioVenta: tool.str2double(precioVenta.text),
+      existencia: tool.str2double(existencia.text),
+      maximo: tool.str2double(maximo.text),
+      minimo: tool.str2double(minimo.text),
+      fechaCambio: DateFormat("dd-MM-yyyy").format(DateTime.now()).toString(),
+    );
+  }
+
+  bool validarForm() {
+    var correcto = false;
+    var mensaje = "";
+    var verificarArticulo = inventariosLista.where((i) => i.codigoArticulo == codigoArticulo.text).firstOrNull;
+    if(tool.isNullOrEmpty(codigoArticulo)) {
+      mensaje = "Escriba el código artículo";
+    } else if(verificarArticulo != null) {
+      mensaje = "Ya existe un artículo con ese código";
+    } else if(tool.isNullOrEmpty(descripcion)) {
+      mensaje = "Escriba la descripción";
+    } else if(tool.isNullOrEmpty(precioCompra)) {
+      mensaje = "Escriba el precio de compra";
+    } else if(tool.isNullOrEmpty(precioVenta)) {
+      mensaje = "Escriba el precio de venta";
+    } else if(tool.isNullOrEmpty(existencia)) {
+      mensaje = "Escriba las existencias";
+    } else if(tool.isNullOrEmpty(maximo)) {
+      mensaje = "Escriba el máximo";
+    } else if(tool.isNullOrEmpty(minimo)) {
+      mensaje = "Escriba el mínimo";
+    } else {
+      correcto = true;
+    }
+    if(!correcto) {
+      tool.toast(mensaje);
+    }
+    return correcto;
   }
 
   void _cargarOpcionesPopup() {
@@ -117,5 +357,13 @@ class InventariosController extends GetInjection {
       }
       update();
     } finally { }
+  }
+
+  Future<void> _validarBusquedaEscrita() async {
+    if(busqueda.text == "") {
+      return;
+    }
+    busqueda.clear();
+    inventariosLista = _inventariosListaImportados;
   }
 }

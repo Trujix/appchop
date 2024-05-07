@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 
+import '../../utils/color_list.dart';
+
 class LoadingDialog extends StatelessWidget {
   const LoadingDialog({
     super.key,
@@ -28,14 +30,14 @@ class LoadingDialog extends StatelessWidget {
                 ),
                 height: 120,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Color(ColorList.ui[0]),
                   shape: BoxShape.rectangle,
                   borderRadius: BorderRadius.circular(20),
-                  boxShadow: const <BoxShadow>[
+                  boxShadow: <BoxShadow>[
                     BoxShadow(
-                      color: Colors.black26,
+                      color: Color(ColorList.ui[2]),
                       blurRadius: 10,
-                      offset: Offset(0, 10),
+                      offset: const Offset(0, 10),
                     ),
                   ],
                 ),

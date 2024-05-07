@@ -21,7 +21,7 @@ class CobranzaMainPage extends StatelessWidget with WidgetsBindingObserver {
     return GetBuilder<CobranzaMainController>(
       builder: (_) => Scaffold(
         resizeToAvoidBottomInset: true,
-        backgroundColor: Color(ColorList.sys[3]),
+        backgroundColor: Color(ColorList.ui[1]),
         appBar: MainAppbar(
           controller: _.busqueda,
           opciones: _.opcionesConsulta,
@@ -88,7 +88,7 @@ class CobranzaMainPage extends StatelessWidget with WidgetsBindingObserver {
                   _.opcionDeudaSeleccion == 0
                    ? 1 : 2
                 ]),
-                backgroundColor: Color(ColorList.sys[3]),
+                backgroundColor: Color(ColorList.ui[1]),
                 onDestinationSelected: _.opcionDeudaSeleccionar,
                 destinations: <Widget>[
                   NavigationDestination(

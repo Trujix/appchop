@@ -21,7 +21,7 @@ class LoginPage extends StatelessWidget with WidgetsBindingObserver {
       builder: (_) => Scaffold(
         resizeToAvoidBottomInset: true,
         appBar: const OffAppbar(),
-        backgroundColor: Color(ColorList.sys[3]),
+        backgroundColor: Color(ColorList.ui[1]),
         body: SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.all(0),
@@ -32,7 +32,7 @@ class LoginPage extends StatelessWidget with WidgetsBindingObserver {
               children: [
                 const Expanded(child: SizedBox()),
                 Shimmer(
-                  color: Color(ColorList.sys[3]),
+                  color: Color(ColorList.ui[1]),
                   colorOpacity: 0.8,
                   child: Image.asset(
                     "assets/login/head_login.png",

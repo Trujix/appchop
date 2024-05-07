@@ -13,7 +13,7 @@ class AlphaPage extends StatelessWidget with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return GetBuilder<AlphaController>(
       builder: (_) => Scaffold(
-        backgroundColor: Color(ColorList.alpha[0]),
+        backgroundColor: Color(ColorList.sys[0]),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[

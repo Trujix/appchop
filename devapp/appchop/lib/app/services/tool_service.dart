@@ -153,7 +153,7 @@ class ToolService extends GetxController {
       toastLength: Toast.LENGTH_LONG,
       gravity: ToastGravity.CENTER,
       timeInSecForIosWeb: 1,
-      textColor: Colors.white,
+      textColor: Color(ColorList.ui[0]),
       fontSize: 16.0,
       webShowClose: true,
     );

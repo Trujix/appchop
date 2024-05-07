@@ -28,7 +28,7 @@ class MainAppbar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Color(ColorList.sys[3]),
+      backgroundColor: Color(ColorList.ui[1]),
       title: TextField(
         controller: controller,
         decoration: InputDecoration(

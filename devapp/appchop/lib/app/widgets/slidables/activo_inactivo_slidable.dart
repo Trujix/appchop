@@ -31,7 +31,7 @@ class ActivoInactivoSlidable extends StatelessWidget {
               cambiar();
             },
             backgroundColor: Color(ColorList.theme[activo ? 3 : 1]),
-            foregroundColor: Colors.white,
+            foregroundColor: Color(ColorList.ui[0]),
             icon: activo ? MaterialIcons.block : MaterialIcons.restore,
             label: activo ? "Inactivar" : "Activar",
             borderRadius: const BorderRadius.only(

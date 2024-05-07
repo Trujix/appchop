@@ -16,11 +16,11 @@ class BusquedaPage extends StatelessWidget {
     return GetBuilder<BusquedaController>(
       builder: (_) => Scaffold(
         resizeToAvoidBottomInset: true,
-        backgroundColor: Color(ColorList.sys[3]),
+        backgroundColor: Color(ColorList.ui[1]),
         appBar: SearchAppbar(
           controller: _.busquedaController,
           onTap: _.cerrar,
-          fondo: ColorList.sys[3],
+          fondo: ColorList.ui[1],
           onTapClear: _.limpiarBusqueda,
           onChanged: _.buscar,
         ),
