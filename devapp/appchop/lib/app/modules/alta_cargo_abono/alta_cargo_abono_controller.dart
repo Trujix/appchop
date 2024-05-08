@@ -64,7 +64,7 @@ class AltaCargoAbonoController extends GetInjection {
   Future<void> marcarCobranzaPagada() async {
     var mensaje = "¿Desea registrar el pago total (~MONTOTOTAL~)?";
     var montoBonificacion = 0.0;
-    if(!tool.str2date(cobranzaEditar!.fechaVencimiento!).isBefore(DateTime.now())) {
+    if(!tool.str2date(cobranzaEditar!.fechaVencimiento!).isBefore(DateTime.now().add(-1.days))) {
       montoBonificacion = (saldoPendiente * (configuracion.porcentajeBonificacion! / 100));
       var saldoBonificacion = saldoPendiente - montoBonificacion;
       mensaje = mensaje.replaceAll("~MONTOTOTAL~", MoneyFormatter(amount: saldoBonificacion).output.symbolOnLeft);
@@ -156,7 +156,7 @@ class AltaCargoAbonoController extends GetInjection {
         _limpiaForm();
         _cargarListaCargosAbonos();
       }
-      if(!tool.str2date(cobranzaEditar!.fechaVencimiento!).isBefore(DateTime.now()) && !pagar) {
+      if(!tool.str2date(cobranzaEditar!.fechaVencimiento!).isBefore(DateTime.now().add(-1.days)) && !pagar) {
         return;
       }
       tool.msg("Registro generado correctamente ($tipo)", 1);

@@ -217,7 +217,7 @@ class CobranzaMainController extends GetInjection {
       if(opcionDeudaSeleccion > 1) {
         cobranzaStorage = cobranzaStorage.where(
           (c) => c.fechaVencimiento != Literals.sinVencimiento 
-            && tool.str2date(c.fechaVencimiento!).isBefore(DateTime.now())
+            && tool.str2date(c.fechaVencimiento!).isBefore(DateTime.now().add(-1.days))
         ).toList();
       } else {
         cobranzaStorage = cobranzaStorage.where(

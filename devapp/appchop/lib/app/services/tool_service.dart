@@ -15,6 +15,7 @@ import 'package:http/http.dart' as http;
 import 'package:pdf/widgets.dart' as pdfwidget;
 import 'package:pdf/pdf.dart' as pdflib;
 
+import '../data/models/local_storage/inventarios.dart';
 import '../data/models/local_storage/zonas.dart';
 import '../data/models/local_storage/cobranzas.dart';
 import '../utils/color_list.dart';
@@ -345,6 +346,40 @@ class ToolService extends GetxController {
             valor = value.toString();
           }
           cuerpoTemp += valor;
+        }
+      });
+      if(addTitulo) {
+        titulo += "\n";
+      }
+      cuerpo += "$cuerpoTemp\n";
+      addTitulo = false;
+    }
+    return "$titulo$cuerpo";
+  }
+
+  String inventarioCsv(
+    List<Inventarios> inventarios,
+    List<String> omisiones
+  ) {
+    var listaElementos = jsonDecode(jsonEncode(inventarios)) as List<dynamic>;
+    var titulo = "";
+    var addTitulo = true;
+    var cuerpo = "";
+    for (var cobranza in listaElementos) {
+      var cobranzaMap = jsonDecode(jsonEncode(cobranza)) as Map<String, dynamic>;
+      var cuerpoTemp = "";
+      cobranzaMap.forEach((key, value) {
+        if(!omisiones.contains(key)) {
+          if(addTitulo) {
+            if(titulo != "") {
+              titulo += ",";
+            }
+            titulo += key.toUpperCase();
+          }
+          if(cuerpoTemp != "") {
+            cuerpoTemp += ",";
+          }
+          cuerpoTemp += value.toString();
         }
       });
       if(addTitulo) {

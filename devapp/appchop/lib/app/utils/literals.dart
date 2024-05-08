@@ -45,6 +45,7 @@ class Literals {
   static const String apiTrue = "true";
 
   static const String reporteCobranzaCsv = "reporte_cobranza.csv";
+  static const String reporteInventariosCsv = "listado_inventario.csv";
   static const String reporteEstadoCuentaPdf = "estado_cuenta.pdf";
 
   static const String msgOffline = "Es necesario estar conectado a internet para esta acción";

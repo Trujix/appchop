@@ -2,11 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:open_file_plus/open_file_plus.dart';
 
 import '../../data/models/local_storage/inventarios.dart';
 import '../../data/models/local_storage/local_storage.dart';
 import '../../data/models/menu_popup_opciones.dart';
 import '../../utils/get_injection.dart';
+import '../../utils/literals.dart';
+import '../../widgets/columns/inventario_form_column.dart';
+import '../../widgets/containers/basic_bottom_sheet_container.dart';
+import '../../widgets/modals/gestion_csv_modal.dart';
 
 class InventariosController extends GetInjection {
   ScrollController scrollController = ScrollController();
@@ -46,6 +52,7 @@ class InventariosController extends GetInjection {
   ];
   int totalElementosInventario = 0;
   bool elementosImportados = false;
+  bool editandoElemento = false;
 
   int opcionInventarioSeleccion = 0;
   
@@ -115,6 +122,12 @@ class InventariosController extends GetInjection {
     await cargarListaInventario();
   }
 
+  void nuevoArticuloInventario() {
+    editandoElemento = false;
+    _limpiarForm(null);
+    _abrirForm();
+  }
+
   Future<void> importarInventario() async {
     try {
       elementosImportados = false;
@@ -181,6 +194,18 @@ class InventariosController extends GetInjection {
         tool.msg("No tiene información de inventario para exportar");
         return;
       }
+      var contenido = tool.inventarioCsv(
+        inventariosLista,
+        ["tabla", "idUsuario", "idArticulo",]
+      );
+      var archivoCsv = await tool.crearArchivo(contenido, Literals.reporteInventariosCsv);
+      await Future.delayed(0.7.seconds);
+      tool.modal(
+        widgets: [GestionCsvModal(
+          abrirAccion: () async => await OpenFile.open(archivoCsv),
+          exportarAccion: () async => await tool.compartir(archivoCsv!, Literals.reporteCobranzaCsv),
+        ),]
+      );
     } catch(e) {
       tool.msg("Ocurrió un error al intentar exportar información de inventario", 3);
     } finally { }
@@ -190,7 +215,16 @@ class InventariosController extends GetInjection {
     try {
       tool.isBusy();
       var articulo = nuevoElementoFromForm();
-      inventariosLista.add(articulo);
+      if(editandoElemento) {
+        for (var i = 0; i < inventariosLista.length; i++) {
+          if(inventariosLista[i].codigoArticulo == articulo.codigoArticulo) {
+            inventariosLista[i] = articulo;
+            break;
+          }
+        }
+      } else {
+        inventariosLista.add(articulo);
+      }
       await storage.update(inventariosLista);
       await cargarListaInventario();
       await Future.delayed(1.seconds);
@@ -206,13 +240,32 @@ class InventariosController extends GetInjection {
   Future<void> agregarElementoInventario() async {
     try {
       var articulo = nuevoElementoFromForm();
-      inventariosLista.add(articulo);
+      if(editandoElemento) {
+        for (var i = 0; i < inventariosLista.length; i++) {
+          if(inventariosLista[i].codigoArticulo == articulo.codigoArticulo) {
+            inventariosLista[i] = articulo;
+            break;
+          }
+        }
+      } else {
+        inventariosLista.add(articulo);
+      }
       tool.closeBottomSheet();
     } catch(e) {
       tool.msg("Ocurrió un error al intentar agregar artículo al inventario", 3);
     } finally {
       update();
     }
+  }
+
+  Future<void> editarElementoInventario(Inventarios inventario) async {
+    try {
+      editandoElemento = true;
+      _limpiarForm(inventario);
+      _abrirForm();
+    } catch(e) {
+      tool.msg("Ocurrió un error al intentar editar artículo del inventario", 3);
+    } finally { }
   }
 
   Future<void> borrarElementoInventario(Inventarios inventario) async {
@@ -251,6 +304,22 @@ class InventariosController extends GetInjection {
       if(!validar) {
         return;
       }
+      tool.isBusy(true);
+      elementosImportados = false;
+      var inventarioStorage = List<Inventarios>.from(
+        storage.get([Inventarios()]).map((json) => Inventarios.fromJson(json))
+      );
+      for(var inventarioNuevo in inventariosLista) {
+        var verificar = inventarioStorage.where((i) => i.codigoArticulo == inventarioNuevo.codigoArticulo).firstOrNull;
+        if(verificar != null) {
+          continue;
+        }
+        inventarioStorage.add(inventarioNuevo);
+      }
+      await storage.update(inventarioStorage);
+      await Future.delayed(1.seconds);
+      await cargarListaInventario();
+      tool.msg("Artículo agregado al inventario correctamente", 1);
     } catch(e) {
       tool.msg("Ocurrió un error al intentar reemplazar elemento de inventario", 3);
     } finally {
@@ -317,7 +386,7 @@ class InventariosController extends GetInjection {
     var verificarArticulo = inventariosLista.where((i) => i.codigoArticulo == codigoArticulo.text).firstOrNull;
     if(tool.isNullOrEmpty(codigoArticulo)) {
       mensaje = "Escriba el código artículo";
-    } else if(verificarArticulo != null) {
+    } else if(verificarArticulo != null && !editandoElemento) {
       mensaje = "Ya existe un artículo con ese código";
     } else if(tool.isNullOrEmpty(descripcion)) {
       mensaje = "Escriba la descripción";
@@ -357,6 +426,63 @@ class InventariosController extends GetInjection {
       }
       update();
     } finally { }
+  }
+
+  void _limpiarForm(Inventarios? inventario) {
+    if(editandoElemento) {
+      codigoArticulo.text = inventario!.codigoArticulo!;
+      descripcion.text = inventario.descripcion!;
+      precioCompra.text = inventario.precioCompra!.toString();
+      precioVenta.text = inventario.precioVenta!.toString();
+      existencia.text = inventario.existencia!.toString();
+      maximo.text = inventario.maximo!.toString();
+      minimo.text = inventario.minimo!.toString();
+    } else {
+      codigoArticulo.clear();
+      descripcion.clear();
+      precioCompra.clear();
+      precioVenta.clear();
+      existencia.clear();
+      maximo.clear();
+      minimo.clear();
+    }
+  }
+
+  void _abrirForm() {
+    var context = Get.context!;
+    showMaterialModalBottomSheet(
+      context: context,
+      expand: true,
+      enableDrag: false,
+      backgroundColor: Colors.transparent,
+      builder: (context) => StatefulBuilder(builder: (context, setState) {
+        return BasicBottomSheetContainer(
+          context: context,
+          cerrar: true,
+          child: InventarioFormColumn(
+            codigoArticulo: codigoArticulo,
+            codigoArticuloFocus: codigoArticuloFocus,
+            descripcion: descripcion,
+            descripcionFocus: descripcionFocus,
+            precioCompra: precioCompra,
+            precioCompraFocus: precioCompraFocus,
+            precioVenta: precioVenta,
+            precioVentaFocus: precioVentaFocus,
+            existencia: existencia,
+            existenciaFocus: existenciaFocus,
+            maximo: maximo,
+            maximoFocus: maximoFocus,
+            minimo: minimo,
+            minimoFocus: minimoFocus,
+            elementosImportados: elementosImportados,
+            editandoElemento: editandoElemento,
+            validarForm: validarForm,
+            agregarElementoInventario: agregarElementoInventario,
+            guardarElementoInventario: guardarElementoInventario,
+          ),
+        );
+      }),
+    );
   }
 
   Future<void> _validarBusquedaEscrita() async {

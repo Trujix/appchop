@@ -1,4 +1,3 @@
-import 'package:appchop/app/widgets/containers/card_container.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
@@ -7,17 +6,20 @@ import 'package:money_formatter/money_formatter.dart';
 import '../../data/models/local_storage/inventarios.dart';
 import '../../utils/color_list.dart';
 import '../buttons/circular_buttons.dart';
-import '../slidables/borrar_slidable.dart';
+import '../containers/card_container.dart';
+import '../slidables/editar_borrar_slidable.dart';
 
 class InventarioCustomscrollview extends StatelessWidget {
   final ScrollController? scrollController;
   final List<Inventarios> listaInventarios;
   final void Function(Inventarios) onBorrar;
+  final void Function(Inventarios) onEditar;
   const InventarioCustomscrollview({
     super.key,
     this.scrollController,
     this.listaInventarios = const [],
     required this.onBorrar,
+    required this.onEditar,
   });
   @override
   Widget build(BuildContext context) {
@@ -27,7 +29,8 @@ class InventarioCustomscrollview extends StatelessWidget {
         return SliverToBoxAdapter(
           child: Builder(
             builder: (context) {
-              return BorrarSlidable(
+              return EditarBorrarSlidable(
+                onEditar: () => onEditar(inventario),
                 onBorrar: () => onBorrar(inventario),
                 child: InkWell(
                   onLongPress: () {},
