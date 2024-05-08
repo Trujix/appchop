@@ -12,6 +12,7 @@ class StandardTextform extends StatelessWidget {
   final IconData icon;
   final bool upper;
   final bool enabled;
+  final TextAlign textAlign;
   final void Function(String?)? onChanged;
 
   const StandardTextform({
@@ -26,6 +27,7 @@ class StandardTextform extends StatelessWidget {
     this.upper = false,
     this.enabled = true,
     this.onChanged,
+    this.textAlign = TextAlign.start,
   });
 
   @override
@@ -42,6 +44,7 @@ class StandardTextform extends StatelessWidget {
         focusNode: focusNode,
         keyboardType: keyboardType,
         maxLength: maxLength,
+        textAlign: textAlign,
         decoration: InputDecoration(
           counterText: "",
           labelText: text,

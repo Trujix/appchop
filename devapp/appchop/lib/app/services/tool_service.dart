@@ -160,6 +160,12 @@ class ToolService extends GetxController {
     );
   }
 
+  void toastClose() {
+    try {
+      Fluttertoast.cancel();
+    } finally { }
+  }
+
   void calculadora() {
     var calculadoraContext = Get.context!;
     showModalBottomSheet(

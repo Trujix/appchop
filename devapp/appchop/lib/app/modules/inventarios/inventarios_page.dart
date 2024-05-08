@@ -85,6 +85,8 @@ class InventariosPage extends StatelessWidget {
                         listaInventarios: _.inventariosLista,
                         onEditar: _.editarElementoInventario,
                         onBorrar: _.borrarElementoInventario,
+                        editarExistencias: _.editarExistencias,
+                        mostrarDetalle: _.mostrarDetalle,
                       ),
                     ),
                   );

@@ -14,12 +14,16 @@ class InventarioCustomscrollview extends StatelessWidget {
   final List<Inventarios> listaInventarios;
   final void Function(Inventarios) onBorrar;
   final void Function(Inventarios) onEditar;
+  final void Function(Inventarios) editarExistencias;
+  final void Function(Inventarios) mostrarDetalle;
   const InventarioCustomscrollview({
     super.key,
     this.scrollController,
     this.listaInventarios = const [],
     required this.onBorrar,
     required this.onEditar,
+    required this.editarExistencias,
+    required this.mostrarDetalle,
   });
   @override
   Widget build(BuildContext context) {
@@ -33,7 +37,7 @@ class InventarioCustomscrollview extends StatelessWidget {
                 onEditar: () => onEditar(inventario),
                 onBorrar: () => onBorrar(inventario),
                 child: InkWell(
-                  onLongPress: () {},
+                  onLongPress: () => mostrarDetalle(inventario),
                   child: CardContainer(
                     padding: const EdgeInsets.all(15),
                     margin: const EdgeInsets.fromLTRB(10, 2, 10, 2,),
@@ -98,9 +102,7 @@ class InventarioCustomscrollview extends StatelessWidget {
                                 colorIcono: ColorList.sys[0],
                                 color: ColorList.sys[1],
                                 icono: MaterialIcons.exposure,
-                                onPressed: () {
-                                  
-                                },
+                                onPressed: () => editarExistencias(inventario),
                               ),
                             ],
                           ),

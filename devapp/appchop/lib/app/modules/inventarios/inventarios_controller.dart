@@ -12,7 +12,10 @@ import '../../utils/get_injection.dart';
 import '../../utils/literals.dart';
 import '../../widgets/columns/inventario_form_column.dart';
 import '../../widgets/containers/basic_bottom_sheet_container.dart';
+import '../../widgets/containers/titulo_container.dart';
 import '../../widgets/modals/gestion_csv_modal.dart';
+import '../../widgets/modals/inventario_detalle_modal.dart';
+import '../../widgets/modals/inventario_existencia_modal.dart';
 
 class InventariosController extends GetInjection {
   ScrollController scrollController = ScrollController();
@@ -32,6 +35,7 @@ class InventariosController extends GetInjection {
   FocusNode maximoFocus = FocusNode();
   TextEditingController minimo = TextEditingController();
   FocusNode minimoFocus = FocusNode();
+  TextEditingController existenciaEdit = TextEditingController();
 
   List<Inventarios> inventariosLista = [];
   List<Inventarios> _inventariosListaImportados = [];
@@ -55,6 +59,9 @@ class InventariosController extends GetInjection {
   bool editandoElemento = false;
 
   int opcionInventarioSeleccion = 0;
+
+  int warningColor = 0xFFFFFFFF;
+  String warningTexto = "";
   
   @override
   Future<void> onInit() async {
@@ -294,6 +301,37 @@ class InventariosController extends GetInjection {
     }
   }
 
+  void editarExistencias(Inventarios inventarios) {
+    tool.modal(
+      widgets: [
+        InventarioExistenciaModal(
+          existencia: existenciaEdit,
+          inventarios: inventarios,
+          guardarCambios: _guardarExistencias,
+          warningAccion: _warningAccion,
+        ),
+      ],
+      height: 220,
+    );
+  }
+
+  void mostrarDetalle(Inventarios inventarios) {
+    var context = Get.context!;
+    tool.modal(
+      widgets: [
+        const TituloContainer(
+          texto: "Detalle de artículo",
+          size: 18,
+          ltrbp: [10, 10, 10, 5],
+        ),
+        InventarioDetalleModal(
+          inventarios: inventarios,
+        ),
+      ],
+      height: MediaQuery.of(context).size.height - 300,
+    );
+  }
+
   Future<void> agregarImportacion() async {
     try {
       await _validarBusquedaEscrita();
@@ -407,6 +445,41 @@ class InventariosController extends GetInjection {
       tool.toast(mensaje);
     }
     return correcto;
+  }
+
+  Future<void> _guardarExistencias(Inventarios inventarios, String existencia) async {
+    try {
+      tool.modalClose();
+      tool.isBusy();
+      for (var i = 0; i < inventariosLista.length; i++) {
+        if(inventariosLista[i].codigoArticulo == inventarios.codigoArticulo) {
+          inventariosLista[i].existencia = tool.str2double(existencia);
+          break;
+        }
+      }
+      await storage.update(inventariosLista);
+      await Future.delayed(1.seconds);
+      tool.isBusy(false);
+      await cargarListaInventario();
+    } catch(e) {
+      tool.msg("Ocurrió un error al intentar modificar existencia artículo", 3);
+    } finally {
+      update();
+    }
+  }
+
+  void _warningAccion(String existencia, Inventarios inventarios) {
+    if(existencia == "") {
+      tool.toast("Cantidad incorrecta");
+    } else {
+      tool.toastClose();
+      if(tool.str2int(existencia) < inventarios.minimo!) {
+        tool.toast("Excede el MÍNIMO: ${inventarios.minimo}");
+      } else if(tool.str2int(existencia) > inventarios.maximo!) {
+        tool.toast("Excede el MÁXMIMO: ${inventarios.maximo}");
+      }
+    }
+    update();
   }
 
   void _cargarOpcionesPopup() {
