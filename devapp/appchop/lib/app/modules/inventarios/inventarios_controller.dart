@@ -219,7 +219,7 @@ class InventariosController extends GetInjection {
           ),
         );
         _inventariosListaImportados = inventariosLista;
-        totalElementosInventario = inventariosLista.length;
+        
       }
       if(inventariosLista.isEmpty) {
         tool.msg("No se encontraron elementos en la importación");
@@ -486,35 +486,6 @@ class InventariosController extends GetInjection {
     );
   }
 
-  bool validarForm() {
-    var correcto = false;
-    var mensaje = "";
-    var verificarArticulo = inventariosLista.where((i) => i.codigoArticulo == codigoArticulo.text).firstOrNull;
-    if(tool.isNullOrEmpty(codigoArticulo)) {
-      mensaje = "Escriba el código artículo";
-    } else if(verificarArticulo != null && !editandoElemento) {
-      mensaje = "Ya existe un artículo con ese código";
-    } else if(tool.isNullOrEmpty(descripcion)) {
-      mensaje = "Escriba la descripción";
-    } else if(tool.isNullOrEmpty(precioCompra)) {
-      mensaje = "Escriba el precio de compra";
-    } else if(tool.isNullOrEmpty(precioVenta)) {
-      mensaje = "Escriba el precio de venta";
-    } else if(tool.isNullOrEmpty(existencia)) {
-      mensaje = "Escriba las existencias";
-    } else if(tool.isNullOrEmpty(maximo)) {
-      mensaje = "Escriba el máximo";
-    } else if(tool.isNullOrEmpty(minimo)) {
-      mensaje = "Escriba el mínimo";
-    } else {
-      correcto = true;
-    }
-    if(!correcto) {
-      tool.toast(mensaje);
-    }
-    return correcto;
-  }
-
   Future<void> _guardarExistencias(Inventarios inventarios, String existencia) async {
     try {
       tool.modalClose();
@@ -538,7 +509,6 @@ class InventariosController extends GetInjection {
             break;
           }
         }
-        await storage.update(inventariosLista);
       }
       await Future.delayed(1.seconds);
       tool.isBusy(false);
@@ -580,6 +550,35 @@ class InventariosController extends GetInjection {
       }
       update();
     } finally { }
+  }
+
+  bool validarForm() {
+    var correcto = false;
+    var mensaje = "";
+    var verificarArticulo = inventariosLista.where((i) => i.codigoArticulo == codigoArticulo.text).firstOrNull;
+    if(tool.isNullOrEmpty(codigoArticulo)) {
+      mensaje = "Escriba el código artículo";
+    } else if(verificarArticulo != null && !editandoElemento) {
+      mensaje = "Ya existe un artículo con ese código";
+    } else if(tool.isNullOrEmpty(descripcion)) {
+      mensaje = "Escriba la descripción";
+    } else if(tool.isNullOrEmpty(precioCompra)) {
+      mensaje = "Escriba el precio de compra";
+    } else if(tool.isNullOrEmpty(precioVenta)) {
+      mensaje = "Escriba el precio de venta";
+    } else if(tool.isNullOrEmpty(existencia)) {
+      mensaje = "Escriba las existencias";
+    } else if(tool.isNullOrEmpty(maximo)) {
+      mensaje = "Escriba el máximo";
+    } else if(tool.isNullOrEmpty(minimo)) {
+      mensaje = "Escriba el mínimo";
+    } else {
+      correcto = true;
+    }
+    if(!correcto) {
+      tool.toast(mensaje);
+    }
+    return correcto;
   }
 
   void _limpiarForm(Inventarios? inventario) {
