@@ -94,6 +94,7 @@ class InventariosController extends GetInjection {
       }
       inventariosLista = inventarioStorage;
       _inventariosListaBusqueda = inventarioStorage;
+      totalElementosInventario = inventariosLista.length;
     } finally {
       update();
     }
@@ -218,6 +219,7 @@ class InventariosController extends GetInjection {
           ),
         );
         _inventariosListaImportados = inventariosLista;
+        totalElementosInventario = inventariosLista.length;
       }
       if(inventariosLista.isEmpty) {
         tool.msg("No se encontraron elementos en la importación");
