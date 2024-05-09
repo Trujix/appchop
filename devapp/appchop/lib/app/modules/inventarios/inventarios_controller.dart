@@ -38,6 +38,7 @@ class InventariosController extends GetInjection {
   TextEditingController existenciaEdit = TextEditingController();
 
   List<Inventarios> inventariosLista = [];
+  List<Inventarios> _inventariosListaBusqueda = [];
   List<Inventarios> _inventariosListaImportados = [];
   String opcionSelected = "";
   List<String> opcionesBase = [
@@ -92,6 +93,7 @@ class InventariosController extends GetInjection {
         inventarioStorage = inventarioStorage.where((i) => i.existencia! <= i.minimo!).toList();
       }
       inventariosLista = inventarioStorage;
+      _inventariosListaBusqueda = inventarioStorage;
     } finally {
       update();
     }
@@ -129,6 +131,37 @@ class InventariosController extends GetInjection {
     await cargarListaInventario();
   }
 
+  Future<void> busquedaInventarioTexto(String? valor) async {
+    try {
+      if(elementosImportados) {
+        return;
+      }
+      await cargarListaInventario();
+      var busqueda = _inventariosListaBusqueda.where((c) {
+        var query = "";
+        switch(opcionSelected) {
+          case "0":
+            query = c.descripcion!.toLowerCase();
+            break;
+          case "1":
+            query = c.codigoArticulo!.toLowerCase();
+            break;
+          case "2":
+            query = c.precioVenta!.toString().toLowerCase();
+            break;
+          case "3":
+            query = c.existencia!.toString().toLowerCase();
+            break;
+        }
+        return query.contains(valor!.toLowerCase());
+      }).toList();
+      inventariosLista = busqueda;
+      totalElementosInventario = inventariosLista.length;
+    } finally {
+      update();
+    }
+  }
+
   void nuevoArticuloInventario() {
     editandoElemento = false;
     _limpiarForm(null);
@@ -137,6 +170,14 @@ class InventariosController extends GetInjection {
 
   Future<void> importarInventario() async {
     try {
+      if(elementosImportados) {
+        var importandoVerificar = await tool.ask("Importando inventario", "Ya tiene un archivo abierto ¿Desea abrir uno nuevo?");
+        if(!importandoVerificar) {
+          return;
+        } else {
+          await cargarListaInventario();
+        }
+      }
       elementosImportados = false;
       var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
       var csvArhivo = await tool.abrirCsv();
@@ -222,21 +263,41 @@ class InventariosController extends GetInjection {
     try {
       tool.isBusy();
       var articulo = nuevoElementoFromForm();
-      if(editandoElemento) {
-        for (var i = 0; i < inventariosLista.length; i++) {
-          if(inventariosLista[i].codigoArticulo == articulo.codigoArticulo) {
-            inventariosLista[i] = articulo;
-            break;
+      if(!elementosImportados) {
+        var inventarioStorage = List<Inventarios>.from(
+          storage.get([Inventarios()]).map((json) => Inventarios.fromJson(json))
+        );
+        if(editandoElemento) {
+          for (var i = 0; i < inventarioStorage.length; i++) {
+            if(inventarioStorage[i].codigoArticulo == articulo.codigoArticulo) {
+              inventarioStorage[i] = articulo;
+              break;
+            }
           }
+        } else {
+          inventarioStorage.add(articulo);
         }
+        await storage.update(inventarioStorage);
+        await cargarListaInventario();
       } else {
-        inventariosLista.add(articulo);
+        if(editandoElemento) {
+          for (var i = 0; i < inventariosLista.length; i++) {
+            if(inventariosLista[i].codigoArticulo == articulo.codigoArticulo) {
+              inventariosLista[i] = articulo;
+              break;
+            }
+          }
+        } else {
+          inventariosLista.add(articulo);
+        }
       }
-      await storage.update(inventariosLista);
-      await cargarListaInventario();
       await Future.delayed(1.seconds);
       tool.closeBottomSheet();
-      tool.msg("Artículo agregado al inventario correctamente", 1);
+      if(!elementosImportados) {
+        tool.msg("Artículo ${(!editandoElemento ? "agregado al inventario" : "editad")} correctamente", 1);
+      } else {
+        tool.isBusy(false);
+      }
     } catch(e) {
       tool.msg("Ocurrió un error al intentar guardar nuevo artículo", 3);
     } finally {
@@ -258,6 +319,7 @@ class InventariosController extends GetInjection {
         inventariosLista.add(articulo);
       }
       tool.closeBottomSheet();
+      await cargarListaInventario();
     } catch(e) {
       tool.msg("Ocurrió un error al intentar agregar artículo al inventario", 3);
     } finally {
@@ -281,17 +343,21 @@ class InventariosController extends GetInjection {
       if(!validar) {
         return;
       }
-      inventariosLista.removeWhere((i) => i.codigoArticulo == inventario.codigoArticulo);
       if(!elementosImportados) {
-        if(inventariosLista.isNotEmpty) {
-          await storage.update(inventariosLista);
+        var inventarioStorage = List<Inventarios>.from(
+          storage.get([Inventarios()]).map((json) => Inventarios.fromJson(json))
+        );
+        inventarioStorage.removeWhere((i) => i.codigoArticulo == inventario.codigoArticulo);
+        if(inventarioStorage.isNotEmpty) {
+          await storage.update(inventarioStorage);
         } else {
           var _ = await storage.put([Inventarios()]);
         }
+        await cargarListaInventario();
       } else {
+        inventariosLista.removeWhere((i) => i.codigoArticulo == inventario.codigoArticulo);
         if(inventariosLista.isEmpty) {
           elementosImportados = false;
-          await cargarListaInventario();
         }
       }
     } catch(e) {
@@ -377,7 +443,7 @@ class InventariosController extends GetInjection {
       await storage.update(inventariosLista);
       await Future.delayed(1.seconds);
       tool.isBusy(false);
-      tool.msg("Inventario actualizado correctamente", 1);
+      tool.msg("Inventario actualizado correctamente\nTotal registros: (${inventariosLista.length})", 1);
     } catch(e) {
       tool.msg("Ocurrió un error al intentar reemplazar elemento de inventario", 3);
     } finally {
@@ -451,18 +517,31 @@ class InventariosController extends GetInjection {
     try {
       tool.modalClose();
       tool.isBusy();
-      for (var i = 0; i < inventariosLista.length; i++) {
-        if(inventariosLista[i].codigoArticulo == inventarios.codigoArticulo) {
-          inventariosLista[i].existencia = tool.str2double(existencia);
-          break;
+      if(!elementosImportados) {
+        var inventarioStorage = List<Inventarios>.from(
+          storage.get([Inventarios()]).map((json) => Inventarios.fromJson(json))
+        );
+        for (var i = 0; i < inventarioStorage.length; i++) {
+          if(inventarioStorage[i].codigoArticulo == inventarios.codigoArticulo) {
+            inventarioStorage[i].existencia = tool.str2double(existencia);
+            break;
+          }
         }
+        await storage.update(inventarioStorage);
+        await cargarListaInventario();
+      } else {
+        for (var i = 0; i < inventariosLista.length; i++) {
+          if(inventariosLista[i].codigoArticulo == inventarios.codigoArticulo) {
+            inventariosLista[i].existencia = tool.str2double(existencia);
+            break;
+          }
+        }
+        await storage.update(inventariosLista);
       }
-      await storage.update(inventariosLista);
       await Future.delayed(1.seconds);
       tool.isBusy(false);
-      await cargarListaInventario();
     } catch(e) {
-      tool.msg("Ocurrió un error al intentar modificar existencia artículo", 3);
+      tool.msg("Ocurrió un error al intentar modificar existencia del artículo", 3);
     } finally {
       update();
     }
@@ -547,10 +626,8 @@ class InventariosController extends GetInjection {
             maximoFocus: maximoFocus,
             minimo: minimo,
             minimoFocus: minimoFocus,
-            elementosImportados: elementosImportados,
             editandoElemento: editandoElemento,
             validarForm: validarForm,
-            agregarElementoInventario: agregarElementoInventario,
             guardarElementoInventario: guardarElementoInventario,
           ),
         );

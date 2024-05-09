@@ -22,10 +22,8 @@ class InventarioFormColumn extends StatelessWidget {
   final FocusNode? maximoFocus;
   final TextEditingController? minimo;
   final FocusNode? minimoFocus;
-  final bool elementosImportados;
   final bool editandoElemento;
   final bool Function() validarForm;
-  final void Function() agregarElementoInventario;
   final void Function() guardarElementoInventario;
   const InventarioFormColumn({
     super.key,
@@ -43,10 +41,8 @@ class InventarioFormColumn extends StatelessWidget {
     this.maximoFocus,
     this.minimo,
     this.minimoFocus,
-    this.elementosImportados = false,
     this.editandoElemento = false,
     required this.validarForm,
-    required this.agregarElementoInventario,
     required this.guardarElementoInventario,
   });
 
@@ -126,7 +122,7 @@ class InventarioFormColumn extends StatelessWidget {
           ),
         ),
         SolidButton(
-          texto: "${(elementosImportados ? "Agregar" : (editandoElemento ? "Editar" : "Guardar"))} artículo",
+          texto: "${(editandoElemento ? "Editar" : "Guardar")} artículo",
           icono: MaterialIcons.save,
           fondoColor: ColorList.sys[2],
           textoColor: ColorList.sys[0],
@@ -135,11 +131,7 @@ class InventarioFormColumn extends StatelessWidget {
             if (!validarForm()) {
               return;
             }
-            if (elementosImportados) {
-              agregarElementoInventario();
-            } else {
-              guardarElementoInventario();
-            }
+            guardarElementoInventario();
           },
           onLongPress: () {},
         ),

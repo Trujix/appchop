@@ -26,7 +26,7 @@ class InventariosPage extends StatelessWidget {
           onTap: _.cerrar,
           onTapClear: _.limpiarBusquedaTexto,
           onTapPopup: _.opcionPopupConsulta,
-          onChanged: (e) {},
+          onChanged: _.busquedaInventarioTexto,
           opcionPopup: _.opcionSelected,
           opciones: _.opcionesConsulta,
           fondo: ColorList.ui[1],
