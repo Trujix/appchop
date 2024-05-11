@@ -16,6 +16,8 @@ import '../../utils/literals.dart';
 import '../../widgets/modals/gestion_csv_modal.dart';
 import '../../widgets/modals/totales_modal.dart';
 import '../../widgets/texts/combo_texts.dart';
+import '../login/login_binding.dart';
+import '../login/login_page.dart';
 import '../pdf_viewer/pdf_viewer_binding.dart';
 import '../pdf_viewer/pdf_viewer_page.dart';
 
@@ -88,23 +90,27 @@ class CobranzaMainController extends GetInjection {
   }
 
   Future<void> _ready() async {
-    var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
-    if(localStorage.acepta == 0) {
-      var archivo = await tool.downloadPdf(
-        "${Literals.uri}${Literals.terminosCondicionesFile}"
-      );
-      Get.to(
-        const PdfViewerPage(),
-        binding: PdfViewerBinding(),
-        arguments: {
-          "salir": false,
-          "archivo": archivo,
-          "descripcion": "Términos y condiciones",
-          "tipo": "TYC",
-        },
-        transition: Transition.downToUp,
-      );
-    }
+    try {
+      var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
+      if(localStorage.acepta == 0) {
+        var archivo = await tool.downloadPdf(
+          "${Literals.uri}${Literals.terminosCondicionesFile}"
+        );
+        Get.to(
+          const PdfViewerPage(),
+          binding: PdfViewerBinding(),
+          arguments: {
+            "salir": false,
+            "archivo": archivo,
+            "descripcion": "Términos y condiciones",
+            "tipo": "TYC",
+          },
+          transition: Transition.downToUp,
+        );
+      }
+    } finally {
+      _verificarEstatus();
+    } 
   }
 
   void altaCobranza() {
@@ -480,6 +486,28 @@ class CobranzaMainController extends GetInjection {
         ));
       }
       update();
+    } finally { }
+  }
+
+  void _verificarEstatus() async {
+    try {
+      var validaInternet = await tool.isOnline();
+      if(!validaInternet) {
+        return;
+      }
+      var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
+      var estatus = await usuariosRepository.verificarEstatusAsync(localStorage.idUsuario!, localStorage.perfil!);
+      if(estatus == null) {
+        return;
+      }
+      if(estatus != Literals.statusActivo) {
+        Get.offAll(
+          const LoginPage(),
+          binding: LoginBinding(),
+          transition: Transition.circularReveal,
+          duration: 1.5.seconds,
+        );
+      }
     } finally { }
   }
 }

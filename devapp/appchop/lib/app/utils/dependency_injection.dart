@@ -4,10 +4,12 @@ import '../data/providers/cobradores_provider.dart';
 import '../data/providers/configuracion_provider.dart';
 import '../data/providers/firebase_provider.dart';
 import '../data/providers/login_provider.dart';
+import '../data/providers/usuarios_provider.dart';
 import '../data/repositories/cobradores_repository.dart';
 import '../data/repositories/configuracion_repository.dart';
 import '../data/repositories/firebase_repository.dart';
 import '../data/repositories/login_repository.dart';
+import '../data/repositories/usuarios_repository.dart';
 import '../services/api_service.dart';
 import '../services/firebase_service.dart';
 import '../services/storage_service.dart';
@@ -28,5 +30,7 @@ class DependencyInjection {
     Get.put<CobradoresRepository>(CobradoresRepository());
     Get.put<FirebaseProvider>(FirebaseProvider());
     Get.put<FirebaseRepository>(FirebaseRepository());
+    Get.put<UsuariosProvider>(UsuariosProvider());
+    Get.put<UsuariosRepository>(UsuariosRepository());
   }
 }
