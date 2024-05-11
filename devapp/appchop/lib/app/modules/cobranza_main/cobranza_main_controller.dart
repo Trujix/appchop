@@ -501,10 +501,12 @@ class CobranzaMainController extends GetInjection {
         return;
       }
       if(estatus != Literals.statusActivo) {
+        localStorage.login = false;
+        localStorage.activo = false;
+        await storage.update(localStorage);
         Get.offAll(
           const LoginPage(),
           binding: LoginBinding(),
-          transition: Transition.circularReveal,
           duration: 1.5.seconds,
         );
       }
