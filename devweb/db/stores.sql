@@ -81,6 +81,21 @@ BEGIN
 END $$
 DELIMITER ;
 
+/* ------------------------------------------------------------------------------------*/
+DROP PROCEDURE IF EXISTS STP_VERIFICAR_ESTATUS_USUARIO;
+DELIMITER $$
+CREATE PROCEDURE STP_VERIFICAR_ESTATUS_USUARIO(
+    IN _IDSISTEMA VARCHAR(120), IN _PERFIL VARCHAR(150)
+)
+BEGIN
+    SELECT 
+        status 
+    FROM appchop.usuarios 
+    WHERE id_sistema = _IDSISTEMA 
+        AND perfil = _PERFIL;
+END $$
+DELIMITER ;
+
 
 /* ------------------------------------------------------------------------------------*/
 DROP PROCEDURE IF EXISTS STP_VERIFICAR_COBRADOR;
@@ -204,6 +219,32 @@ DELIMITER ;
 
 
 /* ------------------------------------------------------------------------------------*/
+DROP PROCEDURE IF EXISTS STP_APP_BACKUP_USUARIOS_GET;
+DELIMITER $$
+CREATE PROCEDURE STP_APP_BACKUP_USUARIOS_GET(
+    IN _IDSISTEMA VARCHAR(120)
+)
+BEGIN
+    SELECT 
+        id_sistema AS idUsuario,
+        usuario,
+        (
+            CASE
+                WHEN status = 'ACTIVO' THEN 1
+                ELSE 0
+            END
+        ) AS estatus,
+        nombres,
+        apellidos
+    FROM appchop.usuarios
+        WHERE id_sistema = _IDSISTEMA
+            AND perfil = 'COBRADOR';
+END $$
+DELIMITER ;
+
+
+
+/* ------------------------------------------------------------------------------------*/
 DROP PROCEDURE IF EXISTS STP_OBTENER_CONFIGURACION_USUARIO;
 DELIMITER $$
 CREATE PROCEDURE STP_OBTENER_CONFIGURACION_USUARIO(
@@ -217,5 +258,124 @@ BEGIN
         US1.porcentaje_moratorio AS porcentajeMoratorio 
     FROM appchop.configuracion AS US1
         WHERE US1.id_sistema = _IDSISTEMA;
+END $$
+DELIMITER ;
+
+
+/* ------------------------------------------------------------------------------------*/
+DROP PROCEDURE IF EXISTS STP_APP_BACKUP_ZONAS_GET;
+DELIMITER $$
+CREATE PROCEDURE STP_APP_BACKUP_ZONAS_GET(
+    IN _IDSISTEMA VARCHAR(120)
+)
+BEGIN
+    SELECT 
+        id_sistema AS idUsuario,
+        id_zona AS idZona,
+        value_zona AS valueZona,
+        label_zona AS labelZona,
+        fecha_creacion AS fechaCreacion,
+        activo AS activobit
+    FROM appchop.app_zonas
+        WHERE id_sistema = _IDSISTEMA;
+END $$
+DELIMITER ;
+
+
+/* ------------------------------------------------------------------------------------*/
+DROP PROCEDURE IF EXISTS STP_APP_BACKUP_ZONAS_DELETE;
+DELIMITER $$
+CREATE PROCEDURE STP_APP_BACKUP_ZONAS_DELETE(
+    IN _IDSISTEMA VARCHAR(120)
+)
+BEGIN
+    DELETE FROM 
+        appchop.app_zonas
+    WHERE id_sistema = _IDSISTEMA;
+END $$
+DELIMITER ;
+
+
+/* ------------------------------------------------------------------------------------*/
+DROP PROCEDURE IF EXISTS STP_APP_BACKUP_ZONAS_INSERT;
+DELIMITER $$
+CREATE PROCEDURE STP_APP_BACKUP_ZONAS_INSERT(
+    IN _TABLA VARCHAR(50), IN _IDSISTEMA VARCHAR(120), 
+    IN _IDZONA VARCHAR(120), IN _VALUEZONA VARCHAR(120), 
+    IN _LABELZONA VARCHAR(40), IN _FECHACREACION VARCHAR(10), 
+    IN _ACTIVO BIT
+)
+BEGIN
+    INSERT INTO appchop.app_zonas (
+        tabla, 
+        id_sistema, 
+        id_zona, 
+        value_zona, 
+        label_zona, 
+        fecha_creacion, 
+        activo
+    ) VALUES (
+        _TABLA, 
+        _IDSISTEMA, 
+        _IDZONA, 
+        _VALUEZONA, 
+        _LABELZONA, 
+        _FECHACREACION, 
+        _ACTIVO
+    );
+END $$
+DELIMITER ;
+
+
+/* ------------------------------------------------------------------------------------*/
+DROP PROCEDURE IF EXISTS STP_APP_BACKUP_ZONASUSUARIOS_GET;
+DELIMITER $$
+CREATE PROCEDURE STP_APP_BACKUP_ZONASUSUARIOS_GET(
+    IN _IDSISTEMA VARCHAR(120)
+)
+BEGIN
+    SELECT 
+        id_sistema AS idUsuario,
+        id_zona AS idZona,
+        usuario 
+    FROM appchop.app_zonas_usuarios
+        WHERE id_sistema = _IDSISTEMA;
+END $$
+DELIMITER ;
+
+
+/* ------------------------------------------------------------------------------------*/
+DROP PROCEDURE IF EXISTS STP_APP_BACKUP_ZONASUSUARIOS_DELETE;
+DELIMITER $$
+CREATE PROCEDURE STP_APP_BACKUP_ZONASUSUARIOS_DELETE(
+    IN _IDSISTEMA VARCHAR(120)
+)
+BEGIN
+    DELETE FROM 
+        appchop.app_zonas_usuarios
+    WHERE id_sistema = _IDSISTEMA;
+END $$
+DELIMITER ;
+
+
+/* ------------------------------------------------------------------------------------*/
+DROP PROCEDURE IF EXISTS STP_APP_BACKUP_ZONASUSUARIOS_INSERT;
+DELIMITER $$
+CREATE PROCEDURE STP_APP_BACKUP_ZONASUSUARIOS_INSERT(
+    IN _TABLA VARCHAR(50), IN _IDSISTEMA VARCHAR(120), 
+    IN _IDZONA VARCHAR(120), IN _USUARIO VARCHAR(150)
+)
+BEGIN
+    INSERT INTO appchop.app_zonas_usuarios (
+        tabla, 
+        id_sistema, 
+        id_zona, 
+        usuario
+    ) VALUES (
+        _TABLA, 
+        _IDSISTEMA, 
+        _IDZONA, 
+        _USUARIO
+    );
 END $$
 DELIMITER ;

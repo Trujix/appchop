@@ -1,6 +1,7 @@
 <?php
     Class Cobradores {
         public static function verificarCobrador($params) {
+            Auth::verify();
             if(!isset($params[0]) || !isset($params[1]) || count($params) == 0) {
                 http_response_code(406);
                 die("Parámetros de cobrador incorrectos");
@@ -16,6 +17,7 @@
         }
 
         public static function altaCobrador($params) {
+            Auth::verify();
             $alta_form = (object)$params;
             if(!isset($alta_form->idUsuario) 
                 || !isset($alta_form->usuario)
@@ -36,6 +38,7 @@
         }
 
         public static function actualizarPassword($params) {
+            Auth::verify();
             $password_form = (object)$params;
             if(!isset($password_form->idUsuario) 
                 || !isset($password_form->usuario)
@@ -54,6 +57,7 @@
         }
 
         public static function consultarCobradorInfo($params) {
+            Auth::verify();
             if(!isset($params[0]) || !isset($params[1]) || count($params) == 0) {
                 http_response_code(406);
                 die("Parámetros de cobrador incorrectos");
@@ -71,6 +75,7 @@
         }
 
         public static function actualizarEstatus($params) {
+            Auth::verify();
             $estatus_form = (object)$params;
             if(!isset($estatus_form->idUsuario) 
                 || !isset($estatus_form->usuario)
@@ -86,12 +91,6 @@
                 )"
             );
             return json_encode($actualizar == 1);
-        }
-
-        public static function prueba($params) {
-            $email = new Email();
-            $gg = $email->enviar();
-            return json_encode($gg);
         }
     }
 ?>

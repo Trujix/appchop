@@ -1,6 +1,7 @@
 <?php
     Class Firebase {
         public static function enviarNotificacion($params) {
+            Auth::verify();
             $notif_form = (object)$params;
             if(!isset($notif_form->titulo) 
                 || !isset($notif_form->cuerpo)

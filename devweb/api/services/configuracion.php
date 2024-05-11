@@ -1,6 +1,7 @@
 <?php
     Class Configuracion {
         public static function desvincularDispositivo($params) {
+            Auth::verify();
             if(!isset($params[0]) || count($params) == 0) {
                 http_response_code(406);
                 die("Parámetros de dispositivo incorrectos");
@@ -13,6 +14,7 @@
         }
 
         public static function obtenerConfiguracionUsuario($params) {
+            Auth::verify();
             if(!isset($params[0]) || count($params) == 0) {
                 http_response_code(406);
                 die("Parámetros de usuario incorrectos");

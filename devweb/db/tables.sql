@@ -31,6 +31,32 @@ CREATE TABLE IF NOT EXISTS configuracion(
     porcentaje_moratorio FLOAT NOT NULL DEFAULT 0 COMMENT 'Valor del porcentaje del interes moratorio'
 );
 
+CREATE TABLE IF NOT EXISTS app_zonas(
+    tabla VARCHAR(50) NOT NULL DEFAULT '-' COMMENT 'Id de tabla local storage',
+    id_sistema VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de registro de sistema',
+    id_zona VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de registro de zona',
+    value_zona VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id mascara de valor zona',
+    label_zona VARCHAR(40) NOT NULL DEFAULT '-' COMMENT 'Etiqueta mascara de valor zona',
+    fecha_creacion VARCHAR(10) NOT NULL DEFAULT '-' COMMENT 'Fecha de creacion del registro',
+    activo BIT NOT NULL DEFAULT 0 COMMENT 'Estatus del registro'
+);
+
+CREATE TABLE IF NOT EXISTS app_zonas_usuarios(
+    tabla VARCHAR(50) NOT NULL DEFAULT '-' COMMENT 'Id de tabla local storage',
+    id_sistema VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de registro de sistema',
+    id_zona VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de zona vinculada al usuario',
+    usuario VARCHAR(150) NOT NULL DEFAULT '-' COMMENT 'Usuario al que se vincula la zona'
+);
+
+/*
+"tabla":"zonas",
+"idUsuario":"b0339cf5-e46e-4179-9ea9-3772e4aaf26b",
+"idZona":"61d6e1d2-754b-4b77-b8f0-a563951fe097",
+"valueZona":"88bbe1aa-cbe7-41d5-9654-c2eefef8ae74",
+"labelZona":"Prueba",
+"fechaCreacion":"08-05-2024",
+"activo":true
+*/
 /*
 INSERT INTO autorization (
     token
