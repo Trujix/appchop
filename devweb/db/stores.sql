@@ -201,3 +201,21 @@ BEGIN
         AND usuario = _USUARIO;
 END $$
 DELIMITER ;
+
+
+/* ------------------------------------------------------------------------------------*/
+DROP PROCEDURE IF EXISTS STP_OBTENER_CONFIGURACION_USUARIO;
+DELIMITER $$
+CREATE PROCEDURE STP_OBTENER_CONFIGURACION_USUARIO(
+    IN _IDSISTEMA VARCHAR(120)
+)
+BEGIN
+    SELECT
+        US1.id,
+        US1.id_sistema AS idUsuario,
+        US1.porcentaje_bonificacion AS porcentajeBonificacion,
+        US1.porcentaje_moratorio AS porcentajeMoratorio 
+    FROM appchop.configuracion AS US1
+        WHERE US1.id_sistema = _IDSISTEMA;
+END $$
+DELIMITER ;

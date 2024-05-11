@@ -24,6 +24,13 @@ CREATE TABLE IF NOT EXISTS usuarios(
     fh_registro DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Fecha y hora del registro'
 );
 
+CREATE TABLE IF NOT EXISTS configuracion(
+    id INT AUTO_INCREMENT NOT NULL PRIMARY KEY COMMENT 'Id de registro',
+    id_sistema VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de registro de sistema',
+    porcentaje_bonificacion FLOAT NOT NULL DEFAULT 0 COMMENT 'Valor del porcentaje de bonificacion',
+    porcentaje_moratorio FLOAT NOT NULL DEFAULT 0 COMMENT 'Valor del porcentaje del interes moratorio'
+);
+
 /*
 INSERT INTO autorization (
     token
@@ -49,5 +56,15 @@ INSERT INTO usuarios (
     'Manuel',
     'Trujillo',
     'ADMINISTRADOR'
+);
+
+INSERT INTO configuracion (
+    id_sistema,
+    porcentaje_bonificacion,
+    porcentaje_moratorio
+) VALUES (
+    'b0339cf5-e46e-4179-9ea9-3772e4aaf26b',
+    5,
+    2
 );
 */
