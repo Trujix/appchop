@@ -6,8 +6,8 @@ import '../models/local_storage/zonas_usuarios.dart';
 import '../providers/app_backup_provider.dart';
 
 class AppBackupRepository {
-  Future<AppBackupData?> descargarAsync(String idUsuario) async {
-    return await Get.find<AppBackupProvider>().descargarAsync(idUsuario);
+  Future<AppBackupData?> descargarAsync(String idUsuario, String usuario) async {
+    return await Get.find<AppBackupProvider>().descargarAsync(idUsuario, usuario);
   }
 
   Future<bool?> backupZonasAsync(List<Zonas> zonas) async {

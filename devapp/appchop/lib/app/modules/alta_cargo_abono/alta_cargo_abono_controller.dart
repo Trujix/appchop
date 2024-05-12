@@ -51,7 +51,7 @@ class AltaCargoAbonoController extends GetInjection {
       tool.msg("Ocurrió un problema al cargar datos de Cargo y abono", 3);
     }
     configuracion = Configuracion.fromJson(storage.get(Configuracion()));
-    pendiente = cobranzaEditar!.estatus == Literals.statusCobranzaPendiente;
+    pendiente = cobranzaEditar!.estatus == Literals.statusCobranzaPendiente && cobranzaEditar!.bloqueado == Literals.bloqueoNo;
     if(cobranzaEditar!.tipoCobranza! == Literals.tipoCobranzaMeDeben) {
       etiqueta = "Me debe: ";
     } else if(cobranzaEditar!.tipoCobranza! == Literals.tipoCobranzaDebo) {

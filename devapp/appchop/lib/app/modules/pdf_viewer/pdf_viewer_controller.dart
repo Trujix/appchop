@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../../data/models/local_storage/local_storage.dart';
 import '../../data/models/login/login_form.dart';
 import '../../utils/get_injection.dart';
+import '../home/home_controller.dart';
 
 class PdfViewerController extends GetInjection {
   bool salir = true;
@@ -48,8 +49,11 @@ class PdfViewerController extends GetInjection {
       }
       localStorage.acepta = 1;
       await storage.update(localStorage);
+      await tool.wait(1);
+      tool.isBusy(false);
       Get.back();
-      tool.msg("Gracias por aceptar los Términos y condiciones", 1);
+      tool.toast("Gracias por aceptar los Términos y condiciones");
+      Get.find<HomeController>().ejecutarAppBackup();
       return true;
     } catch(e) {
       tool.msg("Ocurrió un error al intentar aceptar Términos y condiciones", 3);

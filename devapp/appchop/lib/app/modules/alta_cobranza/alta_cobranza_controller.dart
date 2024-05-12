@@ -10,6 +10,7 @@ import '../../data/models/local_storage/clientes.dart';
 import '../../data/models/local_storage/zonas.dart';
 import '../../data/models/local_storage/cobranzas.dart';
 import '../../data/models/local_storage/local_storage.dart';
+import '../../data/models/local_storage/zonas_usuarios.dart';
 import '../../routes/app_routes.dart';
 import '../../utils/get_injection.dart';
 import '../../utils/literals.dart';
@@ -72,7 +73,7 @@ class AltaCobranzaController extends GetInjection {
     var zonas = List<Zonas>.from(
       storage.get([Zonas()]).map((json) => Zonas.fromJson(json))
     );
-    listaZona = [BottomSheetAction(
+    listaZona = esAdmin ? [BottomSheetAction(
       title: const ComboText(
         texto: Literals.defaultZonaSinTxt,
       ),
@@ -82,9 +83,9 @@ class AltaCobranzaController extends GetInjection {
         update();
         Navigator.of(context).pop();
       },
-    )];
-    zona.text = Literals.defaultZonaSinTxt;
-    zonaSelected = Literals.defaultZonaSin;
+    )] : [];
+    zona.text = esAdmin ? Literals.defaultZonaSinTxt : zonas.first.labelZona!;
+    zonaSelected = esAdmin ? Literals.defaultZonaSin : zonas.first.valueZona!;
     for(var zonaItem in zonas) {
       if(!zonaItem.activo!) {
         continue;
@@ -150,6 +151,7 @@ class AltaCobranzaController extends GetInjection {
       ); 
       var vencimiento = fechaVencimiento.text;
       var latLng = marcadorCliente[MarkerId(idMarcadorCliente)]!.position;
+      var zonaAsignada = _verificarZona();
       var nuevaCobranza = Cobranzas(
         idUsuario: localStorage.idUsuario,
         tipoCobranza: tipoCobranza,
@@ -168,6 +170,7 @@ class AltaCobranzaController extends GetInjection {
         ultimoCargo: tool.str2double(cantidad.text),
         fechaUltimoCargo: fechaHoy,
         usuarioUltimoCargo: esAdmin ? Literals.perfilAdministrador : localStorage.email,
+        bloqueado: zonaAsignada ? Literals.bloqueoSi : Literals.bloqueoNo,
       );
       if(nuevo) {
         nuevaCobranza.saldo = tool.str2double(cantidad.text);
@@ -270,6 +273,14 @@ class AltaCobranzaController extends GetInjection {
       crearClienteMarcador(editarPosicion);
     }
     update();
+  }
+
+  bool _verificarZona() {
+    var zonasUsuarios = List<ZonasUsuarios>.from(
+      storage.get([ZonasUsuarios()]).map((json) => ZonasUsuarios.fromJson(json))
+    );
+    var verificar = zonasUsuarios.where((zu) => zu.idZona == zonaSelected).firstOrNull;
+    return verificar != null;
   }
 
   bool _validarForm() {

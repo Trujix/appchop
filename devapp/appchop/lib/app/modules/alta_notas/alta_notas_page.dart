@@ -3,6 +3,7 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 
 import '../../utils/color_list.dart';
+import '../../utils/literals.dart';
 import '../../widgets/appbars/back_appbar.dart';
 import '../../widgets/buttons/circular_buttons.dart';
 import '../../widgets/buttons/solid_button.dart';
@@ -158,14 +159,18 @@ class AltaNotasPage extends StatelessWidget with WidgetsBindingObserver {
                 ),
               ],
             ),
-            SolidButton(
-              texto: "Guardar nota",
-              icono: MaterialIcons.save,
-              fondoColor: ColorList.sys[2],
-              textoColor: ColorList.sys[0],
-              ltrbm: const [0, 0, 0, 15,],
-              onPressed: _.guardarNota,
-              onLongPress: () {},
+            Visibility(
+              visible: _.cobranza!.bloqueado == Literals.bloqueoNo 
+                && _.cobranza!.estatus == Literals.statusCobranzaPendiente,
+              child: SolidButton(
+                texto: "Guardar nota",
+                icono: MaterialIcons.save,
+                fondoColor: ColorList.sys[2],
+                textoColor: ColorList.sys[0],
+                ltrbm: const [0, 0, 0, 15,],
+                onPressed: _.guardarNota,
+                onLongPress: () {},
+              ),
             ),
           ],
         ),

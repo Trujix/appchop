@@ -18,7 +18,7 @@ class AppBackupResultadoPage extends StatelessWidget with WidgetsBindingObserver
   Widget build(BuildContext context) {
     return GetBuilder<AppBackupResultadoController>(
       builder: (_) => PopScope(
-        canPop: _.respaldoTerminado,
+        canPop: false,
         child: Scaffold(
           appBar: const OffAppbar(
             height: 30,

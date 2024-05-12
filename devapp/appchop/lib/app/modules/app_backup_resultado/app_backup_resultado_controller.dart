@@ -5,6 +5,8 @@ import '../../data/models/app_backup/app_backup_data.dart';
 import '../../data/models/backup_etiquetas.dart';
 import '../../data/models/local_storage/local_storage.dart';
 import '../../utils/get_injection.dart';
+import '../../utils/literals.dart';
+import '../cobranza_main/cobranza_main_controller.dart';
 
 class AppBackupResultadoController extends GetInjection {
   bool respaldoTerminado = false;
@@ -13,6 +15,8 @@ class AppBackupResultadoController extends GetInjection {
   AppBackupData? appBackupData = AppBackupData();
 
   List<BackupEtiquetas> etiquetas = [];
+
+  final bool esAdmin = GetInjection.administrador;
 
   @override
   Future<void> onInit() async {
@@ -30,7 +34,8 @@ class AppBackupResultadoController extends GetInjection {
       tipo = arguments['tipo'] as int;
       _crearEtiquetas();
       await tool.wait(1);
-      appBackupData = await appBackupRepository.descargarAsync(localStorage.idUsuario!);
+      var usuario = esAdmin ? Literals.perfilAdministrador : localStorage.email;
+      appBackupData = await appBackupRepository.descargarAsync(localStorage.idUsuario!, usuario!);
       if(appBackupData == null) {
         throw Exception();
       }
@@ -41,8 +46,8 @@ class AppBackupResultadoController extends GetInjection {
     } catch(e) {
       tool.msg("Ocurrió un error al intentar realizar respaldo inicial", 3);
     } finally {
-      _actualizarEtiquetas();
       respaldoTerminado = true;
+      _actualizarEtiquetas();
       update();
     }
   }
@@ -57,12 +62,14 @@ class AppBackupResultadoController extends GetInjection {
             texto1: "Zonas:   ",
             icono: MaterialIcons.list_alt,
           ),
-          BackupEtiquetas(
+        ];
+        if(esAdmin) {
+          etiquetas.add(BackupEtiquetas(
             tag: "usuarios",
             texto1: "Usuarios:   ",
             icono: MaterialIcons.person_add,
-          ),
-        ];
+          ),);
+        }
       break;
       default:
         return;
@@ -80,7 +87,11 @@ class AppBackupResultadoController extends GetInjection {
     }
   }
 
-  void salir() {
+  Future<void> salir() async {
+    var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
     Get.back();
+    if(tipo == 1) {
+      await Get.find<CobranzaMainController>().configurarZonas(localStorage);
+    }
   }
 }

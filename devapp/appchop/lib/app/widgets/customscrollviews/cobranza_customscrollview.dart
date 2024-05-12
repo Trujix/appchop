@@ -145,6 +145,17 @@ class CobranzaCustomscrollview extends StatelessWidget {
                                   color: Color(ColorList.sys[0]),
                                 ),
                               ),
+                              Visibility(
+                                visible: cobranza.bloqueado == Literals.bloqueoSi,
+                                child: Container(
+                                  margin: const EdgeInsets.only(left: 5,),
+                                  child: Icon(
+                                    Icons.lock,
+                                    color: Color(ColorList.sys[2]),
+                                    size: 16,
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
                           const SizedBox(

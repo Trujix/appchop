@@ -5,6 +5,7 @@ import 'package:material_color_gen/material_color_gen.dart';
 import 'package:money_formatter/money_formatter.dart';
 
 import '../../utils/color_list.dart';
+import '../../utils/literals.dart';
 import '../../widgets/appbars/back_appbar.dart';
 import '../../widgets/buttons/solid_button.dart';
 import '../../widgets/containers/card_container.dart';
@@ -33,7 +34,7 @@ class AltaCargoAbonoPage extends StatelessWidget with WidgetsBindingObserver {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             TituloContainer(
-              texto: _.pendiente ? "(*) - Los campos son olbigatorios" : "Registro pagado",
+              texto: _.pendiente ? "(*) - Los campos son olbigatorios" : "Registro ${(_.cobranzaEditar!.bloqueado == Literals.bloqueoNo ? "pagado" : "pendiente")}",
               ltrbp: const [20, 0, 0, 0],
               size: 14,
             ),

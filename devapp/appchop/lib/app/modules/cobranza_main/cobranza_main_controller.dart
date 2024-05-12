@@ -67,6 +67,8 @@ class CobranzaMainController extends GetInjection {
   int totalCargos = 0;
   int totalAbonos = 0;
 
+  final bool esAdmin = GetInjection.administrador;
+
   @override
   Future<void> onInit() async {
     await _init();
@@ -114,6 +116,15 @@ class CobranzaMainController extends GetInjection {
   }
 
   void altaCobranza() {
+    if(!esAdmin) {
+      var zonaStorage = List<Zonas>.from(
+        storage.get([Zonas()]).map((json) => Zonas.fromJson(json))
+      );
+      if(zonaStorage.isEmpty) {
+        tool.msg("No tiene zonas registradas. Obtenga un respaldo desde el menú Configuración, o consulte con su administrador");
+        return;
+      }
+    }
     Get.toNamed(
       AppRoutes.altaCobranza,
       arguments: {
@@ -294,10 +305,10 @@ class CobranzaMainController extends GetInjection {
       var zonaStorage = List<Zonas>.from(
         storage.get([Zonas()]).map((json) => Zonas.fromJson(json))
       );
-      zona.text = Literals.defaultZonaTodoTxt;
-      zonaSelected = Literals.defaultZonaTodo;
+      zona.text = esAdmin ? Literals.defaultZonaTodoTxt : (zonaStorage.isNotEmpty ? zonaStorage.first.labelZona! : "- Sin zonas -");
+      zonaSelected = esAdmin ? Literals.defaultZonaTodo : (zonaStorage.isNotEmpty ? zonaStorage.first.valueZona! : "");
       zonasOff = [];
-      listaZona = [
+      listaZona = esAdmin ? [
         BottomSheetAction(
           title: const ComboText(
             texto: Literals.defaultZonaTodoTxt,
@@ -322,7 +333,7 @@ class CobranzaMainController extends GetInjection {
             Navigator.of(context).pop();
           },
         ),
-      ];
+      ] : [];
       for(var zonaItem in zonaStorage) {
         if(!zonaItem.activo!) {
           zonasOff.add(zonaItem.valueZona!);
@@ -414,6 +425,10 @@ class CobranzaMainController extends GetInjection {
   }
 
   void editarCobranzaElemento(Cobranzas cobranza) {
+    if(cobranza.bloqueado == Literals.bloqueoSi) {
+      tool.msg("Esta nota no puede ser editada ya que se encuentra asignada a un cobrador");
+      return;
+    }
     Get.toNamed(
       AppRoutes.altaCobranza,
       arguments: {

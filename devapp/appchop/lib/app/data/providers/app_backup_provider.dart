@@ -11,10 +11,10 @@ import '../models/local_storage/zonas_usuarios.dart';
 class AppBackupProvider {
   final ApiService _api = Get.find<ApiService>();
 
-  Future<AppBackupData?> descargarAsync(String idUsuario) async {
+  Future<AppBackupData?> descargarAsync(String idUsuario, String usuario) async {
     try {
       var result = await _api.get(
-        "api/appbackup/descargar/$idUsuario"
+        "api/appbackup/descargar/$idUsuario/$usuario"
       );
       return AppBackupData.fromApi(jsonDecode(result!));
     } catch(e) {
