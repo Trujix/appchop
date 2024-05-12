@@ -35,12 +35,9 @@ class HomeController extends GetInjection {
   }
 
   void _init() {
-    var arguments = Get.arguments;
-    if(arguments != null) {
-      backup = arguments['backup'] as bool;
-    }
     Get.put<CobranzaMainController>(CobranzaMainController());
     var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
+    backup = localStorage.backupInicial!;
     nombre = "${localStorage.nombres} ${localStorage.apellidos}";
     idUsuario = localStorage.idUsuario!;
     listaMenu = [
@@ -86,9 +83,9 @@ class HomeController extends GetInjection {
 
   Future<void> _ready() async {
     try {
-      /*if(!backup || !esAdmin) {
+      if(backup || !esAdmin) {
         return;
-      }*/
+      }
       await tool.wait(1);
       Get.toNamed(
         AppRoutes.appBackupResultado,

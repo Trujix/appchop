@@ -18,6 +18,7 @@ class LocalStorage {
   String? idDispositivo;
   int? acepta;
   bool? creado = false;
+  bool? backupInicial = false;
 
   LocalStorage({
     this.version = _localStorageVersion,
@@ -34,6 +35,7 @@ class LocalStorage {
     this.idDispositivo = "",
     this.acepta = 0,
     this.creado = false,
+    this.backupInicial = false,
   });
 
   Map toJson() => {
@@ -52,6 +54,7 @@ class LocalStorage {
     'idDispositivo'     : idDispositivo,
     'acepta'            : acepta,
     'creado'            : creado,
+    'backupInicial'     : backupInicial,
   };
   
   Map<String, dynamic> toMap() {
@@ -71,6 +74,7 @@ class LocalStorage {
       'idDispositivo'     : idDispositivo,
       'acepta'            : acepta,
       'creado'            : creado,
+      'backupInicial'     : backupInicial,
     };
   }
 
@@ -89,6 +93,7 @@ class LocalStorage {
     idDispositivo = json['idDispositivo'] ?? "";
     acepta = json['acepta'] ?? 0;
     creado = json['creado'] ?? true;
+    backupInicial = json['backupInicial'] ?? true;
   }
 
   LocalStorage.fromMap(Map<String, dynamic> json) {
@@ -105,6 +110,7 @@ class LocalStorage {
     idDispositivo = json['idDispositivo'] ?? "";
     acepta = json['acepta'] ?? 0;
     creado = json['creado'] ?? true;
+    backupInicial = json['backupInicial'] ?? true;
   }
 
   factory LocalStorage.fromJson(Map<String, dynamic> json) => LocalStorage(
@@ -122,5 +128,6 @@ class LocalStorage {
     idDispositivo: json['idDispositivo'] ?? "",
     acepta: json['acepta'] ?? 0,
     creado: json['creado'] ?? true,
+    backupInicial: json['backupInicial'] ?? true,
   );
 }

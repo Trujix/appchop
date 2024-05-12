@@ -36,7 +36,6 @@ class ConfiguracionController extends GetInjection {
         throw Exception();
       }
       await storage.clearAll();
-      //await storage.update(LocalStorage());
       await storage.init();
       await localStorageClassInit();
       await firebase.init();

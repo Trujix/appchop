@@ -27,12 +27,12 @@ class AppBackupData {
     Iterable iterableZonasUsuarios = jsonDecode(jsonEncode(json['zonasUsuarios']));
     usuarios = List<Usuarios>.from(
       iterableUsuarios.map((json) => Usuarios.fromJson(json))
-    );;
+    );
     zonas = List<Zonas>.from(
       iterableZonas.map((json) => Zonas.fromJson(json))
-    );;
+    );
     zonasUsuarios = List<ZonasUsuarios>.from(
       iterableZonasUsuarios.map((json) => ZonasUsuarios.fromJson(json))
-    );;
+    );
   }
 }
