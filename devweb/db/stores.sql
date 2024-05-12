@@ -283,6 +283,33 @@ DELIMITER ;
 
 
 /* ------------------------------------------------------------------------------------*/
+DROP PROCEDURE IF EXISTS STP_APP_BACKUP_ZONAS_COBRADOR_GET;
+DELIMITER $$
+CREATE PROCEDURE STP_APP_BACKUP_ZONAS_COBRADOR_GET(
+    IN _IDSISTEMA VARCHAR(120), in _USUARIO VARCHAR(150)
+)
+BEGIN
+    SELECT 
+        id_sistema AS idUsuario,
+        id_zona AS idZona,
+        value_zona AS valueZona,
+        label_zona AS labelZona,
+        fecha_creacion AS fechaCreacion,
+        activo AS activobit
+    FROM appchop.app_zonas 
+        WHERE value_zona = (
+            SELECT 
+                id_zona 
+            FROM appchop.app_zonas_usuarios 
+                WHERE usuario = _USUARIO 
+                    AND id_sistema = _IDSISTEMA
+            LIMIT 1
+        );
+END $$
+DELIMITER ;
+
+
+/* ------------------------------------------------------------------------------------*/
 DROP PROCEDURE IF EXISTS STP_APP_BACKUP_ZONAS_DELETE;
 DELIMITER $$
 CREATE PROCEDURE STP_APP_BACKUP_ZONAS_DELETE(

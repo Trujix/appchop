@@ -2,31 +2,39 @@
     Class AppBackup {
         public static function descargar($params) {
             Auth::verify();
-            if(!isset($params[0]) || count($params) == 0) {
+            if(!isset($params[0]) || !isset($params[1]) || count($params) == 0) {
                 http_response_code(406);
                 die("Parámetros de usuario incorrectos");
             }
             $id_usuario = $params[0];
+            $usuario = $params[1];
+            $esAdmin = $usuario == "ADMINISTRADOR";
+            $usuarios = array();
+            $zonas = array();
+            $zonas_usuarios = array();
             $app_backup = new stdClass();
             $mysql = new Mysql();
-            $usuarios = $mysql->executeReader(
-                "CALL STP_APP_BACKUP_USUARIOS_GET('$id_usuario')",
-            );
-            foreach($usuarios as $usuario) {
-                $usuario->activo = $usuario->estatus > 0;
-            }
             $zonas = $mysql->executeReader(
-                "CALL STP_APP_BACKUP_ZONAS_GET('$id_usuario')",
+                $esAdmin ? "CALL STP_APP_BACKUP_ZONAS_GET('$id_usuario')"
+                : "CALL STP_APP_BACKUP_ZONAS_COBRADOR_GET('$id_usuario', '$usuario')",
             );
             foreach($zonas as $zona) {
                 $zona->activo = $zona->activobit > 0;
             }
-            $zonas_usuarios = $mysql->executeReader(
-                "CALL STP_APP_BACKUP_ZONASUSUARIOS_GET('$id_usuario')",
-            );
-            $app_backup->usuarios = $usuarios;
-            $app_backup->zonas = $zonas;
-            $app_backup->zonasUsuarios = $zonas_usuarios;
+            if($esAdmin) {
+                $usuarios = $mysql->executeReader(
+                    "CALL STP_APP_BACKUP_USUARIOS_GET('$id_usuario')",
+                );
+                foreach($usuarios as $usuario) {
+                    $usuario->activo = $usuario->estatus > 0;
+                }
+                $zonas_usuarios = $mysql->executeReader(
+                    "CALL STP_APP_BACKUP_ZONASUSUARIOS_GET('$id_usuario')",
+                );
+            }
+            $app_backup->usuarios = isset($usuarios[0]->idUsuario) ? $usuarios : array();
+            $app_backup->zonas = isset($zonas[0]->idUsuario) ? $zonas : array();
+            $app_backup->zonasUsuarios = isset($zonas_usuarios[0]->idUsuario) ? $zonas_usuarios : array();
             return json_encode($app_backup);
         }
 
