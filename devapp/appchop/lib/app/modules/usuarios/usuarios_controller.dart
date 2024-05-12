@@ -42,11 +42,30 @@ class UsuariosController extends GetInjection {
     super.onInit();
   }
 
+  @override
+  Future<void> onReady() async {
+    await _ready();
+    super.onReady();
+  }
+
   void _init() {
     _cargarZonas();
     listaUsuarios = List<Usuarios>.from(
       storage.get([Usuarios()]).map((json) => Usuarios.fromJson(json))
     );
+  }
+
+  Future<void> _ready() async {
+    try {
+      tool.isBusy();
+      var verificarOnline = await tool.isOnline();
+      if(!verificarOnline) {
+        return;
+      }
+      await _backupZonas();
+    } finally {
+      tool.isBusy(false);
+    }
   }
 
   Future<void> guardarNuevoUsuario() async {
@@ -95,6 +114,7 @@ class UsuariosController extends GetInjection {
         usuario: usuarioAlta,
       ));
       await storage.update(listaZonasUsuarios);
+      await _backupZonas();
       await Future.delayed(1.seconds);
       tool.closeBottomSheet();
       tool.msg("El usuario registrado correctamente", 1);
@@ -350,5 +370,18 @@ class UsuariosController extends GetInjection {
       tool.toast(mensaje);
     }
     return correcto;
+  }
+
+  Future<void> _backupZonas() async {
+    try {
+      var zonasBack = List<Zonas>.from(
+        storage.get([Zonas()]).map((json) => Zonas.fromJson(json))
+      );
+      var zonasUsuariosBack = List<ZonasUsuarios>.from(
+        storage.get([ZonasUsuarios()]).map((json) => ZonasUsuarios.fromJson(json))
+      );
+      var _ = await appBackupRepository.backupZonasAsync(zonasBack);
+      _ = await appBackupRepository.backupZonasUsuariosAsync(zonasUsuariosBack);
+    } finally { }
   }
 }

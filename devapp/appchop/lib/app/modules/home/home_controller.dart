@@ -18,6 +18,7 @@ class HomeController extends GetInjection {
 
   String nombre = "";
   String idUsuario = "";
+  bool backup = false;
 
   bool esAdmin = GetInjection.administrador;
   
@@ -27,7 +28,17 @@ class HomeController extends GetInjection {
     super.onInit();
   }
 
+  @override
+  Future<void> onReady() async {
+    await _ready();
+    super.onReady();
+  }
+
   void _init() {
+    var arguments = Get.arguments;
+    if(arguments != null) {
+      backup = arguments['backup'] as bool;
+    }
     Get.put<CobranzaMainController>(CobranzaMainController());
     var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
     nombre = "${localStorage.nombres} ${localStorage.apellidos}";
@@ -71,6 +82,21 @@ class HomeController extends GetInjection {
       ),
     ];
     update();
+  }
+
+  Future<void> _ready() async {
+    try {
+      /*if(!backup || !esAdmin) {
+        return;
+      }*/
+      await tool.wait(1);
+      Get.toNamed(
+        AppRoutes.appBackupResultado,
+        arguments: {
+          "tipo": 1,
+        },
+      );
+    } finally { }
   }
 
   void abrirMenu() {

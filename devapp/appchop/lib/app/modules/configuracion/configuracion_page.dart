@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import '../../utils/color_list.dart';
 import '../../widgets/appbars/back_appbar.dart';
 import '../../widgets/buttons/default_sliderbutton.dart';
+import '../../widgets/buttons/solid_button.dart';
 import '../../widgets/containers/card_container.dart';
 import '../../widgets/containers/titulo_container.dart';
 import '../../widgets/texts/etiqueta_text.dart';
@@ -52,6 +53,15 @@ class ConfiguracionPage extends StatelessWidget with WidgetsBindingObserver {
                   icono: MaterialIcons.badge,
                 ),
               ],
+            ),
+            SolidButton(
+              texto: "Guardar cambios",
+              icono: MaterialIcons.save,
+              fondoColor: ColorList.sys[2],
+              textoColor: ColorList.sys[0],
+              ltrbm: const [0, 0, 0, 15,],
+              onPressed: () {},
+              onLongPress: () {},
             ),
             const TituloContainer(
               texto: "Desvincular dispositivo",

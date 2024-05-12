@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../data/models/app_backup/app_backup_data.dart';
 import '../data/models/local_storage/local_storage.dart';
 import '../utils/literals.dart';
 import 'tool_service.dart';
@@ -87,6 +88,14 @@ class StorageService {
   Future<void> clearAll() async {
     try {
       await _storage!.deleteFromDisk();
+    } finally { }
+  }
+
+  Future<void> backup(AppBackupData appBackupData) async {
+    try {
+      await update(appBackupData.usuarios);
+      await update(appBackupData.zonas);
+      await update(appBackupData.zonasUsuarios);
     } finally { }
   }
 

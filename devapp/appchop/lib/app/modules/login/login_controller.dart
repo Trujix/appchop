@@ -16,6 +16,7 @@ class LoginController extends GetInjection {
 
   bool ocultarPassword = true;
   bool usuarioTextEnabled = true;
+  bool backup = false;
 
   @override
   void onInit() {
@@ -83,6 +84,7 @@ class LoginController extends GetInjection {
       localStorage.nombres = result.nombres;
       localStorage.apellidos = result.apellidos;
       localStorage.acepta = result.acepta;
+      backup = usuarioTextEnabled && result.acepta == 1;
       await storage.update(localStorage);
       await storage.update(configuracion);
       tool.isBusy(false);
@@ -91,6 +93,9 @@ class LoginController extends GetInjection {
         binding: HomeBinding(),
         transition: Transition.cupertino,
         duration: 1.seconds,
+        arguments: {
+          "backup": backup,
+        },
       );
       return;
     } catch(e) {

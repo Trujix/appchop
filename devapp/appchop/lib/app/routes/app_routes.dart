@@ -5,6 +5,7 @@ class AppRoutes {
   static const altaCobranza = "/alta_cobranza";
   static const altaNotas = "/alta_notas";
   static const altaZona = "/alta_zona";
+  static const appBackupResultado = "/app_backup_resultado";
   static const busqueda = "/busqueda";
   static const cobranzaMain = "/cobranza_main";
   static const configuracion = "/configuracion";

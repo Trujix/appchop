@@ -9,6 +9,7 @@ import '../data/models/local_storage/notas.dart';
 import '../data/models/local_storage/usuarios.dart';
 import '../data/models/local_storage/zonas.dart';
 import '../data/models/local_storage/zonas_usuarios.dart';
+import '../data/repositories/app_backup_repository.dart';
 import '../data/repositories/cobradores_repository.dart';
 import '../data/repositories/configuracion_repository.dart';
 import '../data/repositories/firebase_repository.dart';
@@ -30,6 +31,7 @@ abstract class GetInjection extends GetxController {
   final cobradoresRepository = Get.find<CobradoresRepository>();
   final firebaseRepository = Get.find<FirebaseRepository>();
   final usuariosRepository = Get.find<UsuariosRepository>();
+  final appBackupRepository = Get.find<AppBackupRepository>();
 
   static bool administrador = false;
   static String perfil = "";

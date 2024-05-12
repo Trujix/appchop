@@ -1,10 +1,12 @@
 import 'package:get/get.dart';
 
+import '../data/providers/app_backup_provider.dart';
 import '../data/providers/cobradores_provider.dart';
 import '../data/providers/configuracion_provider.dart';
 import '../data/providers/firebase_provider.dart';
 import '../data/providers/login_provider.dart';
 import '../data/providers/usuarios_provider.dart';
+import '../data/repositories/app_backup_repository.dart';
 import '../data/repositories/cobradores_repository.dart';
 import '../data/repositories/configuracion_repository.dart';
 import '../data/repositories/firebase_repository.dart';
@@ -32,5 +34,7 @@ class DependencyInjection {
     Get.put<FirebaseRepository>(FirebaseRepository());
     Get.put<UsuariosProvider>(UsuariosProvider());
     Get.put<UsuariosRepository>(UsuariosRepository());
+    Get.put<AppBackupProvider>(AppBackupProvider());
+    Get.put<AppBackupRepository>(AppBackupRepository());
   }
 }
