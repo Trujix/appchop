@@ -5,11 +5,13 @@ import 'package:material_color_gen/material_color_gen.dart';
 import 'package:money_formatter/money_formatter.dart';
 
 import '../../utils/color_list.dart';
+import '../../utils/svg_assets.dart';
 import '../../widgets/appbars/main_appbar.dart';
 import '../../widgets/combo/selection_combo.dart';
 import '../../widgets/customscrollviews/cobranza_customscrollview.dart';
 import '../../widgets/defaults/small_header.dart';
 import '../../widgets/inkwells/saldo_cobranza_inwell.dart';
+import '../../widgets/sizedboxes/svg_asset_sizedbox.dart';
 import '../home/home_controller.dart';
 import 'cobranza_main_controller.dart';
 
@@ -63,7 +65,10 @@ class CobranzaMainPage extends StatelessWidget with WidgetsBindingObserver {
                   );
                 } else {
                   return Expanded(
-                    child: Image.asset('assets/home/background.png'),
+                    child: SvgAssetSizedbox(
+                      assets: SvgAssets.assets['home_background']!,
+                      size: 300,
+                    ),
                   );
                 }
               },

@@ -2,6 +2,8 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 import '../../utils/color_list.dart';
+import '../../utils/svg_assets.dart';
+import '../sizedboxes/svg_asset_sizedbox.dart';
 
 class SinBusquedaCenter extends StatelessWidget {
   final String texto;
@@ -15,9 +17,9 @@ class SinBusquedaCenter extends StatelessWidget {
       child: Column(
         children: [
           const Expanded(child: SizedBox()),
-          Image.asset(
-            'assets/busqueda/fondo.png',
-            scale: 1.5,
+          SvgAssetSizedbox(
+            assets: SvgAssets.assets['busqueda_fondo']!,
+            size: 230,
           ),
           Container(
             padding: const EdgeInsets.only(

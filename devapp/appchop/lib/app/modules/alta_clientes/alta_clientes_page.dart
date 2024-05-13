@@ -91,7 +91,8 @@ class AltaClientesPage extends StatelessWidget {
                   } else {
                     return const SinElementosColumn(
                       texto: "Su lista de clientes está vacía",
-                      imagenAsset: "clientes/search.png",
+                      imagenAsset: "clientes_search",
+                      sizeAsset: 230,
                     );
                   }
                 },

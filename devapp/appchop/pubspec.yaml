@@ -25,6 +25,7 @@ dependencies:
   connectivity_plus: ^6.0.3
   fluttertoast: ^8.2.4
   flutter_spinkit: ^5.2.0
+  svg_path_parser: ^1.1.1
   cached_network_image: ^3.3.1
   custom_radio_grouped_button: ^2.2.1
   adaptive_action_sheet: ^2.0.3
@@ -67,9 +68,6 @@ flutter:
 
   assets:
     - assets/home/menu_logo.png
-    - assets/home/background.png
     - assets/login/head_login.png
     - assets/zonas/background.png
-    - assets/busqueda/fondo.png
-    - assets/clientes/search.png
     - assets/inventarios/background.png

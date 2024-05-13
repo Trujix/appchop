@@ -2,14 +2,18 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../utils/color_list.dart';
+import '../../utils/svg_assets.dart';
+import '../sizedboxes/svg_asset_sizedbox.dart';
 
 class SinElementosColumn extends StatelessWidget {
   final String imagenAsset;
+  final double sizeAsset;
   final String texto;
   const SinElementosColumn({
     super.key,
     this.imagenAsset = "",
     this.texto = "",
+    this.sizeAsset = 100,
   });
 
   @override
@@ -18,9 +22,9 @@ class SinElementosColumn extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Image.asset(
-          "assets/$imagenAsset",
-          scale: 1.1,
+        SvgAssetSizedbox(
+          assets: SvgAssets.assets[imagenAsset]!,
+          size: sizeAsset,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
