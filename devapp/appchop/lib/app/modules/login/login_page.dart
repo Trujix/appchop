@@ -6,8 +6,10 @@ import 'package:shimmer_animation/shimmer_animation.dart';
 
 import '../../utils/color_list.dart';
 import '../../utils/literals.dart';
+import '../../utils/svg_assets.dart';
 import '../../widgets/appbars/off_appbar.dart';
 import '../../widgets/buttons/solid_button.dart';
+import '../../widgets/sizedboxes/svg_asset_sizedbox.dart';
 import '../../widgets/textforms/password_textform.dart';
 import '../../widgets/textforms/standard_textform.dart';
 import 'login_controller.dart';
@@ -34,9 +36,9 @@ class LoginPage extends StatelessWidget with WidgetsBindingObserver {
                 Shimmer(
                   color: Color(ColorList.ui[1]),
                   colorOpacity: 0.8,
-                  child: Image.asset(
-                    "assets/login/head_login.png",
-                    scale: 1.5,
+                  child: SvgAssetSizedbox(
+                    assets: SvgAssets.assets['login_head_login']!,
+                    size: 170,
                   ),
                 ),
                 StandardTextform(

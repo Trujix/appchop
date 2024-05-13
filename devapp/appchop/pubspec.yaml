@@ -65,9 +65,3 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-
-  assets:
-    - assets/home/menu_logo.png
-    - assets/login/head_login.png
-    - assets/zonas/background.png
-    - assets/inventarios/background.png

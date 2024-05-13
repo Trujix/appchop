@@ -94,7 +94,8 @@ class InventariosPage extends StatelessWidget {
                   return const Expanded(
                     child: SinElementosColumn(
                       texto: "Su lista de inventario está vacía",
-                      imagenAsset: "inventarios/background.png",
+                      imagenAsset: "inventarios_background",
+                      sizeAsset: 260,
                     ),
                   );
                 }

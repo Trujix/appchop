@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
 import '../../utils/color_list.dart';
+import '../../utils/svg_assets.dart';
+import '../../widgets/sizedboxes/svg_asset_sizedbox.dart';
 import 'alpha_controller.dart';
 
 class AlphaPage extends StatelessWidget with WidgetsBindingObserver {
@@ -23,8 +25,9 @@ class AlphaPage extends StatelessWidget with WidgetsBindingObserver {
                 child: Shimmer(
                   color: Color(ColorList.sys[0]),
                   colorOpacity: 1,
-                  child: Image.asset(
-                    "assets/home/menu_logo.png",
+                  child: SvgAssetSizedbox(
+                    assets: SvgAssets.assets['alpha_logo']!,
+                    size: 150,
                   ),
                 ),
               ),
