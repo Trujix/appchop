@@ -21,7 +21,7 @@ class AltaClientesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<AltaClientesController>(
       builder: (_) => Scaffold(
-        resizeToAvoidBottomInset: true,
+        resizeToAvoidBottomInset: false,
         backgroundColor: Color(ColorList.ui[1]),
         appBar: BackAppbar(
           cerrar: _.cerrar,
