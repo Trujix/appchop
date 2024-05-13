@@ -144,6 +144,12 @@ class HomeController extends GetInjection {
     );
   }
 
+  void actualizarImagen() {
+    if(!esAdmin) {
+      return;
+    }
+  }
+
   Future<void> cerrarSesion() async {
     try {
       tool.isBusy();

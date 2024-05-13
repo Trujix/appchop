@@ -66,7 +66,7 @@ class CobranzaMainPage extends StatelessWidget with WidgetsBindingObserver {
                 } else {
                   return Expanded(
                     child: SvgAssetSizedbox(
-                      assets: SvgAssets.assets['home_background']!,
+                      assets: SvgAssets.assets['cobranza_main_background']!,
                       size: 300,
                     ),
                   );

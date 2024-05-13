@@ -4,14 +4,18 @@ import 'package:flutter/material.dart';
 
 import '../../utils/color_list.dart';
 import '../../utils/literals.dart';
+import '../../utils/svg_assets.dart';
+import '../sizedboxes/svg_asset_sizedbox.dart';
 
 class MenuHeaderContainer extends StatelessWidget {
   final String idUsduario;
   final String nombre;
+  final void Function() actualizarImagen;
   const MenuHeaderContainer({
     super.key,
     this.idUsduario = "",
     this.nombre = "",
+    required this.actualizarImagen,
   });
 
   @override
@@ -27,23 +31,29 @@ class MenuHeaderContainer extends StatelessWidget {
           children: <Widget>[
             Row(
               children: [
-                Container(
-                  width: 90,
-                  height: 90,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(200),
-                    color: Colors.transparent,
-                  ),
-                  margin: const EdgeInsets.only(
-                    bottom: 10,
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(2000.0),
-                    child: CachedNetworkImage(
-                      imageUrl: "${Literals.uri}media/usuarios/$idUsduario.jpg",
-                      errorWidget: (context, url, error) {
-                        return Image.asset('assets/home/menu_logo.png');
-                      },
+                InkWell(
+                  onTap: actualizarImagen,
+                  child: Container(
+                    width: 90,
+                    height: 90,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(200),
+                      color: Colors.transparent,
+                    ),
+                    margin: const EdgeInsets.only(
+                      bottom: 10,
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(2000.0),
+                      child: CachedNetworkImage(
+                        imageUrl: "${Literals.uri}media/usuarios/$idUsduario.jpg",
+                        errorWidget: (context, url, error) {
+                          return SvgAssetSizedbox(
+                            assets: SvgAssets.assets['alpha_logo']!,
+                            size: 80,
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ),

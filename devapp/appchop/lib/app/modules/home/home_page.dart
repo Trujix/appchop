@@ -25,6 +25,7 @@ class HomePage extends StatelessWidget with WidgetsBindingObserver {
           MenuHeaderContainer(
             nombre: _.nombre,
             idUsduario: _.idUsuario,
+            actualizarImagen: _.actualizarImagen,
           ),
           Expanded(
             child: Scaffold(
