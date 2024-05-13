@@ -105,7 +105,8 @@ class AltaZonaPage extends StatelessWidget with WidgetsBindingObserver {
                   } else {
                     return const SinElementosColumn(
                       texto: "Su lista de zonas está vacía",
-                      imagenAsset: "zonas/background.png",
+                      imagenAsset: "zonas_background",
+                      sizeAsset: 250,
                     );
                   }
                 },
