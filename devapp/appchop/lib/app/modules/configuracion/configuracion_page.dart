@@ -73,7 +73,7 @@ class ConfiguracionPage extends StatelessWidget with WidgetsBindingObserver {
                       ),
                     ),
                     CircularButton(
-                      onPressed: () {},
+                      onPressed: _.verificarServidorBackup,
                       icono: MaterialIcons.sync_icon,
                       colorIcono: ColorList.sys[0],
                     ),

@@ -33,6 +33,32 @@ class ConfiguracionController extends GetInjection {
     nombre = "${localStorage.nombres!} ${localStorage.apellidos!}";
   }
 
+  Future<void> verificarServidorBackup() async {
+    try {
+      var online = await tool.isOnline();
+      if(!online) {
+        tool.msg(Literals.msgOffline, 2);
+      }
+      tool.isBusy();
+      var verificacion = await appBackupRepository.verificarBackupAsync(idUsuario);
+      if(verificacion == null) {
+        throw Exception();
+      }
+      await tool.wait(1);
+      tool.isBusy(false);
+      if(verificacion.idBackup != idBackup) {
+        var actualizar = await tool.ask("Nueva versión", "Existe una actualización pendiente\n¿Desea sincronizar?");
+        if(!actualizar) {
+          return;
+        }
+      }
+    } catch(e) {
+      tool.msg("Ocurrió un error al conectarse con el servidor", 3);
+    } finally {
+      update();
+    }
+  }
+
   Future<bool> desvincularDispositivo() async {
     try {
       var validar = await tool.ask("Desvincular dispositivo", "¿Desea continuar?");
