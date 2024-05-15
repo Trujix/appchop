@@ -84,7 +84,14 @@ CREATE TABLE IF NOT EXISTS app_cobranzas(
     bloqueado VARCHAR(20) NOT NULL DEFAULT '-' COMMENT 'Estatus bloqueo de nota cobranza',
     idCobrador VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de usuario cobrador'
 );
-
+CREATE TABLE IF NOT EXISTS app_notas(
+    id INT AUTO_INCREMENT NOT NULL PRIMARY KEY COMMENT 'Id de registro',
+    tabla VARCHAR(50) NOT NULL DEFAULT '-' COMMENT 'Tabla',
+    id_sistema varchar(120) NOT NULL DEFAULT '-' COMMENT 'Id sistema',
+    id_nota varchar(120) NOT NULL DEFAULT '-' COMMENT 'Id nota',
+    id_cobranza varchar(120) NOT NULL DEFAULT '-' COMMENT 'Id cobranza',
+    nota varchar(200) NOT NULL DEFAULT '-' COMMENT 'Nota'
+);
 /*
 "tabla":"zonas",
 "idUsuario":"b0339cf5-e46e-4179-9ea9-3772e4aaf26b",
