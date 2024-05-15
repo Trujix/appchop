@@ -54,8 +54,13 @@ class ConfiguracionPage extends StatelessWidget with WidgetsBindingObserver {
                 ),
               ],
             ),
+            const TituloContainer(
+              texto: "Sincronizar con el servidor",
+              ltrbp: [20, 5, 0, 0],
+              size: 20,
+            ),
             SolidButton(
-              texto: "Guardar cambios",
+              texto: "Realizar sincronización",
               icono: MaterialIcons.save,
               fondoColor: ColorList.sys[2],
               textoColor: ColorList.sys[0],
