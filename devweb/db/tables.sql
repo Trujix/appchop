@@ -57,6 +57,34 @@ CREATE TABLE IF NOT EXISTS app_log_backups(
     fh_registro DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Fecha y hora del registro'
 );
 
+CREATE TABLE IF NOT EXISTS app_cobranzas(
+    tabla VARCHAR(50) NOT NULL DEFAULT '-' COMMENT 'Id de tabla local storage',
+    id_sistema VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de registro de sistema',
+    idCobranza VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de registro de cobranza',
+    tipoCobranza VARCHAR(20) NOT NULL DEFAULT '-' COMMENT 'Tipo de cobranza Debo Me deben',
+    zona VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Zona de registro de cobranza',
+    nombre VARCHAR(200) NOT NULL DEFAULT '-' COMMENT 'Nombre de cliente',
+    cantidad FLOAT NOT NULL DEFAULT 0 COMMENT 'Monto de la nota de cobranza',
+    descripcion VARCHAR(100) NOT NULL DEFAULT '-' COMMENT 'Descripcion de cobranza',
+    telefono VARCHAR(200) NOT NULL DEFAULT '-' COMMENT 'Telefono de cliente',
+    direccion VARCHAR(200) NOT NULL DEFAULT '-' COMMENT 'Direccion de cliente',
+    correo VARCHAR(200) NOT NULL DEFAULT '-' COMMENT 'Correo de cliente',
+    fechaRegistro VARCHAR(10) NOT NULL DEFAULT '-' COMMENT 'Fecha de registro de cobranza',
+    fechaVencimiento VARCHAR(10) NOT NULL DEFAULT '-' COMMENT 'Fecha de vencimiento de cobranza',
+    saldo FLOAT NOT NULL DEFAULT 0 COMMENT 'Saldo restante de cobranza',
+    latitud VARCHAR(200) NOT NULL DEFAULT '-' COMMENT 'Longitud coordenada hubicacion',
+    longitud VARCHAR(200) NOT NULL DEFAULT '-' COMMENT 'Latitud coordenada hubicacion',
+    ultimoCargo FLOAT NOT NULL DEFAULT 0 COMMENT 'Monto ultimo cargo',
+    fechaUltimoCargo VARCHAR(10) NOT NULL DEFAULT '-' COMMENT 'Fecha ultimo cargo',
+    usuarioUltimoCargo VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Usuario genera ultimo cargo',
+    ultimoAbono FLOAT NOT NULL DEFAULT 0 COMMENT 'Monto ultimo abono',
+    fechaUltimoAbono VARCHAR(10) NOT NULL DEFAULT '-' COMMENT 'Fecha ultimo abono',
+    usuarioUltimoAbono VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Usuario ultimo abono',
+    estatus VARCHAR(20) NOT NULL DEFAULT '-' COMMENT 'Estatus de nota de cobranza',
+    bloqueado VARCHAR(20) NOT NULL DEFAULT '-' COMMENT 'Estatus bloqueo de nota cobranza',
+    idCobrador VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de usuario cobrador'
+);
+
 /*
 "tabla":"zonas",
 "idUsuario":"b0339cf5-e46e-4179-9ea9-3772e4aaf26b",
