@@ -5,11 +5,23 @@ import 'package:get/get.dart';
 import '../../services/api_service.dart';
 import '../../utils/literals.dart';
 import '../models/app_backup/app_backup_data.dart';
+import '../models/app_backup/app_backup_info.dart';
 import '../models/local_storage/zonas.dart';
 import '../models/local_storage/zonas_usuarios.dart';
 
 class AppBackupProvider {
   final ApiService _api = Get.find<ApiService>();
+
+  Future<AppBackupInfo?> verificarBackupAsync(String idUsuario) async {
+    try {
+      var result = await _api.get(
+        "api/appbackup/verificarBackup/$idUsuario"
+      );
+      return AppBackupInfo.fromApi(jsonDecode(result!));
+    } catch(e) {
+      return null;
+    }
+  }
 
   Future<AppBackupData?> descargarAsync(String idUsuario, String usuario) async {
     try {

@@ -1,7 +1,9 @@
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../data/models/local_storage/local_storage.dart';
 import '../../utils/get_injection.dart';
+import '../../utils/literals.dart';
 import '../login/login_binding.dart';
 import '../login/login_page.dart';
 
@@ -9,6 +11,8 @@ class ConfiguracionController extends GetInjection {
   String idUsuario = "";
   String usuario = "";
   String nombre = "";
+  String idBackup = "";
+  String fechaBackup = "--";
 
   @override
   Future<void> onInit() async {
@@ -18,6 +22,12 @@ class ConfiguracionController extends GetInjection {
 
   Future<void> _init() async {
     var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
+    if(localStorage.idBackup != Literals.backUpClean && localStorage.idBackup != "") {
+      idBackup = localStorage.idBackup!;
+      fechaBackup = DateFormat("dd-MM-yyyy").format(DateTime.now()).toString();
+    } else {
+      idBackup = "Sin registro de actualización";
+    }
     idUsuario = localStorage.idUsuario!;
     usuario = localStorage.email!;
     nombre = "${localStorage.nombres!} ${localStorage.apellidos!}";

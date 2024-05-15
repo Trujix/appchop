@@ -34,6 +34,8 @@ class Literals {
   static const String movimientoCargo = "CARGO";
   static const String movimientoAbono = "ABONO";
 
+  static const String backUpClean = "NABACKUP";
+
   static const String busquedaClientes = "BUSCAR-CLIENTES";
 
   static const String notificacionUsuarioPassword = "USUARIO-PASSWORD";

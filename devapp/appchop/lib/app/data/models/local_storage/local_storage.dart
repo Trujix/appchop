@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import '../../../utils/literals.dart';
+
 class LocalStorage {
   static const int _localStorageVersion = 1;
 
@@ -19,6 +21,7 @@ class LocalStorage {
   int? acepta;
   bool? creado = false;
   bool? backupInicial = false;
+  String? idBackup;
 
   LocalStorage({
     this.version = _localStorageVersion,
@@ -36,6 +39,7 @@ class LocalStorage {
     this.acepta = 0,
     this.creado = false,
     this.backupInicial = false,
+    this.idBackup = Literals.backUpClean,
   });
 
   Map toJson() => {
@@ -55,6 +59,7 @@ class LocalStorage {
     'acepta'            : acepta,
     'creado'            : creado,
     'backupInicial'     : backupInicial,
+    'idBackup'          : idBackup,
   };
   
   Map<String, dynamic> toMap() {
@@ -75,6 +80,7 @@ class LocalStorage {
       'acepta'            : acepta,
       'creado'            : creado,
       'backupInicial'     : backupInicial,
+      'idBackup'          : idBackup,
     };
   }
 
@@ -94,6 +100,7 @@ class LocalStorage {
     acepta = json['acepta'] ?? 0;
     creado = json['creado'] ?? true;
     backupInicial = json['backupInicial'] ?? true;
+    idBackup = json['idBackup'] ?? "";
   }
 
   LocalStorage.fromMap(Map<String, dynamic> json) {
@@ -111,6 +118,7 @@ class LocalStorage {
     acepta = json['acepta'] ?? 0;
     creado = json['creado'] ?? true;
     backupInicial = json['backupInicial'] ?? true;
+    idBackup = json['idBackup'] ?? "";
   }
 
   factory LocalStorage.fromJson(Map<String, dynamic> json) => LocalStorage(
@@ -129,5 +137,6 @@ class LocalStorage {
     acepta: json['acepta'] ?? 0,
     creado: json['creado'] ?? true,
     backupInicial: json['backupInicial'] ?? true,
+    idBackup: json['idBackup'] ?? "",
   );
 }

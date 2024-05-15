@@ -10,6 +10,7 @@ import '../../widgets/buttons/default_sliderbutton.dart';
 import '../../widgets/buttons/solid_button.dart';
 import '../../widgets/containers/card_container.dart';
 import '../../widgets/containers/titulo_container.dart';
+import '../../widgets/texts/etiqueta_jump_text.dart';
 import '../../widgets/texts/etiqueta_text.dart';
 import 'configuracion_controller.dart';
 
@@ -79,8 +80,9 @@ class ConfiguracionPage extends StatelessWidget with WidgetsBindingObserver {
                   ],
                 ),
                 const SizedBox(height: 10,),
-                const EtiquetaText(
-                  texto1: "última actualización: ",
+                EtiquetaJumpText(
+                  texto1: "última actualización:",
+                  texto2: "   ${_.idBackup}\n   ${_.fechaBackup}",
                   icono: MaterialIcons.sync_alt,
                 ),
               ],
