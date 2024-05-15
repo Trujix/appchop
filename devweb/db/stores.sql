@@ -263,6 +263,26 @@ DELIMITER ;
 
 
 /* ------------------------------------------------------------------------------------*/
+DROP PROCEDURE IF EXISTS STP_APP_VERIFICAR_BACKUP;
+DELIMITER $$
+CREATE PROCEDURE STP_APP_VERIFICAR_BACKUP(
+    IN _IDSISTEMA VARCHAR(120)
+)
+BEGIN
+    SELECT 
+        id_sistema AS idUsuario,
+        id_backup AS idBackup,
+        usuario,
+        fecha_creacion AS fechaCreacion 
+    FROM appchop.app_log_backups
+        WHERE id_sistema = _IDSISTEMA
+            ORDER BY fh_registro DESC LIMIT 1;
+END $$
+DELIMITER ;
+
+
+
+/* ------------------------------------------------------------------------------------*/
 DROP PROCEDURE IF EXISTS STP_APP_BACKUP_ZONAS_GET;
 DELIMITER $$
 CREATE PROCEDURE STP_APP_BACKUP_ZONAS_GET(

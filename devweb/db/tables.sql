@@ -48,6 +48,15 @@ CREATE TABLE IF NOT EXISTS app_zonas_usuarios(
     usuario VARCHAR(150) NOT NULL DEFAULT '-' COMMENT 'Usuario al que se vincula la zona'
 );
 
+
+CREATE TABLE IF NOT EXISTS app_log_backups(
+    id_sistema VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de registro de sistema',
+    id_backup VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de ultima actualización',
+    usuario VARCHAR(150) NOT NULL DEFAULT '-' COMMENT 'Usuario que registra',
+    fecha_creacion VARCHAR(10) NOT NULL DEFAULT '-' COMMENT 'Fecha de creacion del registro',
+    fh_registro DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Fecha y hora del registro'
+);
+
 /*
 "tabla":"zonas",
 "idUsuario":"b0339cf5-e46e-4179-9ea9-3772e4aaf26b",

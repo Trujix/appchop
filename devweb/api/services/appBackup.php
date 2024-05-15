@@ -1,5 +1,20 @@
 <?php
     Class AppBackup {
+        public static function verificarBackup($params) {
+            Auth::verify();
+            if(!isset($params[0]) || count($params) == 0) {
+                http_response_code(406);
+                die("Parámetros de usuario incorrectos");
+            }
+            $id_usuario = $params[0];
+            $mysql = new Mysql();
+            $backup_verificar = $mysql->executeReader(
+                "CALL STP_APP_VERIFICAR_BACKUP('$id_usuario')",
+                true
+            );
+            die(json_encode($backup_verificar));
+        }
+
         public static function descargar($params) {
             Auth::verify();
             if(!isset($params[0]) || !isset($params[1]) || count($params) == 0) {
