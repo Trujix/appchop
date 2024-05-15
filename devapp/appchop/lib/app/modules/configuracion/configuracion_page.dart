@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 
 import '../../utils/color_list.dart';
 import '../../widgets/appbars/back_appbar.dart';
+import '../../widgets/buttons/circular_buttons.dart';
 import '../../widgets/buttons/default_sliderbutton.dart';
 import '../../widgets/buttons/solid_button.dart';
 import '../../widgets/containers/card_container.dart';
@@ -59,10 +60,35 @@ class ConfiguracionPage extends StatelessWidget with WidgetsBindingObserver {
               ltrbp: [20, 5, 0, 0],
               size: 20,
             ),
+            CardContainer(
+              fondo: ColorList.ui[3],
+              children: [
+                Row(
+                  children: [
+                    const Expanded(
+                      child: EtiquetaText(
+                        texto1: "Verificar con el servidor",
+                        icono: MaterialIcons.storage,
+                      ),
+                    ),
+                    CircularButton(
+                      onPressed: () {},
+                      icono: MaterialIcons.sync_icon,
+                      colorIcono: ColorList.sys[0],
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10,),
+                const EtiquetaText(
+                  texto1: "última actualización: ",
+                  icono: MaterialIcons.sync_alt,
+                ),
+              ],
+            ),
             SolidButton(
               texto: "Realizar sincronización",
-              icono: MaterialIcons.save,
-              fondoColor: ColorList.sys[2],
+              icono: MaterialIcons.backup,
+              fondoColor: ColorList.sys[1],
               textoColor: ColorList.sys[0],
               ltrbm: const [0, 0, 0, 15,],
               onPressed: () {},
