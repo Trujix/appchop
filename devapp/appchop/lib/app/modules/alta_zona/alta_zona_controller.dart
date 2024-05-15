@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 
 import '../../data/models/local_storage/zonas.dart';
 import '../../data/models/local_storage/local_storage.dart';
+import '../../data/models/local_storage/zonas_usuarios.dart';
 import '../../utils/get_injection.dart';
 import '../cobranza_main/cobranza_main_controller.dart';
 
@@ -65,9 +66,22 @@ class AltaZonaController extends GetInjection {
   Future<void> cambiarZonaEstatus(bool estatus, String idZona) async {
     try {
       var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
+      var listaZonasUsuarios = List<ZonasUsuarios>.from(
+        storage.get([ZonasUsuarios()]).map((json) => ZonasUsuarios.fromJson(json))
+      );
       var zonas = List<Zonas>.from(
         storage.get([Zonas()]).map((json) => Zonas.fromJson(json))
       );
+      var valueZona = zonas.where((z) => z.idZona == idZona).firstOrNull;
+      if(valueZona == null) {
+        tool.msg("Ocurrió un error al intentar configurar la zona", 3);
+        return;
+      }
+      var verificar = listaZonasUsuarios.where((zu) => zu.idZona == valueZona.valueZona).firstOrNull;
+      if(verificar != null) {
+        tool.msg("La zona esta asignada ${verificar.usuario}; Inactive el usuario para poder continuar");
+        return;
+      }
       for(var zona in zonas) {
         if(zona.idZona == idZona) {
           zona.activo = estatus;

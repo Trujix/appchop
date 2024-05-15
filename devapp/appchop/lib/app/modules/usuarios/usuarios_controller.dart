@@ -131,7 +131,7 @@ class UsuariosController extends GetInjection {
 
   bool clearForm() {
     if(listaZonas.isEmpty) {
-      tool.msg("No tiene Zonas registradas o ya fueron todas asignadas");
+      tool.msg("No tiene Zonas registradas, activas o ya fueron todas asignadas");
     }
     usuario.clear();
     password.clear();
@@ -312,6 +312,7 @@ class UsuariosController extends GetInjection {
     var zonas = List<Zonas>.from(
       storage.get([Zonas()]).map((json) => Zonas.fromJson(json))
     );
+    zonas = zonas.where((z) => z.activo!).toList();
     zonasLista = zonas;
     List<String> zonasAsiggnadas = [];
     listaZonas = [];

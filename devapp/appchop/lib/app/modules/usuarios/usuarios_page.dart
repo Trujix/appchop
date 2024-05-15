@@ -59,7 +59,8 @@ class UsuariosPage extends StatelessWidget {
                   } else {
                     return const SinElementosColumn(
                       texto: "Su lista de usuarios está vacía",
-                      imagenAsset: "clientes/search.png",
+                      imagenAsset: "clientes_search",
+                      sizeAsset: 280,
                     );
                   }
                 },
