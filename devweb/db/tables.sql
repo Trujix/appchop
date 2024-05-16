@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS usuarios(
     status VARCHAR(15) NOT NULL DEFAULT '-' COMMENT 'Estatus del usuario',
     id_autorization INT NOT NULL COMMENT 'Id Autorizacion',
     nombres VARCHAR(150) NOT NULL DEFAULT '-' COMMENT 'Nombre(s) del usuario',
-    apellidos VARCHAR(150) NOT NULL DEFAULT '-' COMMENT 'Apellido(s) del usuario',
+    apellidos TEXT NOT NULL DEFAULT '-' COMMENT 'Apellido(s) del usuario',
     perfil VARCHAR(150) NOT NULL DEFAULT '-' COMMENT 'Perfil de usuario',
     id_firebase VARCHAR(350) NOT NULL DEFAULT '-' COMMENT 'Id del sistema de Notificaciones Firebase',
     sesion VARCHAR(30) NOT NULL DEFAULT 'NONE' COMMENT 'Indica si hay una sesion activa',
@@ -63,17 +63,17 @@ CREATE TABLE IF NOT EXISTS app_cobranzas(
     idCobranza VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de registro de cobranza',
     tipoCobranza VARCHAR(20) NOT NULL DEFAULT '-' COMMENT 'Tipo de cobranza Debo Me deben',
     zona VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Zona de registro de cobranza',
-    nombre VARCHAR(200) NOT NULL DEFAULT '-' COMMENT 'Nombre de cliente',
+    nombre TEXT NOT NULL DEFAULT '-' COMMENT 'Nombre de cliente',
     cantidad FLOAT NOT NULL DEFAULT 0 COMMENT 'Monto de la nota de cobranza',
     descripcion VARCHAR(100) NOT NULL DEFAULT '-' COMMENT 'Descripcion de cobranza',
-    telefono VARCHAR(200) NOT NULL DEFAULT '-' COMMENT 'Telefono de cliente',
-    direccion VARCHAR(200) NOT NULL DEFAULT '-' COMMENT 'Direccion de cliente',
-    correo VARCHAR(200) NOT NULL DEFAULT '-' COMMENT 'Correo de cliente',
+    telefono TEXT NOT NULL DEFAULT '-' COMMENT 'Telefono de cliente',
+    direccion TEXT NOT NULL DEFAULT '-' COMMENT 'Direccion de cliente',
+    correo TEXT NOT NULL DEFAULT '-' COMMENT 'Correo de cliente',
     fechaRegistro VARCHAR(10) NOT NULL DEFAULT '-' COMMENT 'Fecha de registro de cobranza',
     fechaVencimiento VARCHAR(10) NOT NULL DEFAULT '-' COMMENT 'Fecha de vencimiento de cobranza',
     saldo FLOAT NOT NULL DEFAULT 0 COMMENT 'Saldo restante de cobranza',
-    latitud VARCHAR(200) NOT NULL DEFAULT '-' COMMENT 'Longitud coordenada hubicacion',
-    longitud VARCHAR(200) NOT NULL DEFAULT '-' COMMENT 'Latitud coordenada hubicacion',
+    latitud TEXT NOT NULL DEFAULT '-' COMMENT 'Longitud coordenada hubicacion',
+    longitud TEXT NOT NULL DEFAULT '-' COMMENT 'Latitud coordenada hubicacion',
     ultimoCargo FLOAT NOT NULL DEFAULT 0 COMMENT 'Monto ultimo cargo',
     fechaUltimoCargo VARCHAR(10) NOT NULL DEFAULT '-' COMMENT 'Fecha ultimo cargo',
     usuarioUltimoCargo VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Usuario genera ultimo cargo',
@@ -86,20 +86,39 @@ CREATE TABLE IF NOT EXISTS app_cobranzas(
 );
 
 CREATE TABLE IF NOT EXISTS app_notas(
-    tabla VARCHAR(50) NOT NULL DEFAULT '-' COMMENT 'Tabla',
-    id_sistema varchar(120) NOT NULL DEFAULT '-' COMMENT 'Id sistema',
-    id_nota varchar(120) NOT NULL DEFAULT '-' COMMENT 'Id nota',
-    id_cobranza varchar(120) NOT NULL DEFAULT '-' COMMENT 'Id cobranza',
-    nota varchar(200) NOT NULL DEFAULT '-' COMMENT 'Nota'
+    tabla VARCHAR(50) NOT NULL DEFAULT '-' COMMENT 'Id de tabla local storage',
+    id_sistema VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de registro de sistema',
+    id_nota VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de registro de nota',
+    id_cobranza VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de registro cobranza',
+    nota VARCHAR(200) NOT NULL DEFAULT '-' COMMENT 'Descripcion de la nota'
 );
+
+CREATE TABLE IF NOT EXISTS app_cargos_abonos(
+    tabla VARCHAR(50) NOT NULL DEFAULT '-' COMMENT 'Id de tabla local storage',
+    id_sistema VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de registro de sistema',
+    id_cobranza VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de cobranza',
+    id_movimiento VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id del movimiento',
+    tipo VARCHAR(20) NOT NULL DEFAULT '-' COMMENT 'Tipo de movimiento Cargo - Abono',
+    monto FLOAT NOT NULL DEFAULT 0 COMMENT 'Monto del movimiento',
+    referencia VARCHAR(200) NOT NULL DEFAULT '-' COMMENT 'Referencia del movimiento',
+    usuario_registro VARCHAR(150) NOT NULL DEFAULT '-' COMMENT 'Usuario que registra el movimiento',
+    fecha_creacion VARCHAR(10) NOT NULL DEFAULT '-' COMMENT 'Fecha de creacion del registro'
+);
+
+CREATE TABLE IF NOT EXISTS prueba(
+    dato varbinary NOT NULL DEFAULT '-' COMMENT 'Id de registro de sistema'
+);
+
 /*
-"tabla":"zonas",
-"idUsuario":"b0339cf5-e46e-4179-9ea9-3772e4aaf26b",
-"idZona":"61d6e1d2-754b-4b77-b8f0-a563951fe097",
-"valueZona":"88bbe1aa-cbe7-41d5-9654-c2eefef8ae74",
-"labelZona":"Prueba",
-"fechaCreacion":"08-05-2024",
-"activo":true
+  String? tabla = "cargos_abonos";
+  String? idUsuario;
+  String? idCobranza;
+  String? idMovimiento;
+  String? tipo;
+  double? monto;
+  String? referencia;
+  String? usuarioRegistro;
+  String? fechaRegistro;
 */
 /*
 INSERT INTO autorization (
