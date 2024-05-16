@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 
+import '../data/models/local_storage/borrados.dart';
 import '../data/models/local_storage/cargos_abonos.dart';
 import '../data/models/local_storage/clientes.dart';
 import '../data/models/local_storage/cobranzas.dart';
@@ -46,6 +47,7 @@ abstract class GetInjection extends GetxController {
     await Inventarios.init();
     await ZonasUsuarios.init();
     await Configuracion.init();
+    await Borrados.init();
     return;
   }
 }
