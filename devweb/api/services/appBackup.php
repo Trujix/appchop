@@ -1,5 +1,15 @@
 <?php
     Class AppBackup {
+        public static function sincronizar($params) {
+            Auth::verify();
+            $backup_data = (object)$params;
+            if(!isset($backup_data->idUsuario)
+                || !isset($backup_data->acepta)) {
+                http_response_code(406);
+                die("Parámetros de backup incorrectos");
+            }
+        }
+
         public static function verificarBackup($params) {
             Auth::verify();
             if(!isset($params[0]) || count($params) == 0) {

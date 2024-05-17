@@ -430,9 +430,9 @@ DELIMITER ;
 
 
 /* ------------------------------------------------------------------------------------*/
-DROP PROCEDURE IF EXISTS STP_APP_BACKUP_COBRANZAS_INSERT;
+DROP PROCEDURE IF EXISTS STP_APP_BACKUP_COBRANZAS_PROCESS;
 DELIMITER $$
-CREATE PROCEDURE STP_APP_BACKUP_COBRANZAS_INSERT(
+CREATE PROCEDURE STP_APP_BACKUP_COBRANZAS_PROCESS(
     IN _TABLA VARCHAR(50), IN _ID_SISTEMA VARCHAR(120), IN _IDCOBRANZA VARCHAR(120), 
     IN _TIPOCOBRANZA VARCHAR(20), IN _ZONA VARCHAR(120), IN _NOMBRE TEXT, 
     IN _CANTIDAD FLOAT, IN _DESCRIPCION VARCHAR(100), IN _TELEFONO TEXT, 
@@ -533,6 +533,96 @@ BEGIN
         WHERE 
             id_sistema = _ID_SISTEMA 
             AND idCobranza = _IDCOBRANZA;
+    END IF;
+END $$
+DELIMITER ;
+
+
+/* ------------------------------------------------------------------------------------*/
+DROP PROCEDURE IF EXISTS STP_APP_BACKUP_NOTAS_INSERT;
+DELIMITER $$
+CREATE PROCEDURE STP_APP_BACKUP_NOTAS_INSERT(
+    IN _TABLA VARCHAR(50), IN _IDSISTEMA VARCHAR(120), 
+    IN _IDNOTA VARCHAR(120), IN _IDCOBRANZA VARCHAR(120),
+    IN _NOTA VARCHAR(200)
+)
+BEGIN
+DECLARE _VERIFY INT DEFAULT 0;
+    SET _VERIFY = (
+        SELECT 
+            COUNT(*) AS VERIFY
+        FROM appchop.app_notas WHERE 
+            id_sistema = _IDSISTEMA 
+            AND id_nota = _IDNOTA
+    );
+    IF _VERIFY = 0 THEN
+        INSERT INTO appchop.app_notas (
+            tabla, 
+            id_sistema, 
+            id_nota, 
+            id_cobranza, 
+            nota
+        ) VALUES (
+            _TABLA, 
+            _IDSISTEMA,
+            _IDNOTA, 
+            _IDCOBRANZA, 
+            _NOTA
+        );
+    ELSE
+        UPDATE appchop.app_notas SET
+            nota = _NOTA
+        WHERE
+            id_sistema = _IDSISTEMA 
+            AND id_nota = _IDNOTA;
+    END IF;
+END $$
+DELIMITER ;
+
+
+/* ------------------------------------------------------------------------------------*/
+DROP PROCEDURE IF EXISTS STP_APP_BACKUP_CARGOSABONOS_INSERT;
+DELIMITER $$
+CREATE PROCEDURE STP_APP_BACKUP_CARGOSABONOS_INSERT(
+    IN _TABLA VARCHAR(50), IN _IDSISTEMA VARCHAR(120), IN _IDCOBRANZA VARCHAR(120), 
+    IN _IDMOVIMIENTO VARCHAR(120), IN _TIPO VARCHAR(20), IN _MONTO FLOAT, 
+    IN _REFERENCIA VARCHAR(200), IN _USUARIOREGISTRO VARCHAR(150), 
+    IN _FECHACREACION VARCHAR(10)
+)
+BEGIN
+DECLARE _VERIFY INT DEFAULT 0;
+    SET _VERIFY = (
+        SELECT 
+            COUNT(*) AS VERIFY
+        FROM appchop.app_cargos_abonos WHERE 
+            id_sistema = _IDSISTEMA 
+            AND id_cobranza = _IDCOBRANZA
+            AND id_movimiento = _IDMOVIMIENTO
+    );
+    IF _VERIFY = 0 THEN
+        INSERT INTO appchop.app_cargos_abonos (
+            tabla,
+            id_sistema, 
+            id_cobranza, 
+            id_movimiento, 
+            tipo, 
+            monto, 
+            referencia, 
+            usuario_registro, 
+            fecha_creacion
+        ) VALUES (
+            _TABLA, 
+            _IDSISTEMA, 
+            _IDCOBRANZA, 
+            _IDMOVIMIENTO, 
+            _TIPO, 
+            _MONTO, 
+            _REFERENCIA, 
+            _USUARIOREGISTRO, 
+            _FECHACREACION
+        );
+    ELSE
+        SELECT _VERIFY FROM appchop.app_cargos_abonos;
     END IF;
 END $$
 DELIMITER ;

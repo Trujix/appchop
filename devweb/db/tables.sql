@@ -105,10 +105,6 @@ CREATE TABLE IF NOT EXISTS app_cargos_abonos(
     fecha_creacion VARCHAR(10) NOT NULL DEFAULT '-' COMMENT 'Fecha de creacion del registro'
 );
 
-CREATE TABLE IF NOT EXISTS prueba(
-    dato varbinary NOT NULL DEFAULT '-' COMMENT 'Id de registro de sistema'
-);
-
 /*
   String? tabla = "cargos_abonos";
   String? idUsuario;
