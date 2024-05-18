@@ -11,6 +11,7 @@ import '../local_storage/zonas.dart';
 import '../local_storage/zonas_usuarios.dart';
 
 class AppBackupData {
+  String? usuarioEnvia;
   List<Cobranzas>? cobranzas;
   List<CargosAbonos>? cargosAbonos;
   List<Notas>? notas;
@@ -22,6 +23,7 @@ class AppBackupData {
   List<ZonasUsuarios>? zonasUsuarios;
 
   AppBackupData({
+    this.usuarioEnvia = "",
     this.cobranzas = const [],
     this.cargosAbonos = const [],
     this.notas = const [],
@@ -34,6 +36,7 @@ class AppBackupData {
   });
 
   Map toJson() => {
+    'usuarioEnvia'      : usuarioEnvia,
     'cobranzas'         : cobranzas,
     'cargosAbonos'      : cargosAbonos,
     'notas'             : notas,
@@ -46,15 +49,16 @@ class AppBackupData {
   };
 
   AppBackupData.fromApi(Map<String, dynamic> json) {
-    Iterable iterableCobranzas = jsonDecode(jsonEncode(json['cobranzas']));
-    Iterable iterableCargosAbonos = jsonDecode(jsonEncode(json['cargosAbonos']));
-    Iterable iterableNotas = jsonDecode(jsonEncode(json['notas']));
-    Iterable iterableClientes = jsonDecode(jsonEncode(json['clientes']));
-    Iterable iterableInventarios = jsonDecode(jsonEncode(json['inventarios']));
-    Iterable iterableBorrados = jsonDecode(jsonEncode(json['borrados']));
-    Iterable iterableUsuarios = jsonDecode(jsonEncode(json['usuarios']));
-    Iterable iterableZonas = jsonDecode(jsonEncode(json['zonas']));
-    Iterable iterableZonasUsuarios = jsonDecode(jsonEncode(json['zonasUsuarios']));
+    usuarioEnvia = json['usuarioEnvia'] ?? "";
+    Iterable iterableCobranzas = jsonDecode(jsonEncode(json['cobranzas'] ?? []));
+    Iterable iterableCargosAbonos = jsonDecode(jsonEncode(json['cargosAbonos'] ?? []));
+    Iterable iterableNotas = jsonDecode(jsonEncode(json['notas'] ?? []));
+    Iterable iterableClientes = jsonDecode(jsonEncode(json['clientes'] ?? []));
+    Iterable iterableInventarios = jsonDecode(jsonEncode(json['inventarios'] ?? []));
+    Iterable iterableBorrados = jsonDecode(jsonEncode(json['borrados'] ?? []));
+    Iterable iterableUsuarios = jsonDecode(jsonEncode(json['usuarios'] ?? []));
+    Iterable iterableZonas = jsonDecode(jsonEncode(json['zonas'] ?? []));
+    Iterable iterableZonasUsuarios = jsonDecode(jsonEncode(json['zonasUsuarios'] ?? []));
     cobranzas = List<Cobranzas>.from(
       iterableCobranzas.map((json) => Cobranzas.fromJson(json))
     );

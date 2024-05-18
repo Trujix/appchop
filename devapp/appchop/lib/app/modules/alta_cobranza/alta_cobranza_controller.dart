@@ -169,6 +169,7 @@ class AltaCobranzaController extends GetInjection {
         saldo: tool.str2double(cantidad.text),
         ultimoCargo: tool.str2double(cantidad.text),
         fechaUltimoCargo: fechaHoy,
+        ultimoAbono: 0,
         usuarioUltimoCargo: esAdmin ? Literals.perfilAdministrador : localStorage.email,
         bloqueado: zonaAsignada ? Literals.bloqueoSi : Literals.bloqueoNo,
       );

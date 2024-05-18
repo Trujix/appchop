@@ -2,6 +2,8 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+import '../../data/models/app_backup/app_backup_data.dart';
+import '../../data/models/local_storage/cobranzas.dart';
 import '../../data/models/local_storage/local_storage.dart';
 import '../../utils/get_injection.dart';
 import '../../utils/literals.dart';
@@ -15,6 +17,8 @@ class ConfiguracionController extends GetInjection {
   String nombre = "";
   String idBackup = "";
   String fechaBackup = "--";
+
+  final bool esAdmin = GetInjection.administrador;
 
   @override
   Future<void> onInit() async {
@@ -61,6 +65,22 @@ class ConfiguracionController extends GetInjection {
     }
   }
 
+  Future<void> sincronizar() async {
+    try {
+      var cobranzas = List<Cobranzas>.from(
+        storage.get([Cobranzas()]).map((json) => Cobranzas.fromJson(json))
+      );
+      var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
+      var backupData = AppBackupData(
+        usuarioEnvia: esAdmin ? Literals.perfilAdministrador : localStorage.email,
+        cobranzas: cobranzas,
+      );
+      var result = await appBackupRepository.sincronizarAsync(backupData);
+    } finally {
+      
+    }
+  }
+ 
   Future<bool> desvincularDispositivo() async {
     try {
       var validar = await tool.ask("Desvincular dispositivo", "¿Desea continuar?");

@@ -11,14 +11,14 @@ import '../models/local_storage/zonas_usuarios.dart';
 class AppBackupProvider {
   final ApiService _api = Get.find<ApiService>();
 
-  Future<AppBackupInfo?> sincronizarAsync(AppBackupInfo backupInfo) async {
+  Future<AppBackupData?> sincronizarAsync(AppBackupData backupInfo) async {
     try {
       var result = await _api.post(
         "api/appbackup/sincronizar",
         backupInfo
       );
       print(result);
-      return AppBackupInfo.fromApi(jsonDecode(result!));
+      return AppBackupData.fromApi(jsonDecode(result!));
     } catch(e) {
       return null;
     }

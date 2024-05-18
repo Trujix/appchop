@@ -96,7 +96,7 @@ class ConfiguracionPage extends StatelessWidget with WidgetsBindingObserver {
                   fondoColor: ColorList.sys[1],
                   textoColor: ColorList.sys[0],
                   ltrbm: const [0, 0, 0, 15,],
-                  onPressed: () {},
+                  onPressed: _.sincronizar,
                   onLongPress: () {},
                 ),
                 const TituloContainer(
