@@ -99,8 +99,8 @@ class AltaCargoAbonoPage extends StatelessWidget with WidgetsBindingObserver {
             Visibility(
               visible: _.pendiente,
               child: CardContainer(
-                padding: const EdgeInsets.fromLTRB(10, 2, 10, 2),
-                margin: const EdgeInsets.fromLTRB(10, 5, 10, 2),
+                padding: const EdgeInsets.fromLTRB(10, 2, 10, 0),
+                margin: const EdgeInsets.fromLTRB(10, 5, 10, 0),
                 fondo: ColorList.ui[3],
                 children: <Widget>[
                   Row(
@@ -137,9 +137,11 @@ class AltaCargoAbonoPage extends StatelessWidget with WidgetsBindingObserver {
                           fondoColor: ColorList.sys[2],
                           textoColor: ColorList.sys[0],
                           ltrbm: const [0, 0, 0, 0,],
+                          ltrbp: const [15, 15, 15, 15,],
                           textoSize: 14,
                           onPressed: _.crearCargo,
                           onLongPress: () {},
+                          height: 70,
                         ),
                       ),
                       Expanded(
@@ -149,9 +151,11 @@ class AltaCargoAbonoPage extends StatelessWidget with WidgetsBindingObserver {
                           fondoColor: ColorList.sys[1],
                           textoColor: ColorList.sys[0],
                           ltrbm: const [0, 0, 0, 0,],
+                          ltrbp: const [15, 15, 15, 15,],
                           textoSize: 14,
                           onPressed: _.crearAbono,
                           onLongPress: () {},
+                          height: 70,
                         ),
                       ),
                     ],
@@ -182,7 +186,7 @@ class AltaCargoAbonoPage extends StatelessWidget with WidgetsBindingObserver {
                 icono: MaterialIcons.done_all,
                 fondoColor: ColorList.sys[0],
                 textoColor: ColorList.ui[0],
-                ltrbm: const [0, 0, 0, 5,],
+                ltrbm: const [0, 0, 0, 2,],
                 onPressed: _.marcarCobranzaPagada,
                 onLongPress: () {},
               ),
