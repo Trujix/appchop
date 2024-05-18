@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 
@@ -41,7 +39,6 @@ class AppBackupResultadoController extends GetInjection {
       if(appBackupData == null) {
         throw Exception();
       }
-      print(jsonEncode(appBackupData!.cobranzas));
       await storage.backup(appBackupData!);
       localStorage.backupInicial = true;
       await storage.update(localStorage);

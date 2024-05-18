@@ -17,7 +17,6 @@ class AppBackupProvider {
         "api/appbackup/sincronizar",
         backupInfo
       );
-      print(result);
       return AppBackupData.fromApi(jsonDecode(result!));
     } catch(e) {
       return null;

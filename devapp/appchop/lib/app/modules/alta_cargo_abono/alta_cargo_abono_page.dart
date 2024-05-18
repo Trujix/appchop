@@ -99,6 +99,8 @@ class AltaCargoAbonoPage extends StatelessWidget with WidgetsBindingObserver {
             Visibility(
               visible: _.pendiente,
               child: CardContainer(
+                padding: const EdgeInsets.fromLTRB(10, 2, 10, 2),
+                margin: const EdgeInsets.fromLTRB(10, 5, 10, 2),
                 fondo: ColorList.ui[3],
                 children: <Widget>[
                   Row(
@@ -180,7 +182,7 @@ class AltaCargoAbonoPage extends StatelessWidget with WidgetsBindingObserver {
                 icono: MaterialIcons.done_all,
                 fondoColor: ColorList.sys[0],
                 textoColor: ColorList.ui[0],
-                ltrbm: const [0, 0, 0, 15,],
+                ltrbm: const [0, 0, 0, 5,],
                 onPressed: _.marcarCobranzaPagada,
                 onLongPress: () {},
               ),
