@@ -101,8 +101,8 @@ class AppBackupResultadoController extends GetInjection {
     var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
     Get.back();
     if(tipo == 1) {
-      await Get.find<CobranzaMainController>().cargarListaCobranza();
       await Get.find<CobranzaMainController>().configurarZonas(localStorage);
+      await Get.find<CobranzaMainController>().cargarListaCobranza();
     }
   }
 }

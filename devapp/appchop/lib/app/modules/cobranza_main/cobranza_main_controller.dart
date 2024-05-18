@@ -426,7 +426,7 @@ class CobranzaMainController extends GetInjection {
   }
 
   void editarCobranzaElemento(Cobranzas cobranza) {
-    if(cobranza.bloqueado == Literals.bloqueoSi) {
+    if(esAdmin && cobranza.bloqueado == Literals.bloqueoSi) {
       tool.msg("Esta nota no puede ser editada ya que se encuentra asignada a un cobrador");
       return;
     }

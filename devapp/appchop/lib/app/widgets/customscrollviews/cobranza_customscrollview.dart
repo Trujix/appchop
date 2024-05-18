@@ -18,6 +18,7 @@ class CobranzaCustomscrollview extends StatelessWidget {
   final void Function(Cobranzas) aregarNota;
   final void Function(Cobranzas) agregarCargoAbono;
   final void Function(Cobranzas) borrarCobranza;
+  final bool esAdmin;
   const CobranzaCustomscrollview({
     super.key,
     this.scrollController,
@@ -27,6 +28,7 @@ class CobranzaCustomscrollview extends StatelessWidget {
     required this.aregarNota,
     required this.agregarCargoAbono,
     required this.borrarCobranza,
+    this.esAdmin = false,
   });
 
   @override
@@ -146,7 +148,7 @@ class CobranzaCustomscrollview extends StatelessWidget {
                                 ),
                               ),
                               Visibility(
-                                visible: cobranza.bloqueado == Literals.bloqueoSi,
+                                visible: esAdmin && cobranza.bloqueado == Literals.bloqueoSi,
                                 child: Container(
                                   margin: const EdgeInsets.only(left: 5,),
                                   child: Icon(

@@ -60,6 +60,7 @@ class CobranzaMainPage extends StatelessWidget with WidgetsBindingObserver {
                         aregarNota: _.agregarNota,
                         agregarCargoAbono: _.agregarCargoAbono,
                         borrarCobranza: _.borrarCobranza,
+                        esAdmin: _.esAdmin,
                       ),
                     ),
                   );

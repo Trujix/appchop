@@ -160,7 +160,7 @@ class AltaNotasPage extends StatelessWidget with WidgetsBindingObserver {
               ],
             ),
             Visibility(
-              visible: _.cobranza!.bloqueado == Literals.bloqueoNo 
+              visible: (!_.esAdmin && _.cobranza!.bloqueado == Literals.bloqueoSi || _.cobranza!.bloqueado == Literals.bloqueoNo) 
                 && _.cobranza!.estatus == Literals.statusCobranzaPendiente,
               child: SolidButton(
                 texto: "Guardar nota",

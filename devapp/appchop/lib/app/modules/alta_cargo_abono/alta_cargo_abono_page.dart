@@ -34,7 +34,7 @@ class AltaCargoAbonoPage extends StatelessWidget with WidgetsBindingObserver {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             TituloContainer(
-              texto: _.pendiente ? "(*) - Los campos son olbigatorios" : "Registro ${(_.cobranzaEditar!.bloqueado == Literals.bloqueoNo ? "pagado" : "pendiente")}",
+              texto: _.pendiente ? "(*) - Los campos son obligatorios" : "Registro ${(_.cobranzaEditar!.bloqueado == Literals.bloqueoNo ? "pagado" : "pendiente")}",
               ltrbp: const [20, 0, 0, 0],
               size: 14,
             ),

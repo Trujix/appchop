@@ -19,6 +19,8 @@ class AltaNotasController extends GetInjection {
   List<Notas> listaNotas = [];
   Notas? notaCargada;
 
+  final bool esAdmin = GetInjection.administrador;
+
   @override
   void onInit() {
     _init();
