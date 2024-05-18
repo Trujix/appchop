@@ -7,6 +7,10 @@ import '../models/local_storage/zonas_usuarios.dart';
 import '../providers/app_backup_provider.dart';
 
 class AppBackupRepository {
+  Future<AppBackupInfo?> sincronizarAsync(AppBackupInfo backupInfo) async {
+    return await Get.find<AppBackupProvider>().sincronizarAsync(backupInfo);
+  }
+
   Future<AppBackupInfo?> verificarBackupAsync(String idUsuario) async {
     return await Get.find<AppBackupProvider>().verificarBackupAsync(idUsuario);
   }

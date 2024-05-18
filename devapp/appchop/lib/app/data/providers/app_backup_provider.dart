@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:get/get.dart';
 
 import '../../services/api_service.dart';
@@ -11,6 +10,19 @@ import '../models/local_storage/zonas_usuarios.dart';
 
 class AppBackupProvider {
   final ApiService _api = Get.find<ApiService>();
+
+  Future<AppBackupInfo?> sincronizarAsync(AppBackupInfo backupInfo) async {
+    try {
+      var result = await _api.post(
+        "api/appbackup/sincronizar",
+        backupInfo
+      );
+      print(result);
+      return AppBackupInfo.fromApi(jsonDecode(result!));
+    } catch(e) {
+      return null;
+    }
+  }
 
   Future<AppBackupInfo?> verificarBackupAsync(String idUsuario) async {
     try {

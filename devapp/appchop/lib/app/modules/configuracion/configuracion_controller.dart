@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -8,6 +9,7 @@ import '../login/login_binding.dart';
 import '../login/login_page.dart';
 
 class ConfiguracionController extends GetInjection {
+  ScrollController scrollController = ScrollController();
   String idUsuario = "";
   String usuario = "";
   String nombre = "";
