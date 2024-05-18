@@ -3,11 +3,40 @@
         public static function sincronizar($params) {
             Auth::verify();
             $backup_data = (object)$params;
-            if(!isset($backup_data->idUsuario)
-                || !isset($backup_data->acepta)) {
+            if(!isset($backup_data->usuarioEnvia) 
+                || !isset($backup_data->cobranzas)
+                || !isset($backup_data->cargosAbonos)
+                || !isset($backup_data->notas)
+                || !isset($backup_data->clientes)
+                || !isset($backup_data->inventarios)
+                || !isset($backup_data->borrados)
+                || !isset($backup_data->usuarios)
+                || !isset($backup_data->zonas)
+                || !isset($backup_data->zonasUsuarios)) {
                 http_response_code(406);
                 die("Parámetros de backup incorrectos");
             }
+            $encryption_key = getenv('ENCRYPTKEY');
+            $usuario_envia = $backup_data->usuarioEnvia;
+            $cobranzas = array();
+            $mysql = new Mysql();
+            foreach($backup_data->cobranzas as $array_cobranza) {
+                $cobranza = (object)$array_cobranza;
+                $agregar_cobranza = $mysql->executeNonQuery(
+                    "CALL STP_APP_BACKUP_COBRANZAS_PROCESS(
+                        '$cobranza->tabla', '$cobranza->idUsuario', '$cobranza->idCobranza', 
+                        '$cobranza->tipoCobranza', '$cobranza->zona', '$cobranza->nombre', 
+                        $cobranza->cantidad , '$cobranza->descripcion', '$cobranza->telefono', 
+                        '$cobranza->direccion', '$cobranza->correo', '$cobranza->fechaRegistro', 
+                        '$cobranza->fechaVencimiento', $cobranza->saldo , '$cobranza->latitud', 
+                        '$cobranza->longitud', '$cobranza->ultimoCargo' , '$cobranza->fechaUltimoCargo', 
+                        '$cobranza->usuarioUltimoCargo', $cobranza->ultimoAbono , '$cobranza->fechaUltimoAbono', 
+                        '$cobranza->usuarioUltimoAbono', '$cobranza->estatus', '$cobranza->bloqueado', 
+                        '$cobranza->idCobrador', '$encryption_key', '$usuario_envia'
+                    )"
+                );
+            }
+            die($encryption_key);
         }
 
         public static function verificarBackup($params) {
@@ -34,6 +63,7 @@
             $id_usuario = $params[0];
             $usuario = $params[1];
             $esAdmin = $usuario == "ADMINISTRADOR";
+            $cobranzas = array();
             $usuarios = array();
             $zonas = array();
             $zonas_usuarios = array();

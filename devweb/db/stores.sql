@@ -433,7 +433,7 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS STP_APP_BACKUP_COBRANZAS_PROCESS;
 DELIMITER $$
 CREATE PROCEDURE STP_APP_BACKUP_COBRANZAS_PROCESS(
-    IN _TABLA VARCHAR(50), IN _ID_SISTEMA VARCHAR(120), IN _IDCOBRANZA VARCHAR(120), 
+    IN _TABLA VARCHAR(50), IN _IDSISTEMA VARCHAR(120), IN _IDCOBRANZA VARCHAR(120), 
     IN _TIPOCOBRANZA VARCHAR(20), IN _ZONA VARCHAR(120), IN _NOMBRE TEXT, 
     IN _CANTIDAD FLOAT, IN _DESCRIPCION VARCHAR(100), IN _TELEFONO TEXT, 
     IN _DIRECCION TEXT, IN _CORREO TEXT, IN _FECHAREGISTRO VARCHAR(10), 
@@ -441,47 +441,49 @@ CREATE PROCEDURE STP_APP_BACKUP_COBRANZAS_PROCESS(
     IN _ULTIMOCARGO FLOAT, IN _FECHAULTIMOCARGO VARCHAR(10), IN _USUARIOULTIMOCARGO VARCHAR(120), 
     IN _ULTIMOABONO FLOAT, IN _FECHAULTIMOABONO VARCHAR(10), IN _USUARIOULTIMOABONO VARCHAR(120), 
     IN _ESTATUS VARCHAR(20), IN _BLOQUEADO VARCHAR(20), IN _IDCOBRADOR VARCHAR(120), 
-    IN _ENCRYPTKEY VARCHAR(30)
+    IN _ENCRYPTKEY VARCHAR(30), IN _USUARIOENVIA VARCHAR(150)
 )
 BEGIN
     DECLARE _VERIFY INT DEFAULT 0;
+    DECLARE _BLOQUEO INT DEFAULT 0;
+    DECLARE _ESBLOQUEO VARCHAR(20) DEFAULT 'SI';
     SET _VERIFY = (
         SELECT 
             COUNT(*) AS VERIFY
         FROM appchop.app_cobranzas WHERE 
             id_sistema = _IDSISTEMA 
-            AND idCobranza = _IDCOBRANZA
+            AND id_cobranza = _IDCOBRANZA
     );
     IF _VERIFY = 0 THEN
         INSERT INTO appchop.app_cobranzas (
-            tabla,
-            id_sistema,
-            idCobranza,
-            tipoCobranza,
-            zona,
-            nombre,
-            cantidad,
-            descripcion,
-            telefono,
-            direccion,
-            correo,
-            fechaRegistro,
-            fechaVencimiento,
-            saldo,
-            latitud,
-            longitud,
-            ultimoCargo,
-            fechaUltimoCargo,
-            usuarioUltimoCargo,
-            ultimoAbono,
-            fechaUltimoAbono,
-            usuarioUltimoAbono,
-            estatus,
-            bloqueado,
-            idCobrador
+            tabla, 
+            id_sistema, 
+            id_cobranza, 
+            tipo_cobranza, 
+            zona, 
+            nombre, 
+            cantidad, 
+            descripcion, 
+            telefono, 
+            direccion, 
+            correo, 
+            fecha_registro, 
+            fecha_vencimiento, 
+            saldo, 
+            latitud, 
+            longitud, 
+            ultimo_cargo, 
+            fecha_ultimo_cargo, 
+            usuario_ultimo_cargo, 
+            ultimo_abono, 
+            fecha_ultimo_abono, 
+            usuario_ultimo_abono, 
+            estatus, 
+            bloqueado, 
+            id_cobrador
         ) VALUES (
             _TABLA,
-            _ID_SISTEMA,
+            _IDSISTEMA,
             _IDCOBRANZA,
             _TIPOCOBRANZA,
             _ZONA,
@@ -507,35 +509,93 @@ BEGIN
             _IDCOBRADOR
         );
     ELSE
-        UPDATE appchop.app_cobranzas SET            
-            tipoCobranza = _TIPOCOBRANZA,
-            zona = _ZONA,
-            nombre = AES_ENCRYPT(_NOMBRE, _ENCRYPTKEY),
-            cantidad = _CANTIDAD,
-            descripcion = _DESCRIPCION,
-            telefono = AES_ENCRYPT(_TELEFONO, _ENCRYPTKEY),
-            direccion = AES_ENCRYPT(_DIRECCION, _ENCRYPTKEY),
-            correo = AES_ENCRYPT(_CORREO, _ENCRYPTKEY),
-            fechaRegistro = _FECHAREGISTRO,
-            fechaVencimiento = _FECHAVENCIMIENTO,
-            saldo = _SALDO,
-            latitud = AES_ENCRYPT(_LATITUD, _ENCRYPTKEY),
-            longitud = AES_ENCRYPT(_LONGITUD, _ENCRYPTKEY),
-            ultimoCargo = _ULTIMOCARGO,
-            fechaUltimoCargo = _FECHAULTIMOCARGO,
-            usuarioUltimoCargo = _USUARIOULTIMOCARGO,
-            ultimoAbono = _ULTIMOABONO,
-            fechaUltimoAbono = _FECHAULTIMOABONO,
-            usuarioUltimoAbono = _USUARIOULTIMOABONO,
-            estatus = _ESTATUS,
-            bloqueado = _BLOQUEADO,
-            idCobrador = _IDCOBRADOR
-        WHERE 
-            id_sistema = _ID_SISTEMA 
-            AND idCobranza = _IDCOBRANZA;
+        IF _USUARIOENVIA = 'ADMINISTRADOR' THEN
+            SET _ESBLOQUEO = 'SI';
+        ELSE
+            SET _ESBLOQUEO = 'NO';
+        END IF;
+        SET _BLOQUEO = (
+            SELECT COUNT(*) AS BLOQUEO 
+            FROM appchop.app_cobranzas
+                WHERE id_sistema = _IDSISTEMA 
+                AND id_cobranza = _IDCOBRANZA
+                AND bloqueado = _ESBLOQUEO
+        );
+        IF _BLOQUEO = 0 THEN
+            UPDATE appchop.app_cobranzas SET            
+                tipo_cobranza = _TIPOCOBRANZA,
+                zona = _ZONA,
+                nombre = AES_ENCRYPT(_NOMBRE, _ENCRYPTKEY),
+                cantidad = _CANTIDAD,
+                descripcion = _DESCRIPCION,
+                telefono = AES_ENCRYPT(_TELEFONO, _ENCRYPTKEY),
+                direccion = AES_ENCRYPT(_DIRECCION, _ENCRYPTKEY),
+                correo = AES_ENCRYPT(_CORREO, _ENCRYPTKEY),
+                fecha_registro = _FECHAREGISTRO,
+                fecha_vencimiento = _FECHAVENCIMIENTO,
+                saldo = _SALDO,
+                latitud = AES_ENCRYPT(_LATITUD, _ENCRYPTKEY),
+                longitud = AES_ENCRYPT(_LONGITUD, _ENCRYPTKEY),
+                ultimo_cargo = _ULTIMOCARGO,
+                fecha_ultimo_cargo = _FECHAULTIMOCARGO,
+                usuario_ultimo_cargo = _USUARIOULTIMOCARGO,
+                ultimo_abono = _ULTIMOABONO,
+                fecha_ultimo_abono = _FECHAULTIMOABONO,
+                usuario_ultimo_abono = _USUARIOULTIMOABONO,
+                estatus = _ESTATUS,
+                bloqueado = _BLOQUEADO,
+                id_cobrador = _IDCOBRADOR
+            WHERE 
+                id_sistema = _IDSISTEMA 
+                AND id_cobranza = _IDCOBRANZA;
+        ELSE
+            SELECT _BLOQUEO AS BLOQUEO;
+        END IF;
+        
     END IF;
 END $$
 DELIMITER ;
+
+
+
+/* ------------------------------------------------------------------------------------*/
+DROP PROCEDURE IF EXISTS STP_APP_BACKUP_COBRANZAS_ADMINISTRADOR_GET;
+DELIMITER $$
+CREATE PROCEDURE STP_APP_BACKUP_COBRANZAS_ADMINISTRADOR_GET(
+    IN _IDSISTEMA VARCHAR(120), IN _ENCRYPTKEY VARCHAR(30)
+)
+BEGIN
+    SELECT 
+        tabla AS tabla,
+        id_sistema AS idUsuario,
+        id_cobranza AS idCobranza,
+        tipo_cobranza AS tipoCobranza,
+        zona AS zona,
+        CAST(AES_DECRYPT(nombre, _ENCRYPTKEY) AS CHAR) AS nombre,
+        cantidad AS cantidad,
+        descripcion AS descripcion,
+        CAST(AES_DECRYPT(telefono, _ENCRYPTKEY) AS CHAR) AS telefono,
+        CAST(AES_DECRYPT(direccion, _ENCRYPTKEY) AS CHAR) AS direccion,
+        CAST(AES_DECRYPT(correo, _ENCRYPTKEY) AS CHAR) AS correo,
+        fecha_registro AS fechaRegistro,
+        fecha_vencimiento AS fechaVencimiento,
+        saldo AS saldo,
+        CAST(AES_DECRYPT(latitud, _ENCRYPTKEY) AS CHAR) AS latitud,
+        CAST(AES_DECRYPT(longitud, _ENCRYPTKEY) AS CHAR) AS longitud,
+        ultimo_cargo AS ultimoCargo,
+        fecha_ultimo_cargo AS fechaUltimoCargo,
+        usuario_ultimo_cargo AS usuarioUltimoCargo,
+        ultimo_abono AS ultimoAbono,
+        fecha_ultimo_abono AS fechaUltimoAbono,
+        usuario_ultimo_abono AS usuarioUltimoAbono,
+        estatus AS estatus,
+        bloqueado AS bloqueado,
+        id_cobrador AS idCobrador
+    FROM appchop.app_cobranzas
+        WHERE id_sistema = _IDSISTEMA;
+END $$
+DELIMITER ;
+
 
 
 /* ------------------------------------------------------------------------------------*/

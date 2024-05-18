@@ -60,8 +60,8 @@ CREATE TABLE IF NOT EXISTS app_log_backups(
 CREATE TABLE IF NOT EXISTS app_cobranzas(
     tabla VARCHAR(50) NOT NULL DEFAULT '-' COMMENT 'Id de tabla local storage',
     id_sistema VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de registro de sistema',
-    idCobranza VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de registro de cobranza',
-    tipoCobranza VARCHAR(20) NOT NULL DEFAULT '-' COMMENT 'Tipo de cobranza Debo Me deben',
+    id_cobranza VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de registro de cobranza',
+    tipo_cobranza VARCHAR(20) NOT NULL DEFAULT '-' COMMENT 'Tipo de cobranza Debo Me deben',
     zona VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Zona de registro de cobranza',
     nombre TEXT NOT NULL DEFAULT '-' COMMENT 'Nombre de cliente',
     cantidad FLOAT NOT NULL DEFAULT 0 COMMENT 'Monto de la nota de cobranza',
@@ -69,20 +69,20 @@ CREATE TABLE IF NOT EXISTS app_cobranzas(
     telefono TEXT NOT NULL DEFAULT '-' COMMENT 'Telefono de cliente',
     direccion TEXT NOT NULL DEFAULT '-' COMMENT 'Direccion de cliente',
     correo TEXT NOT NULL DEFAULT '-' COMMENT 'Correo de cliente',
-    fechaRegistro VARCHAR(10) NOT NULL DEFAULT '-' COMMENT 'Fecha de registro de cobranza',
-    fechaVencimiento VARCHAR(10) NOT NULL DEFAULT '-' COMMENT 'Fecha de vencimiento de cobranza',
+    fecha_registro VARCHAR(10) NOT NULL DEFAULT '-' COMMENT 'Fecha de registro de cobranza',
+    fecha_vencimiento VARCHAR(10) NOT NULL DEFAULT '-' COMMENT 'Fecha de vencimiento de cobranza',
     saldo FLOAT NOT NULL DEFAULT 0 COMMENT 'Saldo restante de cobranza',
     latitud TEXT NOT NULL DEFAULT '-' COMMENT 'Longitud coordenada hubicacion',
     longitud TEXT NOT NULL DEFAULT '-' COMMENT 'Latitud coordenada hubicacion',
-    ultimoCargo FLOAT NOT NULL DEFAULT 0 COMMENT 'Monto ultimo cargo',
-    fechaUltimoCargo VARCHAR(10) NOT NULL DEFAULT '-' COMMENT 'Fecha ultimo cargo',
-    usuarioUltimoCargo VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Usuario genera ultimo cargo',
-    ultimoAbono FLOAT NOT NULL DEFAULT 0 COMMENT 'Monto ultimo abono',
-    fechaUltimoAbono VARCHAR(10) NOT NULL DEFAULT '-' COMMENT 'Fecha ultimo abono',
-    usuarioUltimoAbono VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Usuario ultimo abono',
+    ultimo_cargo FLOAT NOT NULL DEFAULT 0 COMMENT 'Monto ultimo cargo',
+    fecha_ultimo_cargo VARCHAR(10) NOT NULL DEFAULT '-' COMMENT 'Fecha ultimo cargo',
+    usuario_ultimo_cargo VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Usuario genera ultimo cargo',
+    ultimo_abono FLOAT NOT NULL DEFAULT 0 COMMENT 'Monto ultimo abono',
+    fecha_ultimo_abono VARCHAR(10) NOT NULL DEFAULT '-' COMMENT 'Fecha ultimo abono',
+    usuario_ultimo_abono VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Usuario ultimo abono',
     estatus VARCHAR(20) NOT NULL DEFAULT '-' COMMENT 'Estatus de nota de cobranza',
     bloqueado VARCHAR(20) NOT NULL DEFAULT '-' COMMENT 'Estatus bloqueo de nota cobranza',
-    idCobrador VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de usuario cobrador'
+    id_cobrador VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de usuario cobrador'
 );
 
 CREATE TABLE IF NOT EXISTS app_notas(
