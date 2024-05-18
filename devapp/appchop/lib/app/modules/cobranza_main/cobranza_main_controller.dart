@@ -256,6 +256,7 @@ class CobranzaMainController extends GetInjection {
       mostrarResultados = cobranzaStorage.isNotEmpty;
       _calcularSaldos();
     } catch(e) {
+      print(e.toString());
       tool.msg("Ocurrió un error al cargar la lista de cobranza", 3);
     } finally {
       update();

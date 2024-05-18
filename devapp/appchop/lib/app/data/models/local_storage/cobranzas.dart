@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 
 import '../../../services/storage_service.dart';
+import '../../../services/tool_service.dart';
 import '../../../utils/literals.dart';
 
 class Cobranzas {
@@ -102,20 +103,20 @@ class Cobranzas {
     tipoCobranza: json['tipoCobranza'] ?? "",
     zona: json['zona'] ?? "",
     nombre: json['nombre'] ?? "",
-    cantidad: json['cantidad'] ?? 0.0,
+    cantidad: Get.find<ToolService>().str2double(json['cantidad'].toString()),
     descripcion: json['descripcion'] ?? "",
     telefono: json['telefono'] ?? "",
     direccion: json['direccion'] ?? "",
     correo: json['correo'] ?? "",
     fechaRegistro: json['fechaRegistro'] ?? "",
     fechaVencimiento: json['fechaVencimiento'] ?? "",
-    saldo: json['saldo'] ?? 0.0,
+    saldo: Get.find<ToolService>().str2double(json['saldo'].toString()),
     latitud: json['latitud'] ?? "",
     longitud: json['longitud'] ?? "",
-    ultimoCargo: json['ultimoCargo'] ?? 0.0,
+    ultimoCargo: Get.find<ToolService>().str2double(json['ultimoCargo'].toString()),
     fechaUltimoCargo: json['fechaUltimoCargo'] ?? "",
     usuarioUltimoCargo: json['usuarioUltimoCargo'] ?? "",
-    ultimoAbono: json['ultimoAbono'] ?? 0.0,
+    ultimoAbono: Get.find<ToolService>().str2double(json['ultimoAbono'].toString()),
     fechaUltimoAbono: json['fechaUltimoAbono'] ?? "",
     usuarioUltimoAbono: json['usuarioUltimoAbono'] ?? "",
     estatus: json['estatus'] ?? "",

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 
@@ -39,6 +41,7 @@ class AppBackupResultadoController extends GetInjection {
       if(appBackupData == null) {
         throw Exception();
       }
+      print(jsonEncode(appBackupData!.cobranzas));
       await storage.backup(appBackupData!);
       localStorage.backupInicial = true;
       await storage.update(localStorage);
@@ -57,6 +60,11 @@ class AppBackupResultadoController extends GetInjection {
       case 1:
         tituloRespaldo = "Generando respaldo inicial";
         etiquetas = [
+          BackupEtiquetas(
+            tag: "cobranzas",
+            texto1: "Notas de Cobranza:   ",
+            icono: MaterialIcons.description,
+          ),
           BackupEtiquetas(
             tag: "zonas",
             texto1: "Zonas:   ",
@@ -79,7 +87,9 @@ class AppBackupResultadoController extends GetInjection {
 
   void _actualizarEtiquetas() {
     for (var i = 0; i < etiquetas.length; i++) {
-      if(etiquetas[i].tag == "zonas") {
+      if(etiquetas[i].tag == "cobranzas") {
+        etiquetas[i].texto2 = "${appBackupData!.cobranzas!.length} registro(s)";
+      } else if(etiquetas[i].tag == "zonas") {
         etiquetas[i].texto2 = "${appBackupData!.zonas!.length} registro(s)";
       } else if(etiquetas[i].tag == "usuarios") {
         etiquetas[i].texto2 = "${appBackupData!.usuarios!.length} registro(s)";
@@ -91,6 +101,7 @@ class AppBackupResultadoController extends GetInjection {
     var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
     Get.back();
     if(tipo == 1) {
+      await Get.find<CobranzaMainController>().cargarListaCobranza();
       await Get.find<CobranzaMainController>().configurarZonas(localStorage);
     }
   }
