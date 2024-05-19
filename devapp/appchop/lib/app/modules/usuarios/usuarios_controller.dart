@@ -356,6 +356,8 @@ class UsuariosController extends GetInjection {
       mensaje = "Escriba el usuario";
     } else if(espacios > 0) {
       mensaje = "El usuario NO puede contener espacios";
+    } else if(usuario.text.trim() == Literals.perfilAdministrador) {
+      mensaje = "Nombre de usuario incorrecto";
     } else if(tool.isNullOrEmpty(password)) {
       mensaje = "Escriba la contraseña";
     } else if(tool.isNullOrEmpty(nombres)) {

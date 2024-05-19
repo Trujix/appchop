@@ -1,5 +1,6 @@
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../data/models/app_backup/app_backup_data.dart';
 import '../../data/models/backup_etiquetas.dart';
@@ -7,10 +8,14 @@ import '../../data/models/local_storage/local_storage.dart';
 import '../../utils/get_injection.dart';
 import '../../utils/literals.dart';
 import '../cobranza_main/cobranza_main_controller.dart';
+import '../login/login_binding.dart';
+import '../login/login_page.dart';
 
 class AppBackupResultadoController extends GetInjection {
   bool respaldoTerminado = false;
+  bool errorRespaldo = false;
   String tituloRespaldo = "Respaldo de información";
+  String estatusRespaldo = "Por favor espere...";
   int tipo = 0;
   AppBackupData? appBackupData = AppBackupData();
 
@@ -41,9 +46,13 @@ class AppBackupResultadoController extends GetInjection {
       }
       await storage.backup(appBackupData!);
       localStorage.backupInicial = true;
+      localStorage.fechaBackup = DateFormat("dd-MM-yyyy").format(DateTime.now()).toString();
       await storage.update(localStorage);
       await tool.wait(2);
+      estatusRespaldo = "Respaldo terminado con éxito";
     } catch(e) {
+      errorRespaldo = true;
+      estatusRespaldo = "Error en el respaldo";
       tool.msg("Ocurrió un error al intentar realizar respaldo inicial", 3);
     } finally {
       respaldoTerminado = true;
@@ -61,6 +70,11 @@ class AppBackupResultadoController extends GetInjection {
             tag: "cobranzas",
             texto1: "Notas de Cobranza:   ",
             icono: MaterialIcons.description,
+          ),
+          BackupEtiquetas(
+            tag: "cargos_abonos",
+            texto1: "Cargos y abonos   ",
+            icono: MaterialIcons.attach_money,
           ),
           BackupEtiquetas(
             tag: "zonas",
@@ -83,18 +97,33 @@ class AppBackupResultadoController extends GetInjection {
   }
 
   void _actualizarEtiquetas() {
-    for (var i = 0; i < etiquetas.length; i++) {
-      if(etiquetas[i].tag == "cobranzas") {
-        etiquetas[i].texto2 = "${appBackupData!.cobranzas!.length} registro(s)";
-      } else if(etiquetas[i].tag == "zonas") {
-        etiquetas[i].texto2 = "${appBackupData!.zonas!.length} registro(s)";
-      } else if(etiquetas[i].tag == "usuarios") {
-        etiquetas[i].texto2 = "${appBackupData!.usuarios!.length} registro(s)";
+    try {
+      for (var i = 0; i < etiquetas.length; i++) {
+        if(etiquetas[i].tag == "cobranzas") {
+          etiquetas[i].texto2 = "${appBackupData!.cobranzas!.length} registro(s)";
+        } else if(etiquetas[i].tag == "cargos_abonos") {
+          etiquetas[i].texto2 = "${appBackupData!.cargosAbonos!.length} registro(s)";
+        } else if(etiquetas[i].tag == "zonas") {
+          etiquetas[i].texto2 = "${appBackupData!.zonas!.length} registro(s)";
+        } else if(etiquetas[i].tag == "usuarios") {
+          etiquetas[i].texto2 = "${appBackupData!.usuarios!.length} registro(s)";
+        }
       }
+    } finally {
+      update();
     }
   }
 
   Future<void> salir() async {
+    if(errorRespaldo) {
+      Get.offAll(
+        const LoginPage(),
+        binding: LoginBinding(),
+        transition: Transition.circularReveal,
+        duration: 1.5.seconds,
+      );
+      return;
+    }
     var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
     Get.back();
     if(tipo == 1) {

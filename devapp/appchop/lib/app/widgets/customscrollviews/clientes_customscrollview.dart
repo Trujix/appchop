@@ -1,9 +1,9 @@
-import 'package:appchop/app/widgets/containers/card_container.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 import '../../data/models/local_storage/clientes.dart';
 import '../../utils/color_list.dart';
+import '../containers/card_container.dart';
 
 class ClientesCustomscrollview extends StatelessWidget {
   final ScrollController? scrollController;

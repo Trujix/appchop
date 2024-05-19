@@ -12,6 +12,7 @@ import '../local_storage/zonas_usuarios.dart';
 
 class AppBackupData {
   String? usuarioEnvia;
+  String? idBackup;
   List<Cobranzas>? cobranzas;
   List<CargosAbonos>? cargosAbonos;
   List<Notas>? notas;
@@ -24,6 +25,7 @@ class AppBackupData {
 
   AppBackupData({
     this.usuarioEnvia = "",
+    this.idBackup = "",
     this.cobranzas = const [],
     this.cargosAbonos = const [],
     this.notas = const [],
@@ -37,6 +39,7 @@ class AppBackupData {
 
   Map toJson() => {
     'usuarioEnvia'      : usuarioEnvia,
+    'idBackup'          : idBackup,
     'cobranzas'         : cobranzas,
     'cargosAbonos'      : cargosAbonos,
     'notas'             : notas,
@@ -50,6 +53,7 @@ class AppBackupData {
 
   AppBackupData.fromApi(Map<String, dynamic> json) {
     usuarioEnvia = json['usuarioEnvia'] ?? "";
+    idBackup = json['idBackup'] ?? "";
     Iterable iterableCobranzas = jsonDecode(jsonEncode(json['cobranzas'] ?? []));
     Iterable iterableCargosAbonos = jsonDecode(jsonEncode(json['cargosAbonos'] ?? []));
     Iterable iterableNotas = jsonDecode(jsonEncode(json['notas'] ?? []));

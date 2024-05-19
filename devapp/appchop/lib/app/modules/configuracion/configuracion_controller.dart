@@ -1,10 +1,11 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 import '../../data/models/app_backup/app_backup_data.dart';
+import '../../data/models/local_storage/cargos_abonos.dart';
 import '../../data/models/local_storage/cobranzas.dart';
 import '../../data/models/local_storage/local_storage.dart';
+import '../../data/models/local_storage/notas.dart';
 import '../../utils/get_injection.dart';
 import '../../utils/literals.dart';
 import '../login/login_binding.dart';
@@ -30,7 +31,7 @@ class ConfiguracionController extends GetInjection {
     var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
     if(localStorage.idBackup != Literals.backUpClean && localStorage.idBackup != "") {
       idBackup = localStorage.idBackup!;
-      fechaBackup = DateFormat("dd-MM-yyyy").format(DateTime.now()).toString();
+      fechaBackup = localStorage.fechaBackup!;
     } else {
       idBackup = "Sin registro de actualización";
     }
@@ -67,17 +68,30 @@ class ConfiguracionController extends GetInjection {
 
   Future<void> sincronizar() async {
     try {
+      tool.isBusy();
       var cobranzas = List<Cobranzas>.from(
         storage.get([Cobranzas()]).map((json) => Cobranzas.fromJson(json))
+      );
+      var cargosAbonos = List<CargosAbonos>.from(
+        storage.get([CargosAbonos()]).map((json) => CargosAbonos.fromJson(json))
+      );
+      var notas = List<Notas>.from(
+        storage.get([Notas()]).map((json) => Notas.fromJson(json))
       );
       var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
       var backupData = AppBackupData(
         usuarioEnvia: esAdmin ? Literals.perfilAdministrador : localStorage.email,
         cobranzas: cobranzas,
+        cargosAbonos: cargosAbonos,
+        notas: notas,
       );
       var result = await appBackupRepository.sincronizarAsync(backupData);
+      await tool.wait(1);
+      tool.isBusy(false);
+    } catch(e) {
+      tool.msg("Ocurrió un error al intentar sincronizarse con el servidor", 3);
     } finally {
-      
+      update();
     }
   }
  

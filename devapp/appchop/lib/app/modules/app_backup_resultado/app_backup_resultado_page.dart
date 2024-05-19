@@ -1,4 +1,3 @@
-import 'package:appchop/app/widgets/texts/etiqueta_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
@@ -9,6 +8,7 @@ import '../../utils/color_list.dart';
 import '../../widgets/appbars/off_appbar.dart';
 import '../../widgets/containers/card_container.dart';
 import '../../widgets/containers/titulo_container.dart';
+import '../../widgets/texts/etiqueta_text.dart';
 import 'app_backup_resultado_controller.dart';
 
 class AppBackupResultadoPage extends StatelessWidget with WidgetsBindingObserver {
@@ -47,7 +47,7 @@ class AppBackupResultadoPage extends StatelessWidget with WidgetsBindingObserver
                     }).toList(),
                   ),
                   TituloContainer(
-                    texto: !_.respaldoTerminado ? "Por favor espere..." : "Respaldo terminado",
+                    texto: _.estatusRespaldo,
                     ltrbp: const [5, 5, 5, 10],
                     size: 16,
                   ),

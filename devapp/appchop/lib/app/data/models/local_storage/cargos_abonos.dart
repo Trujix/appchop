@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 
 import '../../../services/storage_service.dart';
+import '../../../services/tool_service.dart';
 
 class CargosAbonos {
   String? tabla = "cargos_abonos";
@@ -52,7 +53,7 @@ class CargosAbonos {
     idCobranza: json['idCobranza'] ?? "",
     idMovimiento: json['idMovimiento'] ?? "",
     tipo: json['tipo'] ?? "",
-    monto: json['monto'] ?? 0.0,
+    monto: Get.find<ToolService>().str2double(json['monto'].toString()),
     referencia: json['referencia'] ?? "",
     usuarioRegistro: json['usuarioRegistro'] ?? "",
     fechaRegistro: json['fechaRegistro'] ?? "",

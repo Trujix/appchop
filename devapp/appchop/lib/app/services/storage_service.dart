@@ -94,6 +94,7 @@ class StorageService {
   Future<void> backup(AppBackupData appBackupData) async {
     try {
       await update(appBackupData.cobranzas);
+      await update(appBackupData.cargosAbonos);
       await update(appBackupData.usuarios);
       await update(appBackupData.zonas);
       await update(appBackupData.zonasUsuarios);

@@ -22,6 +22,7 @@ class LocalStorage {
   bool? creado = false;
   bool? backupInicial = false;
   String? idBackup;
+  String? fechaBackup;
 
   LocalStorage({
     this.version = _localStorageVersion,
@@ -40,6 +41,7 @@ class LocalStorage {
     this.creado = false,
     this.backupInicial = false,
     this.idBackup = Literals.backUpClean,
+    this.fechaBackup = "",
   });
 
   Map toJson() => {
@@ -60,6 +62,7 @@ class LocalStorage {
     'creado'            : creado,
     'backupInicial'     : backupInicial,
     'idBackup'          : idBackup,
+    'fechaBackup'       : fechaBackup,
   };
   
   Map<String, dynamic> toMap() {
@@ -81,6 +84,7 @@ class LocalStorage {
       'creado'            : creado,
       'backupInicial'     : backupInicial,
       'idBackup'          : idBackup,
+      'fechaBackup'       : fechaBackup,
     };
   }
 
@@ -101,6 +105,7 @@ class LocalStorage {
     creado = json['creado'] ?? true;
     backupInicial = json['backupInicial'] ?? true;
     idBackup = json['idBackup'] ?? "";
+    fechaBackup = json['fechaBackup'] ?? "";
   }
 
   LocalStorage.fromMap(Map<String, dynamic> json) {
@@ -119,6 +124,7 @@ class LocalStorage {
     creado = json['creado'] ?? true;
     backupInicial = json['backupInicial'] ?? true;
     idBackup = json['idBackup'] ?? "";
+    fechaBackup = json['fechaBackup'] ?? "";
   }
 
   factory LocalStorage.fromJson(Map<String, dynamic> json) => LocalStorage(
@@ -138,5 +144,6 @@ class LocalStorage {
     creado: json['creado'] ?? true,
     backupInicial: json['backupInicial'] ?? true,
     idBackup: json['idBackup'] ?? "",
+    fechaBackup: json['fechaBackup'] ?? "",
   );
 }

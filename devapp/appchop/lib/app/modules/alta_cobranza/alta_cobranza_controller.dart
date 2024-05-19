@@ -140,7 +140,7 @@ class AltaCobranzaController extends GetInjection {
         return;
       }
       var clienteNuevo = false;
-      if(altaCliente && !tool.isNullOrEmpty(telefono)) {
+      if(altaCliente && !tool.isNullOrEmpty(telefono) && esAdmin) {
         clienteNuevo = await tool.ask("Agregar nuevo cliente", "El teléfono ${telefono.text} no está registrado, ¿Desea guardarlo?");
       }
       tool.isBusy(true);
@@ -277,6 +277,9 @@ class AltaCobranzaController extends GetInjection {
   }
 
   bool _verificarZona() {
+    if(!esAdmin) {
+      return true;
+    }
     var zonasUsuarios = List<ZonasUsuarios>.from(
       storage.get([ZonasUsuarios()]).map((json) => ZonasUsuarios.fromJson(json))
     );

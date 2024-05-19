@@ -141,7 +141,7 @@ class AltaCargoAbonoController extends GetInjection {
         tipo: tipo,
         monto: pagar ? saldoPendiente : tool.str2double(cantidad.text),
         referencia: pagar ? "Pago total" : referencia.text,
-        usuarioRegistro: localStorage.idUsuario,
+        usuarioRegistro: esAdmin ? Literals.perfilAdministrador : localStorage.email,
         fechaRegistro: DateFormat("dd-MM-yyyy").format(DateTime.now()).toString(),
       ));
       cobranzaEditar!.saldo = nuevoSaldo;

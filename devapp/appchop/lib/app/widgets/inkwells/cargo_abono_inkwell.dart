@@ -11,10 +11,12 @@ import '../containers/card_container.dart';
 class CargoAbonoInkwell extends StatelessWidget {
   final CargosAbonos cargoAbono;
   final void Function() onLongPress;
+  final int limite;
   const CargoAbonoInkwell({
     super.key,
     required this.cargoAbono,
     required this.onLongPress,
+    this.limite = 50,
   });
 
   @override
@@ -44,7 +46,7 @@ class CargoAbonoInkwell extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.fromLTRB(15, 2, 15, 2, ),
                   child: AutoSizeText(
-                    cargoAbono.referencia!,
+                    cargoAbono.referencia!.length > limite ? "${cargoAbono.referencia!.substring(0, limite)}..." : cargoAbono.referencia!,
                     style: TextStyle(
                       color: Color(ColorList.sys[0]),
                     ),
