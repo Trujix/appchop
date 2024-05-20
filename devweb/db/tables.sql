@@ -31,24 +31,6 @@ CREATE TABLE IF NOT EXISTS configuracion(
     porcentaje_moratorio FLOAT NOT NULL DEFAULT 0 COMMENT 'Valor del porcentaje del interes moratorio'
 );
 
-CREATE TABLE IF NOT EXISTS app_zonas(
-    tabla VARCHAR(50) NOT NULL DEFAULT '-' COMMENT 'Id de tabla local storage',
-    id_sistema VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de registro de sistema',
-    id_zona VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de registro de zona',
-    value_zona VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id mascara de valor zona',
-    label_zona VARCHAR(40) NOT NULL DEFAULT '-' COMMENT 'Etiqueta mascara de valor zona',
-    fecha_creacion VARCHAR(10) NOT NULL DEFAULT '-' COMMENT 'Fecha de creacion del registro',
-    activo BIT NOT NULL DEFAULT 0 COMMENT 'Estatus del registro'
-);
-
-CREATE TABLE IF NOT EXISTS app_zonas_usuarios(
-    tabla VARCHAR(50) NOT NULL DEFAULT '-' COMMENT 'Id de tabla local storage',
-    id_sistema VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de registro de sistema',
-    id_zona VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de zona vinculada al usuario',
-    usuario VARCHAR(150) NOT NULL DEFAULT '-' COMMENT 'Usuario al que se vincula la zona'
-);
-
-
 CREATE TABLE IF NOT EXISTS app_log_backups(
     id_sistema VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de registro de sistema',
     id_backup VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de ultima actualización',
@@ -85,14 +67,6 @@ CREATE TABLE IF NOT EXISTS app_cobranzas(
     id_cobrador VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de usuario cobrador'
 );
 
-CREATE TABLE IF NOT EXISTS app_notas(
-    tabla VARCHAR(50) NOT NULL DEFAULT '-' COMMENT 'Id de tabla local storage',
-    id_sistema VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de registro de sistema',
-    id_nota VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de registro de nota',
-    id_cobranza VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de registro cobranza',
-    nota VARCHAR(200) NOT NULL DEFAULT '-' COMMENT 'Descripcion de la nota'
-);
-
 CREATE TABLE IF NOT EXISTS app_cargos_abonos(
     tabla VARCHAR(50) NOT NULL DEFAULT '-' COMMENT 'Id de tabla local storage',
     id_sistema VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de registro de sistema',
@@ -102,7 +76,42 @@ CREATE TABLE IF NOT EXISTS app_cargos_abonos(
     monto FLOAT NOT NULL DEFAULT 0 COMMENT 'Monto del movimiento',
     referencia VARCHAR(200) NOT NULL DEFAULT '-' COMMENT 'Referencia del movimiento',
     usuario_registro VARCHAR(150) NOT NULL DEFAULT '-' COMMENT 'Usuario que registra el movimiento',
-    fecha_creacion VARCHAR(10) NOT NULL DEFAULT '-' COMMENT 'Fecha de creacion del registro'
+    fecha_registro VARCHAR(10) NOT NULL DEFAULT '-' COMMENT 'Fecha de creacion del registro'
+);
+
+CREATE TABLE IF NOT EXISTS app_notas(
+    tabla VARCHAR(50) NOT NULL DEFAULT '-' COMMENT 'Id de tabla local storage',
+    id_sistema VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de registro de sistema',
+    id_nota VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de registro de nota',
+    id_cobranza VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de registro cobranza',
+    nota VARCHAR(200) NOT NULL DEFAULT '-' COMMENT 'Descripcion de la nota'
+);
+
+CREATE TABLE IF NOT EXISTS app_zonas(
+    tabla VARCHAR(50) NOT NULL DEFAULT '-' COMMENT 'Id de tabla local storage',
+    id_sistema VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de registro de sistema',
+    id_zona VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de registro de zona',
+    value_zona VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id mascara de valor zona',
+    label_zona VARCHAR(40) NOT NULL DEFAULT '-' COMMENT 'Etiqueta mascara de valor zona',
+    fecha_creacion VARCHAR(10) NOT NULL DEFAULT '-' COMMENT 'Fecha de creacion del registro',
+    activo BIT NOT NULL DEFAULT 0 COMMENT 'Estatus del registro'
+);
+
+CREATE TABLE IF NOT EXISTS app_zonas_usuarios(
+    tabla VARCHAR(50) NOT NULL DEFAULT '-' COMMENT 'Id de tabla local storage',
+    id_sistema VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de registro de sistema',
+    id_zona VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de zona vinculada al usuario',
+    usuario VARCHAR(150) NOT NULL DEFAULT '-' COMMENT 'Usuario al que se vincula la zona'
+);
+
+CREATE TABLE IF NOT EXISTS app_clientes(
+    tabla VARCHAR(50) NOT NULL DEFAULT '-' COMMENT 'Id de tabla local storage',
+    id_sistema VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de registro de sistema',
+    id_cliente VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de registro de cliente',
+    nombre TEXT NOT NULL DEFAULT '-' COMMENT 'Nombre del cliente',
+    telefono TEXT NOT NULL DEFAULT '-' COMMENT 'Telefono del cliente',
+    fecha_creacion VARCHAR(10) NOT NULL DEFAULT '-' COMMENT 'Fecha de creacion del registro',
+    activo BIT NOT NULL DEFAULT 0 COMMENT 'Estatus del registro'
 );
 
 /*

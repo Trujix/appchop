@@ -46,6 +46,7 @@ class AltaClientesPage extends StatelessWidget {
                         focusNode: _.nombreFocus,
                         text: "Nombre *",
                         icon: MaterialIcons.person,
+                        maxLength: 40,
                       ),
                     ),
                     IconoBotonInkwell(
@@ -60,6 +61,7 @@ class AltaClientesPage extends StatelessWidget {
                   text: "Teléfono *",
                   icon: MaterialIcons.phone_iphone,
                   keyboardType: TextInputType.phone,
+                  maxLength: 10,
                 ),
                 Container(
                   padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),

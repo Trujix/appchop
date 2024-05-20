@@ -85,7 +85,7 @@ class ConfiguracionPage extends StatelessWidget with WidgetsBindingObserver {
                     const SizedBox(height: 10,),
                     EtiquetaJumpText(
                       texto1: " Última actualización:",
-                      texto2: "   ${_.idBackup}\n   ${_.fechaBackup}",
+                      texto2: "   Id: ${_.idBackup}\n   Fecha: ${_.fechaBackup}",
                       icono: MaterialIcons.sync_alt,
                     ),
                   ],

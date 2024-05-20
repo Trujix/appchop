@@ -151,8 +151,8 @@ BEGIN
             MD5(_PASSWORD),
             'ACTIVO',
             _IDAUTORIZACION,
-            _NOMBRES,
-            _APELLIDOS,
+            CONVERT(_NOMBRES USING UTF8),
+            CONVERT(_APELLIDOS USING UTF8),
             'COBRADOR'
         );
     ELSE
@@ -275,11 +275,48 @@ BEGIN
         usuario,
         fecha_creacion AS fechaCreacion 
     FROM appchop.app_log_backups
-        WHERE id_sistema = _IDSISTEMA
-            ORDER BY fh_registro DESC LIMIT 1;
+        WHERE id_sistema = _IDSISTEMA;
 END $$
 DELIMITER ;
 
+
+/* ------------------------------------------------------------------------------------*/
+DROP PROCEDURE IF EXISTS STP_APP_LOGBACKUP_PROCESS;
+DELIMITER $$
+CREATE PROCEDURE STP_APP_LOGBACKUP_PROCESS(
+    IN _IDSISTEMA VARCHAR(120), IN _IDBACKUP VARCHAR(120),
+    IN _USUARIO VARCHAR(150), IN _FECHACREACION VARCHAR(10)
+)
+BEGIN
+    DECLARE _VERIFY INT DEFAULT 0;
+    SET _VERIFY = (
+        SELECT 
+            COUNT(*) AS VERIFY
+        FROM appchop.app_log_backups 
+            WHERE id_sistema = _IDSISTEMA
+    );
+    IF _VERIFY = 0 THEN
+        INSERT INTO appchop.app_log_backups (
+            id_sistema,
+            id_backup,
+            usuario,
+            fecha_creacion
+        ) VALUES (
+            _IDSISTEMA,
+            _IDBACKUP,
+            _USUARIO,
+            _FECHACREACION
+        );
+    ELSE
+        UPDATE appchop.app_log_backups SET
+            id_backup = _IDBACKUP,
+            usuario = _USUARIO,
+            fecha_creacion = _FECHACREACION,
+            fh_registro = CURRENT_TIMESTAMP
+        WHERE id_sistema = _IDSISTEMA;
+    END IF;
+END $$
+DELIMITER ;
 
 
 /* ------------------------------------------------------------------------------------*/
@@ -366,7 +403,7 @@ BEGIN
         _IDSISTEMA, 
         _IDZONA, 
         _VALUEZONA, 
-        _LABELZONA, 
+        CONVERT(_LABELZONA USING UTF8), 
         _FECHACREACION, 
         _ACTIVO
     );
@@ -487,12 +524,12 @@ BEGIN
             _IDCOBRANZA,
             _TIPOCOBRANZA,
             _ZONA,
-            AES_ENCRYPT(_NOMBRE, _ENCRYPTKEY),
+            AES_ENCRYPT(CONVERT(_NOMBRE USING UTF8), _ENCRYPTKEY),
             _CANTIDAD,
-            _DESCRIPCION,
+            CONVERT(_DESCRIPCION USING UTF8),
             AES_ENCRYPT(_TELEFONO, _ENCRYPTKEY),
-            AES_ENCRYPT(_DIRECCION, _ENCRYPTKEY),
-            AES_ENCRYPT(_CORREO, _ENCRYPTKEY),
+            AES_ENCRYPT(CONVERT(_DIRECCION USING UTF8), _ENCRYPTKEY),
+            AES_ENCRYPT(CONVERT(_CORREO USING UTF8), _ENCRYPTKEY),
             _FECHAREGISTRO,
             _FECHAVENCIMIENTO,
             _SALDO,
@@ -525,12 +562,12 @@ BEGIN
             UPDATE appchop.app_cobranzas SET            
                 tipo_cobranza = _TIPOCOBRANZA,
                 zona = _ZONA,
-                nombre = AES_ENCRYPT(_NOMBRE, _ENCRYPTKEY),
+                nombre = AES_ENCRYPT(CONVERT(_NOMBRE USING UTF8), _ENCRYPTKEY),
                 cantidad = _CANTIDAD,
-                descripcion = _DESCRIPCION,
+                descripcion = CONVERT(_DESCRIPCION USING UTF8),
                 telefono = AES_ENCRYPT(_TELEFONO, _ENCRYPTKEY),
-                direccion = AES_ENCRYPT(_DIRECCION, _ENCRYPTKEY),
-                correo = AES_ENCRYPT(_CORREO, _ENCRYPTKEY),
+                direccion = AES_ENCRYPT(CONVERT(_DIRECCION USING UTF8), _ENCRYPTKEY),
+                correo = AES_ENCRYPT(CONVERT(_CORREO USING UTF8), _ENCRYPTKEY),
                 fecha_registro = _FECHAREGISTRO,
                 fecha_vencimiento = _FECHAVENCIMIENTO,
                 saldo = _SALDO,
@@ -599,6 +636,188 @@ DELIMITER ;
 
 
 /* ------------------------------------------------------------------------------------*/
+DROP PROCEDURE IF EXISTS STP_APP_BACKUP_COBRANZAS_COBRADOR_GET;
+DELIMITER $$
+CREATE PROCEDURE STP_APP_BACKUP_COBRANZAS_COBRADOR_GET(
+    IN _IDSISTEMA VARCHAR(120), IN _ENCRYPTKEY VARCHAR(30), IN _USUARIO VARCHAR(150)
+)
+BEGIN
+    SELECT 
+        COB1.tabla AS tabla,
+        COB1.id_sistema AS idUsuario,
+        COB1.id_cobranza AS idCobranza,
+        COB1.tipo_cobranza AS tipoCobranza,
+        COB1.zona AS zona,
+        CAST(AES_DECRYPT(COB1.nombre, _ENCRYPTKEY) AS CHAR) AS nombre,
+        COB1.cantidad AS cantidad,
+        COB1.descripcion AS descripcion,
+        CAST(AES_DECRYPT(COB1.telefono, _ENCRYPTKEY) AS CHAR) AS telefono,
+        CAST(AES_DECRYPT(COB1.direccion, _ENCRYPTKEY) AS CHAR) AS direccion,
+        CAST(AES_DECRYPT(COB1.correo, _ENCRYPTKEY) AS CHAR) AS correo,
+        COB1.fecha_registro AS fechaRegistro,
+        COB1.fecha_vencimiento AS fechaVencimiento,
+        COB1.saldo AS saldo,
+        CAST(AES_DECRYPT(COB1.latitud, _ENCRYPTKEY) AS CHAR) AS latitud,
+        CAST(AES_DECRYPT(COB1.longitud, _ENCRYPTKEY) AS CHAR) AS longitud,
+        COB1.ultimo_cargo AS ultimoCargo,
+        COB1.fecha_ultimo_cargo AS fechaUltimoCargo,
+        COB1.usuario_ultimo_cargo AS usuarioUltimoCargo,
+        COB1.ultimo_abono AS ultimoAbono,
+        COB1.fecha_ultimo_abono AS fechaUltimoAbono,
+        COB1.usuario_ultimo_abono AS usuarioUltimoAbono,
+        COB1.estatus AS estatus,
+        COB1.bloqueado AS bloqueado,
+        _USUARIO AS idCobrador
+    FROM appchop.app_cobranzas COB1
+    LEFT OUTER JOIN appchop.app_zonas_usuarios ZU1 ON COB1.zona = ZU1.id_zona
+        WHERE COB1.id_sistema = _IDSISTEMA
+			AND ZU1.usuario = _USUARIO;
+END $$
+DELIMITER ;
+
+
+
+/* ------------------------------------------------------------------------------------*/
+DROP PROCEDURE IF EXISTS STP_APP_BACKUP_CARGOSABONOS_INSERT;
+DELIMITER $$
+CREATE PROCEDURE STP_APP_BACKUP_CARGOSABONOS_INSERT(
+    IN _TABLA VARCHAR(50), IN _IDSISTEMA VARCHAR(120), IN _IDCOBRANZA VARCHAR(120), 
+    IN _IDMOVIMIENTO VARCHAR(120), IN _TIPO VARCHAR(20), IN _MONTO FLOAT, 
+    IN _REFERENCIA VARCHAR(200), IN _USUARIOREGISTRO VARCHAR(150), 
+    IN _FECHAREGISTRO VARCHAR(10)
+)
+BEGIN
+DECLARE _VERIFY INT DEFAULT 0;
+    SET _VERIFY = (
+        SELECT 
+            COUNT(*) AS VERIFY
+        FROM appchop.app_cargos_abonos WHERE 
+            id_sistema = _IDSISTEMA 
+            AND id_cobranza = _IDCOBRANZA
+            AND id_movimiento = _IDMOVIMIENTO
+    );
+    IF _VERIFY = 0 THEN
+        INSERT INTO appchop.app_cargos_abonos (
+            tabla,
+            id_sistema, 
+            id_cobranza, 
+            id_movimiento, 
+            tipo, 
+            monto, 
+            referencia, 
+            usuario_registro, 
+            fecha_registro
+        ) VALUES (
+            _TABLA, 
+            _IDSISTEMA, 
+            _IDCOBRANZA, 
+            _IDMOVIMIENTO, 
+            _TIPO, 
+            _MONTO, 
+            CONVERT(_REFERENCIA USING UTF8), 
+            _USUARIOREGISTRO, 
+            _FECHAREGISTRO
+        );
+    ELSE
+        SELECT _VERIFY FROM appchop.app_cargos_abonos;
+    END IF;
+END $$
+DELIMITER ;
+
+
+/* ------------------------------------------------------------------------------------*/
+DROP PROCEDURE IF EXISTS STP_APP_BACKUP_CARGOSABONOS_ADMINISTRADOR_GET;
+DELIMITER $$
+CREATE PROCEDURE STP_APP_BACKUP_CARGOSABONOS_ADMINISTRADOR_GET(
+    IN _IDSISTEMA VARCHAR(120)
+)
+BEGIN
+    SELECT
+        CA1.tabla AS tabla,
+        CA1.id_sistema AS idUsuario,
+        CA1.id_cobranza AS idCobranza,
+        CA1.id_movimiento AS idMovimiento,
+        CA1.tipo AS tipo,
+        CA1.monto AS monto,
+        CA1.referencia AS referencia,
+        CA1.usuario_registro AS usuarioRegistro,
+        CA1.fecha_registro AS fechaRegistro
+    FROM appchop.app_cargos_abonos CA1
+        WHERE CA1.id_sistema =  _IDSISTEMA;
+END $$
+DELIMITER ;
+
+
+/* ------------------------------------------------------------------------------------*/
+DROP PROCEDURE IF EXISTS STP_APP_BACKUP_CARGOSABONOS_COBRADOR_GET;
+DELIMITER $$
+CREATE PROCEDURE STP_APP_BACKUP_CARGOSABONOS_COBRADOR_GET(
+    IN _IDSISTEMA VARCHAR(120), IN _USUARIO VARCHAR(150)
+)
+BEGIN
+    SELECT
+        CA1.tabla AS tabla,
+        CA1.id_sistema AS idUsuario,
+        CA1.id_cobranza AS idCobranza,
+        CA1.id_movimiento AS idMovimiento,
+        CA1.tipo AS tipo,
+        CA1.monto AS monto,
+        CA1.referencia AS referencia,
+        CA1.usuario_registro AS usuarioRegistro,
+        CA1.fecha_registro AS fechaRegistro
+    FROM appchop.app_cargos_abonos CA1
+        LEFT OUTER JOIN appchop.app_cobranzas C1 ON CA1.id_cobranza = C1.id_cobranza
+        LEFT OUTER JOIN appchop.app_zonas_usuarios ZU1 ON C1.zona = ZU1.id_zona
+    WHERE CA1.id_sistema =  _IDSISTEMA
+        AND ZU1.usuario = _USUARIO;
+END $$
+DELIMITER ;
+
+
+
+/* ------------------------------------------------------------------------------------*/
+DROP PROCEDURE IF EXISTS STP_APP_BACKUP_NOTAS_ADMINISTRADOR_GET;
+DELIMITER $$
+CREATE PROCEDURE STP_APP_BACKUP_NOTAS_ADMINISTRADOR_GET(
+    IN _IDSISTEMA VARCHAR(120)
+)
+BEGIN
+    SELECT
+        tabla AS tabla,
+        id_sistema AS idUsuario,
+        id_nota AS idNota,
+        id_cobranza AS idCobranza,
+        nota
+    FROM appchop.app_notas 
+        WHERE id_sistema =  _IDSISTEMA;
+END $$
+DELIMITER ;
+
+
+
+/* ------------------------------------------------------------------------------------*/
+DROP PROCEDURE IF EXISTS STP_APP_BACKUP_NOTAS_COBRADOR_GET;
+DELIMITER $$
+CREATE PROCEDURE STP_APP_BACKUP_NOTAS_COBRADOR_GET(
+    IN _IDSISTEMA VARCHAR(120), IN _USUARIO VARCHAR(150)
+)
+BEGIN
+    SELECT
+        N1.tabla AS tabla,
+        N1.id_sistema AS idUsuario,
+        N1.id_nota AS idNota,
+        N1.id_cobranza AS idCobranza,
+        N1.nota
+    FROM appchop.app_notas N1
+        LEFT OUTER JOIN appchop.app_cobranzas C1 ON N1.id_cobranza = C1.id_cobranza
+        LEFT OUTER JOIN appchop.app_zonas_usuarios ZU1 ON C1.zona = ZU1.id_zona
+    WHERE CA1.id_sistema =  _IDSISTEMA
+        AND ZU1.usuario = _USUARIO;
+END $$
+DELIMITER ;
+
+
+/* ------------------------------------------------------------------------------------*/
 DROP PROCEDURE IF EXISTS STP_APP_BACKUP_NOTAS_INSERT;
 DELIMITER $$
 CREATE PROCEDURE STP_APP_BACKUP_NOTAS_INSERT(
@@ -627,7 +846,7 @@ DECLARE _VERIFY INT DEFAULT 0;
             _IDSISTEMA,
             _IDNOTA, 
             _IDCOBRANZA, 
-            _NOTA
+            CONVERT(_NOTA USING UTF8)
         );
     ELSE
         UPDATE appchop.app_notas SET
@@ -641,48 +860,66 @@ DELIMITER ;
 
 
 /* ------------------------------------------------------------------------------------*/
-DROP PROCEDURE IF EXISTS STP_APP_BACKUP_CARGOSABONOS_INSERT;
+DROP PROCEDURE IF EXISTS STP_APP_BACKUP_CLIENTES_GET;
 DELIMITER $$
-CREATE PROCEDURE STP_APP_BACKUP_CARGOSABONOS_INSERT(
-    IN _TABLA VARCHAR(50), IN _IDSISTEMA VARCHAR(120), IN _IDCOBRANZA VARCHAR(120), 
-    IN _IDMOVIMIENTO VARCHAR(120), IN _TIPO VARCHAR(20), IN _MONTO FLOAT, 
-    IN _REFERENCIA VARCHAR(200), IN _USUARIOREGISTRO VARCHAR(150), 
-    IN _FECHACREACION VARCHAR(10)
+CREATE PROCEDURE STP_APP_BACKUP_CLIENTES_GET(
+    IN _IDSISTEMA VARCHAR(120), IN _ENCRYPTKEY VARCHAR(30)
 )
 BEGIN
-DECLARE _VERIFY INT DEFAULT 0;
-    SET _VERIFY = (
-        SELECT 
-            COUNT(*) AS VERIFY
-        FROM appchop.app_cargos_abonos WHERE 
-            id_sistema = _IDSISTEMA 
-            AND id_cobranza = _IDCOBRANZA
-            AND id_movimiento = _IDMOVIMIENTO
+    SELECT 
+        tabla AS tabla,
+        id_sistema AS idUsuario,
+        id_cliente AS idCliente,
+        CAST(AES_DECRYPT(nombre, _ENCRYPTKEY) AS CHAR) AS nombre,
+        CAST(AES_DECRYPT(telefono, _ENCRYPTKEY) AS CHAR) AS telefono,
+        fecha_creacion AS fechaCreacion,
+        activo AS activobit
+    FROM appchop.app_clientes
+        WHERE id_sistema = _IDSISTEMA;
+END $$
+DELIMITER ;
+
+
+/* ------------------------------------------------------------------------------------*/
+DROP PROCEDURE IF EXISTS STP_APP_BACKUP_CLIENTES_DELETE;
+DELIMITER $$
+CREATE PROCEDURE STP_APP_BACKUP_CLIENTES_DELETE(
+    IN _IDSISTEMA VARCHAR(120)
+)
+BEGIN
+    DELETE FROM 
+        appchop.app_clientes
+    WHERE id_sistema = _IDSISTEMA;
+END $$
+DELIMITER ;
+
+
+/* ------------------------------------------------------------------------------------*/
+DROP PROCEDURE IF EXISTS STP_APP_BACKUP_CLIENTES_INSERT;
+DELIMITER $$
+CREATE PROCEDURE STP_APP_BACKUP_CLIENTES_INSERT(
+    IN _TABLA VARCHAR(50), IN _IDSISTEMA VARCHAR(120), 
+    IN _IDCLIENTE VARCHAR(120), IN _NOMBRE TEXT, 
+    IN _TELEFONO TEXT, IN _FECHACREACION VARCHAR(10), 
+    IN _ACTIVO BIT, IN _ENCRYPTKEY VARCHAR(30)
+)
+BEGIN
+    INSERT INTO appchop.app_clientes (
+        tabla, 
+        id_sistema, 
+        id_cliente, 
+        nombre, 
+        telefono, 
+        fecha_creacion, 
+        activo
+    ) VALUES (
+        _TABLA, 
+        _IDSISTEMA, 
+        _IDCLIENTE, 
+        AES_ENCRYPT(CONVERT(_NOMBRE USING UTF8), _ENCRYPTKEY),
+        AES_ENCRYPT(CONVERT(_TELEFONO USING UTF8), _ENCRYPTKEY),
+        _FECHACREACION, 
+        _ACTIVO
     );
-    IF _VERIFY = 0 THEN
-        INSERT INTO appchop.app_cargos_abonos (
-            tabla,
-            id_sistema, 
-            id_cobranza, 
-            id_movimiento, 
-            tipo, 
-            monto, 
-            referencia, 
-            usuario_registro, 
-            fecha_creacion
-        ) VALUES (
-            _TABLA, 
-            _IDSISTEMA, 
-            _IDCOBRANZA, 
-            _IDMOVIMIENTO, 
-            _TIPO, 
-            _MONTO, 
-            _REFERENCIA, 
-            _USUARIOREGISTRO, 
-            _FECHACREACION
-        );
-    ELSE
-        SELECT _VERIFY FROM appchop.app_cargos_abonos;
-    END IF;
 END $$
 DELIMITER ;

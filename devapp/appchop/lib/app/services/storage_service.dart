@@ -95,6 +95,8 @@ class StorageService {
     try {
       await update(appBackupData.cobranzas);
       await update(appBackupData.cargosAbonos);
+      await update(appBackupData.notas);
+      await update(appBackupData.clientes);
       await update(appBackupData.usuarios);
       await update(appBackupData.zonas);
       await update(appBackupData.zonasUsuarios);

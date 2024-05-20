@@ -77,17 +77,31 @@ class AppBackupResultadoController extends GetInjection {
             icono: MaterialIcons.attach_money,
           ),
           BackupEtiquetas(
+            tag: "notas",
+            texto1: "Notas:   ",
+            icono: MaterialIcons.note_add,
+          ),
+          BackupEtiquetas(
             tag: "zonas",
             texto1: "Zonas:   ",
             icono: MaterialIcons.list_alt,
           ),
         ];
         if(esAdmin) {
-          etiquetas.add(BackupEtiquetas(
-            tag: "usuarios",
-            texto1: "Usuarios:   ",
-            icono: MaterialIcons.person_add,
-          ),);
+          etiquetas.add(
+            BackupEtiquetas(
+              tag: "clientes",
+              texto1: "Clientes:   ",
+              icono: MaterialIcons.contact_phone,
+            ),
+          );
+          etiquetas.add(
+            BackupEtiquetas(
+              tag: "usuarios",
+              texto1: "Usuarios:   ",
+              icono: MaterialIcons.person_add,
+            ),
+          );
         }
       break;
       default:
@@ -103,8 +117,12 @@ class AppBackupResultadoController extends GetInjection {
           etiquetas[i].texto2 = "${appBackupData!.cobranzas!.length} registro(s)";
         } else if(etiquetas[i].tag == "cargos_abonos") {
           etiquetas[i].texto2 = "${appBackupData!.cargosAbonos!.length} registro(s)";
+        } else if(etiquetas[i].tag == "notas") {
+          etiquetas[i].texto2 = "${appBackupData!.notas!.length} registro(s)";
         } else if(etiquetas[i].tag == "zonas") {
           etiquetas[i].texto2 = "${appBackupData!.zonas!.length} registro(s)";
+        } else if(etiquetas[i].tag == "clientes") {
+          etiquetas[i].texto2 = "${appBackupData!.clientes!.length} registro(s)";
         } else if(etiquetas[i].tag == "usuarios") {
           etiquetas[i].texto2 = "${appBackupData!.usuarios!.length} registro(s)";
         }
