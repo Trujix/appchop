@@ -54,9 +54,10 @@ class StorageService {
   }
 
   Future<void> update<S>(dynamic elem) async {
+    var tabla = "";
     try {
       var jsonData = jsonDecode(jsonEncode(elem));
-      var tabla = _tool.isArray(jsonData) ? jsonData[0]['tabla'] : jsonData['tabla'];
+      tabla = _tool.isArray(jsonData) ? jsonData[0]['tabla'] : jsonData['tabla'];
       await _storage!.delete(tabla);
       await _storage!.put(tabla, jsonEncode(elem));
       return;
@@ -126,6 +127,21 @@ class StorageService {
     } catch(e) {
       return null;
     }
+  }
+
+  Future<void> _change(String tabla) async {
+    try {
+      if(tabla == "local_storage") {
+        return;
+      }
+      var localStorage = LocalStorage.fromJson(get(LocalStorage()));
+      if(localStorage.change) {
+        return;
+      }
+      localStorage.change = true;
+      await _storage!.delete(localStorage.tabla);
+      await _storage!.put(localStorage.tabla, jsonEncode(localStorage));
+    } finally { }
   }
 
   Future<void> _openBox() async {
