@@ -6,6 +6,7 @@ import '../../data/models/app_backup/app_backup_data.dart';
 import '../../data/models/local_storage/cargos_abonos.dart';
 import '../../data/models/local_storage/clientes.dart';
 import '../../data/models/local_storage/cobranzas.dart';
+import '../../data/models/local_storage/inventarios.dart';
 import '../../data/models/local_storage/local_storage.dart';
 import '../../data/models/local_storage/notas.dart';
 import '../../data/models/local_storage/usuarios.dart';
@@ -23,6 +24,8 @@ class ConfiguracionController extends GetInjection {
   String nombre = "";
   String idBackup = "";
   String fechaBackup = "--";
+  
+  List<Clientes> _clientesNuevos = [];
 
   final bool esAdmin = GetInjection.administrador;
 
@@ -101,6 +104,9 @@ class ConfiguracionController extends GetInjection {
       var zonasUsuarios = List<ZonasUsuarios>.from(
         storage.get([ZonasUsuarios()]).map((json) => ZonasUsuarios.fromJson(json))
       );
+      var inventarios = List<Inventarios>.from(
+        storage.get([Inventarios()]).map((json) => Inventarios.fromJson(json))
+      );
       var backupData = AppBackupData(
         idUsuario: localStorage.idUsuario,
         usuarioEnvia: esAdmin ? Literals.perfilAdministrador : localStorage.email,
@@ -111,6 +117,7 @@ class ConfiguracionController extends GetInjection {
         usuarios: usuarios,
         zonas: zonas,
         zonasUsuarios: zonasUsuarios,
+        inventarios: inventarios,
       );
       var appBackupData = await appBackupRepository.sincronizarAsync(backupData);
       if(appBackupData == null) {
@@ -121,7 +128,28 @@ class ConfiguracionController extends GetInjection {
       localStorage.fechaBackup = DateFormat("dd-MM-yyyy").format(DateTime.now()).toString();
       await storage.update(localStorage);
       await tool.wait(1);
-      tool.msg("La información ha sido actualizada correctamente", 1);
+      var listaClientes = List<Clientes>.from(
+        storage.get([Clientes()]).map((json) => Clientes.fromJson(json))
+      );
+      for(var cliente in appBackupData.clientes!) {
+        var verificar = listaClientes.where((c) => c.telefono == cliente.telefono).firstOrNull;
+        if(verificar != null) {
+          continue;
+        }
+        var idCliente = tool.guid();
+        _clientesNuevos.add(Clientes(
+          idUsuario: localStorage.idUsuario,
+          idCliente: idCliente,
+          nombre: cliente.nombre,
+          telefono: cliente.telefono,
+          fechaCreacion: DateFormat("dd-MM-yyyy").format(DateTime.now()).toString(),
+        ));
+      }
+      if(_clientesNuevos.isEmpty) {
+        tool.msg("La información ha sido actualizada correctamente", 1);
+      } else {
+        tool.isBusy(false);
+      }
     } catch(e) {
       tool.msg("Ocurrió un error al intentar sincronizarse con el servidor", 3);
     } finally {

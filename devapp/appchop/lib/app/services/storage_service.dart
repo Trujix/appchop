@@ -101,6 +101,7 @@ class StorageService {
       await update(appBackupData.usuarios);
       await update(appBackupData.zonas);
       await update(appBackupData.zonasUsuarios);
+      await update(appBackupData.inventarios);
     } finally { }
   }
 

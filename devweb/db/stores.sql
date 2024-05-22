@@ -789,7 +789,7 @@ BEGIN
         id_cobranza AS idCobranza,
         nota
     FROM appchop.app_notas 
-        WHERE id_sistema =  _IDSISTEMA;
+        WHERE id_sistema = _IDSISTEMA;
 END $$
 DELIMITER ;
 
@@ -811,7 +811,7 @@ BEGIN
     FROM appchop.app_notas N1
         LEFT OUTER JOIN appchop.app_cobranzas C1 ON N1.id_cobranza = C1.id_cobranza
         LEFT OUTER JOIN appchop.app_zonas_usuarios ZU1 ON C1.zona = ZU1.id_zona
-    WHERE CA1.id_sistema =  _IDSISTEMA
+    WHERE N1.id_sistema = _IDSISTEMA
         AND ZU1.usuario = _USUARIO;
 END $$
 DELIMITER ;
@@ -921,5 +921,89 @@ BEGIN
         _FECHACREACION, 
         _ACTIVO
     );
+END $$
+DELIMITER ;
+
+
+
+/* ------------------------------------------------------------------------------------*/
+DROP PROCEDURE IF EXISTS STP_APP_BACKUP_INVENTARIOS_DELETE;
+DELIMITER $$
+CREATE PROCEDURE STP_APP_BACKUP_INVENTARIOS_DELETE(
+    IN _IDSISTEMA VARCHAR(120), IN _USUARIO VARCHAR(120)
+)
+BEGIN
+    DELETE FROM 
+        appchop.app_inventarios
+    WHERE id_sistema = _IDSISTEMA
+        AND usuario = _USUARIO;
+END $$
+DELIMITER ;
+
+
+/* ------------------------------------------------------------------------------------*/
+DROP PROCEDURE IF EXISTS STP_APP_BACKUP_INVENTARIOS_INSERT;
+DELIMITER $$
+CREATE PROCEDURE STP_APP_BACKUP_INVENTARIOS_INSERT(
+    IN _TABLA VARCHAR(50), IN _IDSISTEMA VARCHAR(120), IN _IDARTICULO VARCHAR(120), 
+    IN _CODIGOARTICULO VARCHAR(120), IN _DESCRIPCION VARCHAR(40), IN _PRECIOCOMPRA FLOAT, 
+    IN _PRECIOVENTA FLOAT, IN _EXISTENCIA FLOAT, IN _MAXIMO FLOAT, 
+    IN _MINIMO FLOAT, IN _FECHACAMBIO VARCHAR(10), IN _USUARIO VARCHAR(120) 
+)
+BEGIN
+    INSERT INTO appchop.app_inventarios (
+        tabla,
+        id_sistema,
+        id_articulo,
+        codigo_articulo,
+        descripcion,
+        precio_compra,
+        precio_venta,
+        existencia,
+        maximo,
+        minimo,
+        fecha_cambio,
+        usuario
+    ) VALUES (
+        _TABLA,
+        _IDSISTEMA,
+        _IDARTICULO,
+        _CODIGOARTICULO,
+        CONVERT(_DESCRIPCION USING UTF8),
+        _PRECIOCOMPRA,
+        _PRECIOVENTA,
+        _EXISTENCIA,
+        _MAXIMO,
+        _MINIMO,
+        _FECHACAMBIO,
+        _USUARIO
+    );
+END $$
+DELIMITER ;
+
+
+/* ------------------------------------------------------------------------------------*/
+DROP PROCEDURE IF EXISTS STP_APP_BACKUP_INVENTARIOS_GET;
+DELIMITER $$
+CREATE PROCEDURE STP_APP_BACKUP_INVENTARIOS_GET(
+    IN _IDSISTEMA VARCHAR(120), IN _USUARIO VARCHAR(120)
+)
+BEGIN
+    SELECT 
+        tabla AS tabla,
+        id_sistema AS idUsuario,
+        id_articulo AS idArticulo,
+        codigo_articulo AS codigoArticulo,
+        descripcion,
+        precio_compra AS precioCompra,
+        precio_venta AS precioVenta,
+        existencia,
+        maximo AS maximo,
+        minimo AS minimo,
+        fecha_cambio AS fechaCambio,
+        usuario
+    FROM appchop.app_inventarios
+        WHERE id_sistema = _IDSISTEMA
+        AND usuario = _USUARIO;
 END $$
 DELIMITER ;

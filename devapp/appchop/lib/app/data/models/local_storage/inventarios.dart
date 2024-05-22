@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 
 import '../../../services/storage_service.dart';
+import '../../../services/tool_service.dart';
 
 class Inventarios {
   String? tabla = "inventarios";
@@ -14,6 +15,7 @@ class Inventarios {
   double? maximo;
   double? minimo;
   String? fechaCambio;
+  String? usuario;
 
   Inventarios({
     this.idUsuario = "",
@@ -26,6 +28,7 @@ class Inventarios {
     this.maximo = 0.0,
     this.minimo = 0.0,
     this.fechaCambio = "",
+    this.usuario = "",
   });
 
   static Future<void> init() async {
@@ -51,6 +54,7 @@ class Inventarios {
     'maximo'          : maximo,
     'minimo'          : minimo,
     'fechaCambio'     : fechaCambio,
+    'usuario'         : usuario,
   };
 
   factory Inventarios.fromJson(Map<String, dynamic> json) => Inventarios(
@@ -58,11 +62,12 @@ class Inventarios {
     idArticulo: json['idArticulo'] ?? "",
     codigoArticulo: json['codigoArticulo'] ?? "",
     descripcion: json['descripcion'] ?? "",
-    precioCompra: json['precioCompra'] ?? 0.0,
-    precioVenta: json['precioVenta'] ?? 0.0,
-    existencia: json['existencia'] ?? 0.0,
-    maximo: json['maximo'] ?? 0.0,
-    minimo: json['minimo'] ?? 0.0,
+    precioCompra: Get.find<ToolService>().str2double(json['precioCompra'].toString()),
+    precioVenta: Get.find<ToolService>().str2double(json['precioVenta'].toString()),
+    existencia: Get.find<ToolService>().str2double(json['existencia'].toString()),
+    maximo: Get.find<ToolService>().str2double(json['maximo'].toString()),
+    minimo: Get.find<ToolService>().str2double(json['minimo'].toString()),
     fechaCambio: json['fechaCambio'] ?? "",
+    usuario: json['usuario'] ?? "",
   );
 }

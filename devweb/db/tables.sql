@@ -114,6 +114,21 @@ CREATE TABLE IF NOT EXISTS app_clientes(
     activo BIT NOT NULL DEFAULT 0 COMMENT 'Estatus del registro'
 );
 
+CREATE TABLE IF NOT EXISTS app_inventarios(
+    tabla VARCHAR(50) NOT NULL DEFAULT '-' COMMENT 'Id de tabla local storage',
+    id_sistema VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de registro de sistema',
+    id_articulo VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de registro de articulo',
+    codigo_articulo VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Codigo clave sku de articulo',
+    descripcion VARCHAR(40) NOT NULL DEFAULT '-' COMMENT 'Descripcion de articulo',
+    precio_compra FLOAT NOT NULL DEFAULT 0 COMMENT 'Precio de compra',
+    precio_venta FLOAT NOT NULL DEFAULT 0 COMMENT 'Precio de venta',
+    existencia FLOAT NOT NULL DEFAULT 0 COMMENT 'Existencias del articulo',
+    maximo FLOAT NOT NULL DEFAULT 0 COMMENT 'Cantidad maxima stock',
+    minimo FLOAT NOT NULL DEFAULT 0 COMMENT 'Cantidad minima stock',
+    fecha_cambio VARCHAR(10) NOT NULL DEFAULT '-' COMMENT 'Fecha de creacion del registro',
+    usuario VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Usuario genera registro'
+);
+
 /*
   String? tabla = "cargos_abonos";
   String? idUsuario;

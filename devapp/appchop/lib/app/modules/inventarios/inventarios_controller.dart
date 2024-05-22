@@ -63,6 +63,8 @@ class InventariosController extends GetInjection {
 
   int warningColor = 0xFFFFFFFF;
   String warningTexto = "";
+
+  final bool esAdmin = GetInjection.administrador;
   
   @override
   Future<void> onInit() async {
@@ -216,6 +218,7 @@ class InventariosController extends GetInjection {
             maximo: tool.str2double(elementos[5]),
             minimo: tool.str2double(elementos[6]),
             fechaCambio: elementos[7],
+            usuario: esAdmin ? Literals.perfilAdministrador : localStorage.email,
           ),
         );
         _inventariosListaImportados = inventariosLista;
@@ -472,6 +475,7 @@ class InventariosController extends GetInjection {
   }
 
   Inventarios nuevoElementoFromForm() {
+    var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
     var idArticulo = tool.guid();
     return Inventarios(
       idArticulo: idArticulo,
@@ -483,6 +487,7 @@ class InventariosController extends GetInjection {
       maximo: tool.str2double(maximo.text),
       minimo: tool.str2double(minimo.text),
       fechaCambio: DateFormat("dd-MM-yyyy").format(DateTime.now()).toString(),
+      usuario: esAdmin ? Literals.perfilAdministrador : localStorage.email,
     );
   }
 

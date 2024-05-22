@@ -102,6 +102,13 @@ class AppBackupResultadoController extends GetInjection {
               icono: MaterialIcons.person_add,
             ),
           );
+          etiquetas.add(
+            BackupEtiquetas(
+              tag: "inventarios",
+              texto1: "Inventario:   ",
+              icono: MaterialIcons.inventory,
+            ),
+          );
         }
       break;
       default:
@@ -125,7 +132,9 @@ class AppBackupResultadoController extends GetInjection {
           etiquetas[i].texto2 = "${appBackupData!.clientes!.length} registro(s)";
         } else if(etiquetas[i].tag == "usuarios") {
           etiquetas[i].texto2 = "${appBackupData!.usuarios!.length} registro(s)";
-        }
+        } else if(etiquetas[i].tag == "inventarios") {
+          etiquetas[i].texto2 = "${appBackupData!.inventarios!.length} registro(s)";
+        } 
       }
     } finally {
       update();

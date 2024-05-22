@@ -17,7 +17,6 @@ class AppBackupProvider {
         "api/appbackup/sincronizar",
         backupInfo
       );
-      print(result);
       return AppBackupData.fromApi(jsonDecode(result!));
     } catch(e) {
       return null;
@@ -52,7 +51,6 @@ class AppBackupProvider {
         "api/appbackup/backupZonas",
         zonas,
       );
-      print(result);
       return result == Literals.apiTrue;
     } catch(e) {
       return null;

@@ -101,12 +101,15 @@ class AltaClientesController extends GetInjection {
   bool _validarForm() {
     var correcto = false;
     var mensaje = "";
+    var verificar = listaClientes.where((c) => c.telefono == telefono.text.trim()).firstOrNull;
     if(tool.isNullOrEmpty(nombre)) {
       mensaje = "Escriba el nombre";
     } else if(tool.isNullOrEmpty(telefono)) {
       mensaje = "Escriba el teléfono";
     } else if(telefono.text.length != 10) {
       mensaje = "Formato de teléfono NO válido";
+    } else if(verificar != null) {
+      mensaje = "Ya existe este cliente (${telefono.text.trim()})";
     } else {
       correcto = true;
       nombreFocus.unfocus();

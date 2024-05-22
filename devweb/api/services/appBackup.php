@@ -62,6 +62,7 @@
                 $clientes_backup = self::crearAppBackupClientes($id_usuario, $backup_data->clientes);
                 $zonas_backup = self::crearAppBackupZonas($id_usuario, $backup_data->zonas);
                 $zonas_usuarios_backup = self::crearAppBackupZonasUsuarios($id_usuario, $backup_data->zonasUsuarios);
+                $inventarios_backup = self::crearAppBackupInventarios($id_usuario, $usuario, $backup_data->inventarios);
             }
             $id_backup = self::guid();
             $backup_fecha_creacion = date('d-m-Y');
@@ -127,6 +128,7 @@
             $usuarios = array();
             $zonas = array();
             $zonas_usuarios = array();
+            $inventarios = array();
             $app_backup = new stdClass();
             $mysql = new Mysql();
             $cobranzas = $mysql->executeReader(
@@ -148,6 +150,9 @@
             foreach($zonas as $zona) {
                 $zona->activo = $zona->activobit > 0;
             }
+            $inventarios = $mysql->executeReader(
+                "CALL STP_APP_BACKUP_INVENTARIOS_GET('$id_usuario', '$usuario')",
+            );
             if($esAdmin) {
                 $clientes = $mysql->executeReader(
                     "CALL STP_APP_BACKUP_CLIENTES_GET('$id_usuario', '$encryption_key')",
@@ -172,6 +177,7 @@
             $app_backup->usuarios = isset($usuarios[0]->idUsuario) ? $usuarios : array();
             $app_backup->zonas = isset($zonas[0]->idUsuario) ? $zonas : array();
             $app_backup->zonasUsuarios = isset($zonas_usuarios[0]->idUsuario) ? $zonas_usuarios : array();
+            $app_backup->inventarios = isset($inventarios[0]->idUsuario) ? $inventarios : array();
             return $app_backup;
         }
         
@@ -246,6 +252,38 @@
                 $zonas_usuarios_add = $zonas_usuarios_add + $agregar_zona;
             }
             return $zonas_usuarios_add;
+        }
+
+        static function crearAppBackupInventarios($id_usuario, $usuario, $inventarios_lista) {
+            $inventarios_add = 0;
+            $encryption_key = getenv('ENCRYPTKEY');
+            $mysql = new Mysql();
+            $restablecer_inventarios = $mysql->executeNonQuery(
+                "CALL STP_APP_BACKUP_INVENTARIOS_DELETE(
+                    '$id_usuario', '$usuario'
+                )"
+            );
+            foreach($inventarios_lista as $array_inventarios) {
+                $inventario = (object)$array_inventarios;
+                $agregar_inventario = $mysql->executeNonQuery(
+                    "CALL STP_APP_BACKUP_INVENTARIOS_INSERT(
+                        '$inventario->tabla',
+                        '$inventario->idUsuario',
+                        '$inventario->idArticulo',
+                        '$inventario->codigoArticulo',
+                        '$inventario->descripcion',
+                        $inventario->precioCompra,
+                        $inventario->precioVenta,
+                        $inventario->existencia,
+                        $inventario->maximo,
+                        $inventario->minimo,
+                        '$inventario->fechaCambio',
+                        '$inventario->usuario'
+                    )"
+                );
+                $inventarios_add = $inventarios_add + $agregar_inventario;
+            }
+            return $inventarios_add;
         }
 
         static function init($params) {
