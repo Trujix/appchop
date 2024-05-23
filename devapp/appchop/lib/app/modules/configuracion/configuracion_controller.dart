@@ -12,6 +12,7 @@ import '../../data/models/local_storage/notas.dart';
 import '../../data/models/local_storage/usuarios.dart';
 import '../../data/models/local_storage/zonas.dart';
 import '../../data/models/local_storage/zonas_usuarios.dart';
+import '../../routes/app_routes.dart';
 import '../../utils/get_injection.dart';
 import '../../utils/literals.dart';
 import '../login/login_binding.dart';
@@ -131,8 +132,9 @@ class ConfiguracionController extends GetInjection {
       var listaClientes = List<Clientes>.from(
         storage.get([Clientes()]).map((json) => Clientes.fromJson(json))
       );
-      for(var cliente in appBackupData.clientes!) {
-        var verificar = listaClientes.where((c) => c.telefono == cliente.telefono).firstOrNull;
+      _clientesNuevos = [];
+      for(var cobranza in appBackupData.cobranzas!) {
+        var verificar = listaClientes.where((c) => c.telefono == cobranza.telefono).firstOrNull;
         if(verificar != null) {
           continue;
         }
@@ -140,8 +142,8 @@ class ConfiguracionController extends GetInjection {
         _clientesNuevos.add(Clientes(
           idUsuario: localStorage.idUsuario,
           idCliente: idCliente,
-          nombre: cliente.nombre,
-          telefono: cliente.telefono,
+          nombre: cobranza.nombre,
+          telefono: cobranza.telefono,
           fechaCreacion: DateFormat("dd-MM-yyyy").format(DateTime.now()).toString(),
         ));
       }
@@ -149,6 +151,12 @@ class ConfiguracionController extends GetInjection {
         tool.msg("La información ha sido actualizada correctamente", 1);
       } else {
         tool.isBusy(false);
+        Get.toNamed(
+          AppRoutes.appBackupClientes,
+          arguments: {
+            'clientesNuevos': _clientesNuevos,
+          },
+        );
       }
     } catch(e) {
       tool.msg("Ocurrió un error al intentar sincronizarse con el servidor", 3);

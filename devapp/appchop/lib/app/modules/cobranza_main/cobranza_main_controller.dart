@@ -4,6 +4,7 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 import 'package:open_file_plus/open_file_plus.dart';
 
+import '../../data/models/local_storage/clientes.dart';
 import '../../data/models/menu_popup_opciones.dart';
 import '../../data/models/local_storage/cargos_abonos.dart';
 import '../../data/models/local_storage/zonas.dart';
@@ -456,6 +457,14 @@ class CobranzaMainController extends GetInjection {
       ],
       height: 250,
     );
+  }
+
+  Future<void> validarNuevosClientes(List<Clientes> nuevosClientes) async {
+    if(nuevosClientes.isEmpty) {
+      return;
+    }
+    await tool.wait(2);
+    
   }
 
   Future<void> _exportarConsultaCsv() async {

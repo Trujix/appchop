@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 
 import '../../data/models/app_backup/app_backup_data.dart';
 import '../../data/models/backup_etiquetas.dart';
+import '../../data/models/local_storage/clientes.dart';
 import '../../data/models/local_storage/local_storage.dart';
 import '../../utils/get_injection.dart';
 import '../../utils/literals.dart';
@@ -18,6 +19,8 @@ class AppBackupResultadoController extends GetInjection {
   String estatusRespaldo = "Por favor espere...";
   int tipo = 0;
   AppBackupData? appBackupData = AppBackupData();
+
+  List<Clientes> _clientesNuevos = [];
 
   List<BackupEtiquetas> etiquetas = [];
 
@@ -48,6 +51,24 @@ class AppBackupResultadoController extends GetInjection {
       localStorage.backupInicial = true;
       localStorage.fechaBackup = DateFormat("dd-MM-yyyy").format(DateTime.now()).toString();
       await storage.update(localStorage);
+      var listaClientes = List<Clientes>.from(
+        storage.get([Clientes()]).map((json) => Clientes.fromJson(json))
+      );
+      _clientesNuevos = [];
+      for(var cobranza in appBackupData!.cobranzas!) {
+        var verificar = listaClientes.where((c) => c.telefono == cobranza.telefono).firstOrNull;
+        if(verificar != null) {
+          continue;
+        }
+        var idCliente = tool.guid();
+        _clientesNuevos.add(Clientes(
+          idUsuario: localStorage.idUsuario,
+          idCliente: idCliente,
+          nombre: cobranza.nombre,
+          telefono: cobranza.telefono,
+          fechaCreacion: DateFormat("dd-MM-yyyy").format(DateTime.now()).toString(),
+        ));
+      }
       await tool.wait(2);
       estatusRespaldo = "Respaldo terminado con éxito";
     } catch(e) {
@@ -156,6 +177,7 @@ class AppBackupResultadoController extends GetInjection {
     if(tipo == 1) {
       await Get.find<CobranzaMainController>().configurarZonas(localStorage);
       await Get.find<CobranzaMainController>().cargarListaCobranza();
+      await Get.find<CobranzaMainController>().validarNuevosClientes(_clientesNuevos);
     }
   }
 }
