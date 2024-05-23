@@ -8,10 +8,10 @@ import '../models/local_storage/configuracion.dart';
 class ConfiguracionProvider {
   final ApiService _api = Get.find<ApiService>();
 
-  Future<bool?> desvincularDispositivoAsync(String idUsuario) async {
+  Future<bool?> desvincularDispositivoAsync(String idUsuario, String usuario) async {
     try {
       var result = await _api.get(
-        "api/configuracion/desvincularDispositivo/$idUsuario",
+        "api/configuracion/desvincularDispositivo/$idUsuario/$usuario",
       );
       return result == Literals.apiTrue;
     } catch(e) {

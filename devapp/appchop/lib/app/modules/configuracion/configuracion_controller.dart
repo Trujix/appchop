@@ -166,7 +166,7 @@ class ConfiguracionController extends GetInjection {
         return false;
       }
       tool.isBusy();
-      var desvincular = await configuracionRepository.desvincularDispositivoAsync(idUsuario);
+      var desvincular = await configuracionRepository.desvincularDispositivoAsync(idUsuario, usuario);
       if(!desvincular!) {
         throw Exception();
       }
