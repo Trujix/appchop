@@ -8,7 +8,11 @@
             }
             $mysql = new Mysql();
             $resultado_desvincular = $mysql->executeNonQuery(
-                "CALL STP_ACTUALIZAR_SESION('{$params[0]}', '{$params[1]}', 'NONE', 'NONE')"
+                "CALL STP_ACTUALIZAR_SESION(
+                    '{$params[0]}',
+                    '{$params[1]}',
+                    'NONE', 'NONE'
+                )"
             );
             return json_encode($resultado_desvincular == 1);
         }
