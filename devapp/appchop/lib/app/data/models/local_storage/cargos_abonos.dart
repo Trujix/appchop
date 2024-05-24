@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 
 import '../../../services/storage_service.dart';
 import '../../../services/tool_service.dart';
+import '../../../utils/literals.dart';
 
 class CargosAbonos {
   String? tabla = "cargos_abonos";
@@ -13,6 +14,7 @@ class CargosAbonos {
   String? referencia;
   String? usuarioRegistro;
   String? fechaRegistro;
+  String? genera = Literals.cargoAbonoManual;
 
   CargosAbonos({
     this.idUsuario = "",
@@ -23,6 +25,7 @@ class CargosAbonos {
     this.referencia = "",
     this.usuarioRegistro = "",
     this.fechaRegistro = "",
+    this.genera = Literals.cargoAbonoManual,
   });
 
   static Future<void> init() async {
@@ -46,6 +49,7 @@ class CargosAbonos {
     'referencia'      : referencia,
     'usuarioRegistro' : usuarioRegistro,
     'fechaRegistro'   : fechaRegistro,
+    'genera'          : genera,
   };
 
   factory CargosAbonos.fromJson(Map<String, dynamic> json) => CargosAbonos(
@@ -57,5 +61,6 @@ class CargosAbonos {
     referencia: json['referencia'] ?? "",
     usuarioRegistro: json['usuarioRegistro'] ?? "",
     fechaRegistro: json['fechaRegistro'] ?? "",
+    genera: json['genera'] ?? Literals.cargoAbonoManual,
   );
 }

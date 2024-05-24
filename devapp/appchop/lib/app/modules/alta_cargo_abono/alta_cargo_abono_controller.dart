@@ -38,12 +38,12 @@ class AltaCargoAbonoController extends GetInjection {
   final bool esAdmin = GetInjection.administrador;
 
   @override
-  void onInit() {
-    _init();
+  Future<void> onInit() async {
+    await _init();
     super.onInit();
   }
 
-  void _init() {
+  Future<void> _init() async {
     var arguments = Get.arguments;
     cobranzaEditar = arguments['cobranza'] as Cobranzas;
     if(cobranzaEditar == null) {
@@ -60,6 +60,8 @@ class AltaCargoAbonoController extends GetInjection {
     }
     saldoPendiente = cobranzaEditar!.saldo!;
     _cargarListaCargosAbonos();
+    await tool.wait(1);
+    await _ajustarMoratorios();
   }
 
   Future<void> marcarCobranzaPagada() async {
@@ -82,9 +84,9 @@ class AltaCargoAbonoController extends GetInjection {
     }
     if(montoBonificacion > 0) {
       cantidad.text = montoBonificacion.toString();
-      referencia.text = "Bonificacion pronto pago";
+      referencia.text = Literals.cargoAbonoMsgBonificacion;
       var nuevoSaldo = saldoPendiente - montoBonificacion;
-      await _crearRegistroCargoAbono(Literals.movimientoAbono, nuevoSaldo);
+      await _crearRegistroCargoAbono(Literals.movimientoAbono, nuevoSaldo, manual: false);
     }
     await _crearRegistroCargoAbono(Literals.movimientoAbono, 0, pagar: true);
   }
@@ -103,7 +105,7 @@ class AltaCargoAbonoController extends GetInjection {
     await _crearRegistroCargoAbono(Literals.movimientoAbono, nuevoSaldo);
   }
 
-  Future<void> _crearRegistroCargoAbono(String tipo, double nuevoSaldo, {bool pagar = false}) async {
+  Future<void> _crearRegistroCargoAbono(String tipo, double nuevoSaldo, {bool pagar = false, bool manual = true}) async {
     try {
       if(!_validarForm(pagar)) {
         return;
@@ -134,6 +136,7 @@ class AltaCargoAbonoController extends GetInjection {
       var cargosAbonos = List<CargosAbonos>.from(
         storage.get([CargosAbonos()]).map((json) => CargosAbonos.fromJson(json))
       );
+      var genera = manual ? Literals.cargoAbonoManual : Literals.cargoAbonoAuto;
       cargosAbonos.add(CargosAbonos(
         idUsuario: localStorage.idUsuario,
         idCobranza: cobranzaEditar!.idCobranza,
@@ -143,6 +146,7 @@ class AltaCargoAbonoController extends GetInjection {
         referencia: pagar ? "Pago total" : referencia.text,
         usuarioRegistro: esAdmin ? Literals.perfilAdministrador : localStorage.email,
         fechaRegistro: DateFormat("dd-MM-yyyy").format(DateTime.now()).toString(),
+        genera: genera,
       ));
       cobranzaEditar!.saldo = nuevoSaldo;
       saldoPendiente = nuevoSaldo;
@@ -169,7 +173,10 @@ class AltaCargoAbonoController extends GetInjection {
   }
 
   Future<void> revertirCargoAbono(CargosAbonos cargosAbonos) async {
-    var borrar = await tool.ask("Atención!", "¿Está seguro de querer ELIMINAR definitivamente el ${cargosAbonos.tipo!.toLowerCase()} (${MoneyFormatter(amount: cargosAbonos.monto!).output.symbolOnLeft})?");
+    var borrar = await tool.ask(
+      "Atención!",
+      "¿Está seguro de querer ELIMINAR definitivamente el ${cargosAbonos.tipo!.toLowerCase()} (${MoneyFormatter(amount: cargosAbonos.monto!).output.symbolOnLeft})?"
+    );
     if(!borrar) {
       return;
     }
@@ -254,6 +261,7 @@ class AltaCargoAbonoController extends GetInjection {
       tipo: Literals.movimientoCargo,
       fechaRegistro: cobranzaEditar!.fechaRegistro,
       referencia: cobranzaEditar!.descripcion,
+      genera: Literals.cargoAbonoAuto,
     ));
     saldoCargos = 0;
     saldoAbonos = 0;
@@ -293,6 +301,88 @@ class AltaCargoAbonoController extends GetInjection {
       tool.toast(mensaje);
     }
     return correcto;
+  }
+
+  Future<void> _ajustarMoratorios() async {
+    try {
+      if(!pendiente) {
+        return;
+      }
+      var hoy = DateTime.now();
+      var vencida = tool.str2date(cobranzaEditar!.fechaVencimiento!).isBefore(hoy.add(-1.days));
+      if(!vencida) {
+        return;
+      }
+      tool.isBusy();
+      var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
+      var fechaVencimiento = tool.str2date(cobranzaEditar!.fechaVencimiento!);
+      var saldoCobranza = cobranzaEditar!.saldo!;
+      var finaliza = true;
+      List<CargosAbonos> intereses = [];
+      while(finaliza) {
+        fechaVencimiento = fechaVencimiento.add(7.days);
+        finaliza = fechaVencimiento.isBefore(hoy.add(-1.days));
+        if(finaliza) {
+          var idMovimiento = tool.guid();
+          var monto = (saldoCobranza * (configuracion.porcentajeMoratorio! / 100));
+          saldoCobranza = saldoCobranza + monto;
+          intereses.add(CargosAbonos(
+            idUsuario: localStorage.idUsuario,
+            idCobranza: cobranzaEditar!.idCobranza!,
+            idMovimiento: idMovimiento,
+            tipo: Literals.movimientoCargo,
+            monto: monto,
+            referencia: Literals.cargoAbonoMsgIntereses,
+            usuarioRegistro: esAdmin ? Literals.perfilAdministrador : localStorage.email,
+            fechaRegistro: DateFormat("dd-MM-yyyy").format(fechaVencimiento).toString(),
+            genera: Literals.cargoAbonoAuto,
+          ));
+        }
+      }
+      if(intereses.isEmpty) {
+        tool.isBusy(false);
+        return;
+      }
+      var agrega = false;
+      var cargosAbonosTemp = List<CargosAbonos>.from(
+        storage.get([CargosAbonos()]).map((json) => CargosAbonos.fromJson(json))
+      );
+      for(var interes in intereses) {
+        var verificar = listaCargosAbonos.where((ca) =>
+          ca.idCobranza == interes.idCobranza
+          && ca.fechaRegistro == interes.fechaRegistro
+          && ca.genera == Literals.cargoAbonoAuto
+          && ca.tipo == Literals.movimientoCargo
+        ).firstOrNull;
+        if(verificar != null) {
+          continue;
+        }
+        agrega = true;
+        listaCargosAbonos.add(interes);
+        cargosAbonosTemp.add(interes);
+      }
+      if(agrega) {
+        cobranzaEditar!.saldo = saldoCobranza;
+        var listaCobranzas = List<Cobranzas>.from(
+          storage.get([Cobranzas()]).map((json) => Cobranzas.fromJson(json))
+        );
+        for (var i = 0; i < listaCobranzas.length; i++) {
+          if(listaCobranzas[i].idCobranza == cobranzaEditar!.idCobranza) {
+            listaCobranzas[i].saldo = saldoCobranza;
+          }
+        }
+        await storage.update(listaCobranzas);
+        await storage.update(cargosAbonosTemp);
+        await Get.find<CobranzaMainController>().cargarListaCobranza();
+        tool.toast("Se agregaron cargos de intereses");
+      }
+      await tool.wait(1);
+      tool.isBusy(false);
+    } catch(_) {
+      tool.msg("Ocurrió un error al calcular intereses moratorios", 3);
+    } finally {
+      update();
+    }
   }
 
   void _limpiaForm() {

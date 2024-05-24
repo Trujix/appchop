@@ -45,7 +45,8 @@
                     "CALL STP_APP_BACKUP_CARGOSABONOS_INSERT(
                         '$cargo_abono->tabla', '$cargo_abono->idUsuario', '$cargo_abono->idCobranza', 
                         '$cargo_abono->idMovimiento', '$cargo_abono->tipo', $cargo_abono->monto, 
-                        '$cargo_abono->referencia', '$cargo_abono->usuarioRegistro', '$cargo_abono->fechaRegistro'
+                        '$cargo_abono->referencia', '$cargo_abono->usuarioRegistro', 
+                        '$cargo_abono->fechaRegistro', '$cargo_abono->genera'
                     )"
                 );
             }

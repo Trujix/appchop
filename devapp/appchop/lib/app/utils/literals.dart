@@ -33,6 +33,11 @@ class Literals {
   static const String markerIdClienteCobranza = "COBRANZA_MARKER_CLIENTE";
   static const String movimientoCargo = "CARGO";
   static const String movimientoAbono = "ABONO";
+  static const String cargoAbonoAuto = "AUTO";
+  static const String cargoAbonoManual = "MANUAL";
+
+  static const String cargoAbonoMsgBonificacion = "Bonificacion pronto pago";
+  static const String cargoAbonoMsgIntereses = "Cargo de intereses";
 
   static const String backUpClean = "NABACKUP";
 

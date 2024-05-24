@@ -686,7 +686,7 @@ CREATE PROCEDURE STP_APP_BACKUP_CARGOSABONOS_INSERT(
     IN _TABLA VARCHAR(50), IN _IDSISTEMA VARCHAR(120), IN _IDCOBRANZA VARCHAR(120), 
     IN _IDMOVIMIENTO VARCHAR(120), IN _TIPO VARCHAR(20), IN _MONTO FLOAT, 
     IN _REFERENCIA VARCHAR(200), IN _USUARIOREGISTRO VARCHAR(150), 
-    IN _FECHAREGISTRO VARCHAR(10)
+    IN _FECHAREGISTRO VARCHAR(10), IN _GENERA VARCHAR(15)
 )
 BEGIN
 DECLARE _VERIFY INT DEFAULT 0;
@@ -708,7 +708,8 @@ DECLARE _VERIFY INT DEFAULT 0;
             monto, 
             referencia, 
             usuario_registro, 
-            fecha_registro
+            fecha_registro,
+            genera
         ) VALUES (
             _TABLA, 
             _IDSISTEMA, 
@@ -718,7 +719,8 @@ DECLARE _VERIFY INT DEFAULT 0;
             _MONTO, 
             CONVERT(_REFERENCIA USING UTF8), 
             _USUARIOREGISTRO, 
-            _FECHAREGISTRO
+            _FECHAREGISTRO,
+            _GENERA
         );
     ELSE
         SELECT _VERIFY FROM appchop.app_cargos_abonos;
@@ -743,7 +745,8 @@ BEGIN
         CA1.monto AS monto,
         CA1.referencia AS referencia,
         CA1.usuario_registro AS usuarioRegistro,
-        CA1.fecha_registro AS fechaRegistro
+        CA1.fecha_registro AS fechaRegistro,
+        CA1.genera
     FROM appchop.app_cargos_abonos CA1
         WHERE CA1.id_sistema =  _IDSISTEMA;
 END $$
@@ -766,7 +769,8 @@ BEGIN
         CA1.monto AS monto,
         CA1.referencia AS referencia,
         CA1.usuario_registro AS usuarioRegistro,
-        CA1.fecha_registro AS fechaRegistro
+        CA1.fecha_registro AS fechaRegistro,
+        CA1.genera
     FROM appchop.app_cargos_abonos CA1
         LEFT OUTER JOIN appchop.app_cobranzas C1 ON CA1.id_cobranza = C1.id_cobranza
         LEFT OUTER JOIN appchop.app_zonas_usuarios ZU1 ON C1.zona = ZU1.id_zona

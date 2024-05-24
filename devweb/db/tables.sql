@@ -76,7 +76,8 @@ CREATE TABLE IF NOT EXISTS app_cargos_abonos(
     monto FLOAT NOT NULL DEFAULT 0 COMMENT 'Monto del movimiento',
     referencia VARCHAR(200) NOT NULL DEFAULT '-' COMMENT 'Referencia del movimiento',
     usuario_registro VARCHAR(150) NOT NULL DEFAULT '-' COMMENT 'Usuario que registra el movimiento',
-    fecha_registro VARCHAR(10) NOT NULL DEFAULT '-' COMMENT 'Fecha de creacion del registro'
+    fecha_registro VARCHAR(10) NOT NULL DEFAULT '-' COMMENT 'Fecha de creacion del registro',
+    genera VARCHAR(15) NOT NULL DEFAULT '-' COMMENT 'Tipo genera registro manual automatico'
 );
 
 CREATE TABLE IF NOT EXISTS app_notas(
