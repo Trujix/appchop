@@ -6,6 +6,7 @@ import '../../data/models/app_backup/app_backup_data.dart';
 import '../../data/models/local_storage/cargos_abonos.dart';
 import '../../data/models/local_storage/clientes.dart';
 import '../../data/models/local_storage/cobranzas.dart';
+import '../../data/models/local_storage/configuracion.dart';
 import '../../data/models/local_storage/inventarios.dart';
 import '../../data/models/local_storage/local_storage.dart';
 import '../../data/models/local_storage/notas.dart';
@@ -29,6 +30,7 @@ class ConfiguracionController extends GetInjection {
   List<Clientes> _clientesNuevos = [];
 
   final bool esAdmin = GetInjection.administrador;
+  Configuracion configuracion = Configuracion();
 
   @override
   void onInit() {
@@ -54,12 +56,10 @@ class ConfiguracionController extends GetInjection {
       await tool.wait(1);
       tool.isBusy(false);
       if(verificacion.idBackup != idBackup) {
-        var actualizar = await tool.ask("Nueva versión", "Existe una actualización pendiente\n¿Desea sincronizar?");
-        if(!actualizar) {
-          return;
-        }
+        tool.msg("Tiene notificaciones pendientes"); 
+      } else {
+        tool.msg("No tiene actualizaciones pendientes");
       }
-      tool.msg("No tiene actualizaciones pendientes");
     } catch(e) {
       tool.msg("Ocurrió un error al conectarse con el servidor", 3);
     } finally {
@@ -200,6 +200,7 @@ class ConfiguracionController extends GetInjection {
 
   void cargarInformacionInicial() {
     var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
+    configuracion = Configuracion.fromJson(storage.get(Configuracion()));
     if(localStorage.idBackup != Literals.backUpClean && localStorage.idBackup != "") {
       idBackup = localStorage.idBackup!;
       fechaBackup = localStorage.fechaBackup!;

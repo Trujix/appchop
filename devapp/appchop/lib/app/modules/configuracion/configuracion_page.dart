@@ -100,6 +100,27 @@ class ConfiguracionPage extends StatelessWidget with WidgetsBindingObserver {
                   onLongPress: () {},
                 ),
                 const TituloContainer(
+                  texto: "Configuración general",
+                  ltrbp: [20, 0, 0, 0],
+                  size: 20,
+                ),
+                CardContainer(
+                  padding: const EdgeInsets.all(20,),
+                  fondo: ColorList.ui[3],
+                  children: [
+                    EtiquetaText(
+                      texto1: "% Bonificación\n",
+                      texto2: "${_.configuracion.porcentajeBonificacion} %",
+                      icono: FontAwesome.dollar,
+                    ),
+                    EtiquetaText(
+                      texto1: "% Intereses\n",
+                      texto2: "${_.configuracion.porcentajeMoratorio} %",
+                      icono: MaterialIcons.money_off,
+                    ),
+                  ],
+                ),
+                const TituloContainer(
                   texto: "Desvincular dispositivo",
                   ltrbp: [20, 5, 0, 0],
                   size: 20,
