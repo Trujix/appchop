@@ -115,6 +115,7 @@ class UsuariosController extends GetInjection {
       ));
       await storage.update(listaZonasUsuarios);
       await _backupZonas();
+      _cargarZonas();
       await Future.delayed(1.seconds);
       tool.closeBottomSheet();
       tool.msg("El usuario registrado correctamente", 1);
