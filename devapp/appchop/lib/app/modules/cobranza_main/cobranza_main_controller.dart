@@ -520,7 +520,7 @@ class CobranzaMainController extends GetInjection {
         return;
       }
       var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
-      var estatus = await usuariosRepository.verificarEstatusAsync(localStorage.idUsuario!, localStorage.perfil!);
+      var estatus = await usuariosRepository.verificarEstatusAsync(localStorage.idUsuario!, localStorage.email!);
       if(estatus == null) {
         return;
       }

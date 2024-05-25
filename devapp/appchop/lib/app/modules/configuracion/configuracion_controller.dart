@@ -75,15 +75,13 @@ class ConfiguracionController extends GetInjection {
       }
       tool.isBusy();
       var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
-      /*var verificacion = await appBackupRepository.verificarBackupAsync(idUsuario);
-      if(verificacion == null) {
+      var validarUsuario = await usuariosRepository.validarUsuarioAsync(localStorage.idUsuario!, localStorage.email!);
+      if(validarUsuario == null) {
         throw Exception();
       }
-      if(localStorage.idBackup == verificacion.idBackup) {
-        await tool.wait(1);
-        tool.msg("No tiene actualizaciones pendientes");
+      if(!await _validarUsuario(validarUsuario, localStorage)) {
         return;
-      }*/
+      }      
       var cobranzas = List<Cobranzas>.from(
         storage.get([Cobranzas()]).map((json) => Cobranzas.fromJson(json))
       );
@@ -210,6 +208,37 @@ class ConfiguracionController extends GetInjection {
     idUsuario = localStorage.idUsuario!;
     usuario = localStorage.email!;
     nombre = "${localStorage.nombres!} ${localStorage.apellidos!}";
+  }
+
+  Future<bool> _validarUsuario(String validacion, LocalStorage localStorage) async {
+    try {
+      var correcto = false;
+      switch(validacion) {
+        case "ERROR-ESTATUS":
+          localStorage.login = false;
+          localStorage.activo = false;
+          await storage.update(localStorage);
+          await tool.wait(1);
+          tool.isBusy(false);
+          Get.offAll(
+            const LoginPage(),
+            binding: LoginBinding(),
+            duration: 1.5.seconds,
+          );
+          update();
+          tool.toast("Su usuario NO está Activo");
+          break;
+        case "ERROR-ZONA":
+          await tool.wait(1);
+          tool.msg("La zona signada en su usuario fue modificada o eliminada. Consulte con su administrador", 2);
+          break;
+        default:
+          correcto = true;
+      }
+      return correcto;
+    } catch(_) {
+      throw Exception();
+    }
   }
 
   void cerrar() {
