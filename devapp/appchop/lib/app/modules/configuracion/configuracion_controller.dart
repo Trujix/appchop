@@ -93,23 +93,25 @@ class ConfiguracionController extends GetInjection {
       localStorage.fechaBackup = DateFormat("dd-MM-yyyy").format(DateTime.now()).toString();
       await storage.update(localStorage);
       await tool.wait(1);
-      var listaClientes = List<Clientes>.from(
-        storage.get([Clientes()]).map((json) => Clientes.fromJson(json))
-      );
       _clientesNuevos = [];
-      for(var cobranza in appBackupData.cobranzas!) {
-        var verificar = listaClientes.where((c) => c.telefono == cobranza.telefono).firstOrNull;
-        if(verificar != null) {
-          continue;
+      if(esAdmin) {
+        var listaClientes = List<Clientes>.from(
+          storage.get([Clientes()]).map((json) => Clientes.fromJson(json))
+        );
+        for(var cobranza in appBackupData.cobranzas!) {
+          var verificar = listaClientes.where((c) => c.telefono == cobranza.telefono).firstOrNull;
+          if(verificar != null) {
+            continue;
+          }
+          var idCliente = tool.guid();
+          _clientesNuevos.add(Clientes(
+            idUsuario: localStorage.idUsuario,
+            idCliente: idCliente,
+            nombre: cobranza.nombre,
+            telefono: cobranza.telefono,
+            fechaCreacion: DateFormat("dd-MM-yyyy").format(DateTime.now()).toString(),
+          ));
         }
-        var idCliente = tool.guid();
-        _clientesNuevos.add(Clientes(
-          idUsuario: localStorage.idUsuario,
-          idCliente: idCliente,
-          nombre: cobranza.nombre,
-          telefono: cobranza.telefono,
-          fechaCreacion: DateFormat("dd-MM-yyyy").format(DateTime.now()).toString(),
-        ));
       }
       if(_clientesNuevos.isEmpty) {
         tool.msg("La información ha sido actualizada correctamente", 1);
@@ -179,27 +181,24 @@ class ConfiguracionController extends GetInjection {
   Future<bool> _validarUsuario(String validacion, LocalStorage localStorage) async {
     try {
       var correcto = false;
-      switch(validacion) {
-        case "ERROR-ESTATUS":
-          localStorage.login = false;
-          localStorage.activo = false;
-          await storage.update(localStorage);
-          await tool.wait(1);
-          tool.isBusy(false);
-          Get.offAll(
-            const LoginPage(),
-            binding: LoginBinding(),
-            duration: 1.5.seconds,
-          );
-          update();
-          tool.toast("Su usuario NO está Activo");
-          break;
-        case "ERROR-ZONA":
-          await tool.wait(1);
-          tool.msg("La zona signada en su usuario fue modificada o eliminada. Consulte con su administrador", 2);
-          break;
-        default:
-          correcto = true;
+      if(validacion == Literals.validacionErrorEstatus) {
+        localStorage.login = false;
+        localStorage.activo = false;
+        await storage.update(localStorage);
+        await tool.wait(1);
+        tool.isBusy(false);
+        Get.offAll(
+          const LoginPage(),
+          binding: LoginBinding(),
+          duration: 1.5.seconds,
+        );
+        update();
+        tool.toast("Su usuario NO está Activo");
+      } else if(validacion == Literals.validacionErrorZona) {
+        await tool.wait(1);
+        tool.msg("La zona signada en su usuario fue modificada o eliminada. Consulte con su administrador", 2);
+      } else {
+        correcto = true;
       }
       return correcto;
     } catch(_) {
