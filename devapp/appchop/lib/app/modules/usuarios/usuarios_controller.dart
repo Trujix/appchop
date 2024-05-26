@@ -224,10 +224,6 @@ class UsuariosController extends GetInjection {
       if(!modificar) {
         return;
       }
-      /*var borrarZona = false;
-      if(usuarioZonaVerif && usuario.activo!) {
-        borrarZona = await tool.ask("Quitar Zona asignada al usuario", "¿Desea continuar?", si: "Si", no: "No");
-      }*/
       tool.isBusy();
       var online = await tool.isOnline();
       if(!online) {

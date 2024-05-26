@@ -29,10 +29,6 @@ class InventarioTotalesInkwell extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    /*Icon(
-                      Icons.arrow_circle_up,
-                      color: Color(ColorList.sys[0]),
-                    ),*/
                     Expanded(
                       child: AutoSizeText(
                         totalInventarios,

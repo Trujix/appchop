@@ -22,7 +22,6 @@ class UsuarioPasswordModal extends StatelessWidget {
       children: [
         TituloContainer(
           texto: "Usuario: $usuario",
-          //ltrbp: const [20, 0, 0, 0],
           size: 14,
         ),
         Row(
