@@ -68,7 +68,7 @@ class OptionsAppbar extends StatelessWidget implements PreferredSizeWidget {
                 ? CheckedPopupMenuItem(
                   checked: opcionPopup == opcion.id,
                   value: opcion.id,
-                  labelTextStyle: MaterialStateProperty.all(
+                  labelTextStyle: WidgetStateProperty.all(
                     TextStyle(
                       color: Color(ColorList.sys[0]),
                       fontWeight: FontWeight.w600,
@@ -82,7 +82,7 @@ class OptionsAppbar extends StatelessWidget implements PreferredSizeWidget {
                   onTap: () {
                     onTapPopup(opcion.id);
                   },
-                  labelTextStyle: MaterialStateProperty.all(
+                  labelTextStyle: WidgetStateProperty.all(
                     TextStyle(
                       color: Color(ColorList.sys[0]),
                       fontWeight: FontWeight.w600,

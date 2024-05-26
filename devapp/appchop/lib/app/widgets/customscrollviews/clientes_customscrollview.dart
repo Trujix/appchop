@@ -57,7 +57,7 @@ class ClientesCustomscrollview extends StatelessWidget {
                         child: Transform.scale(
                           scale: 0.7,
                           child: Switch(
-                            thumbColor: MaterialStateProperty.all(Color(ColorList.sys[0])),
+                            thumbColor: WidgetStateProperty.all(Color(ColorList.sys[0])),
                             activeTrackColor: Color(ColorList.sys[1]),
                             inactiveTrackColor: Color(ColorList.sys[2]),
                             value: cliente.activo!,

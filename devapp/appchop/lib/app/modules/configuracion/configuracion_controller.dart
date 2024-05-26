@@ -81,44 +81,8 @@ class ConfiguracionController extends GetInjection {
       }
       if(!await _validarUsuario(validarUsuario, localStorage)) {
         return;
-      }      
-      var cobranzas = List<Cobranzas>.from(
-        storage.get([Cobranzas()]).map((json) => Cobranzas.fromJson(json))
-      );
-      var cargosAbonos = List<CargosAbonos>.from(
-        storage.get([CargosAbonos()]).map((json) => CargosAbonos.fromJson(json))
-      );
-      var notas = List<Notas>.from(
-        storage.get([Notas()]).map((json) => Notas.fromJson(json))
-      );
-      var clientes = List<Clientes>.from(
-        storage.get([Clientes()]).map((json) => Clientes.fromJson(json))
-      );
-      var usuarios = List<Usuarios>.from(
-        storage.get([Usuarios()]).map((json) => Usuarios.fromJson(json))
-      );
-      var zonas = List<Zonas>.from(
-        storage.get([Zonas()]).map((json) => Zonas.fromJson(json))
-      );
-      var zonasUsuarios = List<ZonasUsuarios>.from(
-        storage.get([ZonasUsuarios()]).map((json) => ZonasUsuarios.fromJson(json))
-      );
-      var inventarios = List<Inventarios>.from(
-        storage.get([Inventarios()]).map((json) => Inventarios.fromJson(json))
-      );
-      var backupData = AppBackupData(
-        idUsuario: localStorage.idUsuario,
-        usuarioEnvia: esAdmin ? Literals.perfilAdministrador : localStorage.email,
-        cobranzas: cobranzas,
-        cargosAbonos: cargosAbonos,
-        notas: notas,
-        clientes: clientes,
-        usuarios: usuarios,
-        zonas: zonas,
-        zonasUsuarios: zonasUsuarios,
-        inventarios: inventarios,
-      );
-      var appBackupData = await appBackupRepository.sincronizarAsync(backupData);
+      }
+      var appBackupData = await crearAppBackupData(localStorage);
       if(appBackupData == null) {
         throw Exception();
       }
@@ -162,6 +126,47 @@ class ConfiguracionController extends GetInjection {
       cargarInformacionInicial();
       update();
     }
+  }
+
+  Future<AppBackupData?> crearAppBackupData(LocalStorage localStorage) async {
+    var cobranzas = List<Cobranzas>.from(
+      storage.get([Cobranzas()]).map((json) => Cobranzas.fromJson(json))
+    );
+    var cargosAbonos = List<CargosAbonos>.from(
+      storage.get([CargosAbonos()]).map((json) => CargosAbonos.fromJson(json))
+    );
+    var notas = List<Notas>.from(
+      storage.get([Notas()]).map((json) => Notas.fromJson(json))
+    );
+    var clientes = List<Clientes>.from(
+      storage.get([Clientes()]).map((json) => Clientes.fromJson(json))
+    );
+    var usuarios = List<Usuarios>.from(
+      storage.get([Usuarios()]).map((json) => Usuarios.fromJson(json))
+    );
+    var zonas = List<Zonas>.from(
+      storage.get([Zonas()]).map((json) => Zonas.fromJson(json))
+    );
+    var zonasUsuarios = List<ZonasUsuarios>.from(
+      storage.get([ZonasUsuarios()]).map((json) => ZonasUsuarios.fromJson(json))
+    );
+    var inventarios = List<Inventarios>.from(
+      storage.get([Inventarios()]).map((json) => Inventarios.fromJson(json))
+    );
+    var backupData = AppBackupData(
+      idUsuario: localStorage.idUsuario,
+      usuarioEnvia: esAdmin ? Literals.perfilAdministrador : localStorage.email,
+      cobranzas: cobranzas,
+      cargosAbonos: cargosAbonos,
+      notas: notas,
+      clientes: clientes,
+      usuarios: usuarios,
+      zonas: zonas,
+      zonasUsuarios: zonasUsuarios,
+      inventarios: inventarios,
+    );
+    var appBackupData = await appBackupRepository.sincronizarAsync(backupData);
+    return appBackupData;
   }
  
   Future<bool> desvincularDispositivo() async {

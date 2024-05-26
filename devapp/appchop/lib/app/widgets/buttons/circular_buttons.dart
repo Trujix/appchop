@@ -35,14 +35,14 @@ class CircularButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ButtonStyle(
-          elevation: MaterialStateProperty.all(elevation),
-          shape: MaterialStateProperty.all(
+          elevation: WidgetStateProperty.all(elevation),
+          shape: WidgetStateProperty.all(
             const CircleBorder(),
           ),
-          padding: MaterialStateProperty.all(
+          padding: WidgetStateProperty.all(
             EdgeInsets.all(iconoPadding),
           ),
-          backgroundColor: MaterialStateProperty.all(
+          backgroundColor: WidgetStateProperty.all(
             Color(color),
           ),
         ),

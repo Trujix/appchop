@@ -31,5 +31,18 @@
             );
             return json_encode($resultado_configuracion);
         }
+
+        public static function guardarImagenLogo($params) {
+            Auth::verify();
+            $imagen_logo = (object)$params;
+            if(!isset($imagen_logo->idUsuario) 
+                || !isset($imagen_logo->imagenBase64)) {
+                http_response_code(406);
+                die("Parámetros de notificación incorrectos");
+            }
+            $imagen_base64 = base64_decode($imagen_logo->imagenBase64);
+            file_put_contents("../media/usuarios/{$imagen_logo->idUsuario}.jpg", $imagen_base64);
+            return json_encode(true);
+        }
     }
 ?>

@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 
 import '../../data/models/cobradores/alta_cobrador.dart';
 import '../../data/models/firebase/notificacion.dart';
+import '../../data/models/local_storage/cobranzas.dart';
 import '../../data/models/local_storage/local_storage.dart';
 import '../../data/models/local_storage/usuarios.dart';
 import '../../data/models/local_storage/zonas.dart';
@@ -13,6 +14,7 @@ import '../../utils/get_injection.dart';
 import '../../utils/literals.dart';
 import '../../widgets/modals/usuario_password_modal.dart';
 import '../../widgets/texts/combo_texts.dart';
+import '../cobranza_main/cobranza_main_controller.dart';
 
 class UsuariosController extends GetInjection {
   ScrollController scrollController = ScrollController();
@@ -28,6 +30,7 @@ class UsuariosController extends GetInjection {
   TextEditingController zona = TextEditingController();
   FocusNode zonaFocus = FocusNode();
 
+  ZonasUsuarios? _zonasUsuariosVerify;
   List<Usuarios> listaUsuarios = [];
 
   List<Zonas> zonasLista = [];
@@ -218,7 +221,7 @@ class UsuariosController extends GetInjection {
       var borrarZona = false;
       var usuarioZonaVerif = _verificarUsuarioZona(usuario.usuario!);
       if(usuarioZonaVerif && usuario.activo!) {
-        borrarZona = await tool.ask("Remover Zona asignada al usuario", "¿Desea continuar?", si: "Si", no: "No");
+        borrarZona = await tool.ask("Quitar Zona asignada al usuario", "¿Desea continuar?", si: "Si", no: "No");
       }
       tool.isBusy();
       var online = await tool.isOnline();
@@ -249,6 +252,7 @@ class UsuariosController extends GetInjection {
         } else {
           var _ = await storage.put([ZonasUsuarios()]);
         }
+        await _modificarCobranzas(Literals.bloqueoNo);
       }
       _cargarZonas();
       await Future.delayed(1.seconds);
@@ -290,6 +294,8 @@ class UsuariosController extends GetInjection {
         var _ = await storage.put([ZonasUsuarios()]);
       }
       _cargarZonas();
+      var _ = _verificarUsuarioZona(usuario.usuario!);
+      await _modificarCobranzas(agregar ? Literals.bloqueoSi : Literals.bloqueoNo);
       await Future.delayed(1.seconds);
       if(agregar) {
         tool.closeBottomSheet();
@@ -339,9 +345,28 @@ class UsuariosController extends GetInjection {
     }
   }
 
+  Future<void> _modificarCobranzas(String bloqueo) async {
+    var listaCobranzas = List<Cobranzas>.from(
+      storage.get([Cobranzas()]).map((json) => Cobranzas.fromJson(json))
+    );
+    var actualizar = false;
+    for (var i = 0; i < listaCobranzas.length; i++) {
+      if(listaCobranzas[i].zona == _zonasUsuariosVerify!.idZona) {
+        listaCobranzas[i].bloqueado = bloqueo;
+        actualizar = true;
+      }
+    }
+    if(actualizar) {
+      await storage.update(listaCobranzas);
+      try {
+        await Get.find<CobranzaMainController>().cargarListaCobranza();
+      } finally { }
+    }
+  }
+
   bool _verificarUsuarioZona(String usuario) {
-    var verificar = listaZonasUsuarios.where((zu) => zu.usuario == usuario).firstOrNull;
-    return verificar != null;
+    _zonasUsuariosVerify = listaZonasUsuarios.where((zu) => zu.usuario == usuario).firstOrNull;
+    return _zonasUsuariosVerify != null;
   }
 
   bool _validarForm() {
