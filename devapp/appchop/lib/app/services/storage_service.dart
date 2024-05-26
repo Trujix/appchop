@@ -130,7 +130,7 @@ class StorageService {
     }
   }
 
-  Future<void> _change(String tabla) async {
+  Future<void> change(String tabla) async {
     try {
       if(tabla == "local_storage") {
         return;

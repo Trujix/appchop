@@ -5,6 +5,7 @@ import '../../services/api_service.dart';
 import '../../utils/literals.dart';
 import '../models/app_backup/app_backup_data.dart';
 import '../models/app_backup/app_backup_info.dart';
+import '../models/local_storage/cobranzas.dart';
 import '../models/local_storage/zonas.dart';
 import '../models/local_storage/zonas_usuarios.dart';
 
@@ -62,6 +63,18 @@ class AppBackupProvider {
       var result = await _api.post(
         "api/appbackup/backupZonasUsuarios",
         zonasUsuarios,
+      );
+      return result == Literals.apiTrue;
+    } catch(e) {
+      return null;
+    }
+  }
+
+  Future<bool?> desbloquearCobranzasAdministradorAsync(List<Cobranzas> cobranzas) async {
+    try {
+      var result = await _api.post(
+        "api/appbackup/desbloquearCobranzasAdministrador",
+        cobranzas,
       );
       return result == Literals.apiTrue;
     } catch(e) {

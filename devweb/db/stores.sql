@@ -630,6 +630,21 @@ END $$
 DELIMITER ;
 
 
+/* ------------------------------------------------------------------------------------*/
+DROP PROCEDURE IF EXISTS STP_APP_BACKUP_COBRANZAS_UNLOCK;
+DELIMITER $$
+CREATE PROCEDURE STP_APP_BACKUP_COBRANZAS_UNLOCK(
+    IN _IDSISTEMA VARCHAR(120), IN _IDCOBRANZA VARCHAR(120), IN _BLOQUEADO VARCHAR(20)
+)
+BEGIN
+    UPDATE appchop.app_cobranzas SET            
+        bloqueado = _BLOQUEADO
+    WHERE 
+        id_sistema = _IDSISTEMA 
+            AND id_cobranza = _IDCOBRANZA;
+END $$
+DELIMITER ;
+
 
 /* ------------------------------------------------------------------------------------*/
 DROP PROCEDURE IF EXISTS STP_APP_BACKUP_COBRANZAS_ADMINISTRADOR_GET;

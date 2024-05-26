@@ -214,15 +214,20 @@ class UsuariosController extends GetInjection {
 
   Future<void> cambiarEstatus(Usuarios usuario) async {
     try {
-      var modificar = await tool.ask("${usuario.activo! ? "INACTIVAR" : "ACTIVAR"} Usuario ${usuario.usuario}", "¿Desea continuar?");
+      var titulo = "${usuario.activo! ? "INACTIVAR" : "ACTIVAR"} Usuario ${usuario.usuario}";
+      var cuerpo = "¿Desea continuar?";
+      var usuarioZonaVerif = _verificarUsuarioZona(usuario.usuario!);
+      if(usuarioZonaVerif && usuario.activo!) {
+        cuerpo = "Se quitará la zona asignada al usuario\n$cuerpo";
+      }
+      var modificar = await tool.ask(titulo, cuerpo);
       if(!modificar) {
         return;
       }
-      var borrarZona = false;
-      var usuarioZonaVerif = _verificarUsuarioZona(usuario.usuario!);
+      /*var borrarZona = false;
       if(usuarioZonaVerif && usuario.activo!) {
         borrarZona = await tool.ask("Quitar Zona asignada al usuario", "¿Desea continuar?", si: "Si", no: "No");
-      }
+      }*/
       tool.isBusy();
       var online = await tool.isOnline();
       if(!online) {
@@ -245,7 +250,7 @@ class UsuariosController extends GetInjection {
         }
       }
       await storage.update(listaUsuarios);
-      if(borrarZona) {
+      if(usuarioZonaVerif) {
         listaZonasUsuarios.removeWhere((zu) => zu.usuario == usuario.usuario);
         if(listaZonasUsuarios.isNotEmpty) {
           await storage.update(listaZonasUsuarios);
@@ -253,6 +258,8 @@ class UsuariosController extends GetInjection {
           var _ = await storage.put([ZonasUsuarios()]);
         }
         await _modificarCobranzas(Literals.bloqueoNo);
+        await tool.wait(1);
+        await _desbloquearCobranzas();
       }
       _cargarZonas();
       await Future.delayed(1.seconds);
@@ -296,6 +303,8 @@ class UsuariosController extends GetInjection {
       _cargarZonas();
       var _ = _verificarUsuarioZona(usuario.usuario!);
       await _modificarCobranzas(agregar ? Literals.bloqueoSi : Literals.bloqueoNo);
+      await tool.wait(1);
+        await _desbloquearCobranzas();
       await Future.delayed(1.seconds);
       if(agregar) {
         tool.closeBottomSheet();
@@ -367,6 +376,22 @@ class UsuariosController extends GetInjection {
   bool _verificarUsuarioZona(String usuario) {
     _zonasUsuariosVerify = listaZonasUsuarios.where((zu) => zu.usuario == usuario).firstOrNull;
     return _zonasUsuariosVerify != null;
+  }
+
+  Future<bool> _desbloquearCobranzas() async {
+    try {
+      var listaCobranzas = List<Cobranzas>.from(
+        storage.get([Cobranzas()]).map((json) => Cobranzas.fromJson(json))
+      );
+      listaCobranzas = listaCobranzas.where((c) => c.zona == _zonasUsuariosVerify!.idZona).toList();
+      var desbloquearCobranzas = await appBackupRepository.desbloquearCobranzasAdministradorAsync(listaCobranzas);
+      if(desbloquearCobranzas == null || !desbloquearCobranzas) {
+        throw Exception();
+      }
+      return true;
+    } catch(_) {
+      return false;
+    }
   }
 
   bool _validarForm() {

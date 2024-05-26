@@ -119,6 +119,20 @@
             return json_encode($zonas_usuarios_add > 0);
         }
 
+        public static function desbloquearCobranzasAdministrador($params) {
+            self::init($params);
+            foreach($params as $array_cobranza) {
+                $cobranza = (object)$array_cobranza;
+                $mysql = new Mysql();
+                $agregar_cobranza = $mysql->executeNonQuery(
+                    "CALL STP_APP_BACKUP_COBRANZAS_UNLOCK(
+                        '$cobranza->idUsuario', '$cobranza->idCobranza', '$cobranza->bloqueado'
+                    )"
+                );
+            }
+            return json_encode(true);
+        }
+
         static function crearAppBackup($id_usuario, $usuario) {
             $encryption_key = getenv('ENCRYPTKEY');
             $esAdmin = $usuario == "ADMINISTRADOR";

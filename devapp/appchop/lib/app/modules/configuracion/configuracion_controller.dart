@@ -2,9 +2,17 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+import '../../data/models/app_backup/app_backup_data.dart';
+import '../../data/models/local_storage/cargos_abonos.dart';
 import '../../data/models/local_storage/clientes.dart';
+import '../../data/models/local_storage/cobranzas.dart';
 import '../../data/models/local_storage/configuracion.dart';
+import '../../data/models/local_storage/inventarios.dart';
 import '../../data/models/local_storage/local_storage.dart';
+import '../../data/models/local_storage/notas.dart';
+import '../../data/models/local_storage/usuarios.dart';
+import '../../data/models/local_storage/zonas.dart';
+import '../../data/models/local_storage/zonas_usuarios.dart';
 import '../../routes/app_routes.dart';
 import '../../utils/get_injection.dart';
 import '../../utils/literals.dart';
@@ -21,8 +29,9 @@ class ConfiguracionController extends GetInjection {
   
   List<Clientes> _clientesNuevos = [];
 
-  final bool esAdmin = GetInjection.administrador;
   Configuracion configuracion = Configuracion();
+
+  final bool esAdmin = GetInjection.administrador;
 
   @override
   void onInit() {
@@ -74,7 +83,7 @@ class ConfiguracionController extends GetInjection {
       if(!await _validarUsuario(validarUsuario, localStorage)) {
         return;
       }
-      var backupData = createAppBackupData();
+      var backupData = crearAppBackupData();
       var appBackupData = await appBackupRepository.sincronizarAsync(backupData);
       if(appBackupData == null) {
         throw Exception();
@@ -196,6 +205,47 @@ class ConfiguracionController extends GetInjection {
     } catch(_) {
       throw Exception();
     }
+  }
+
+  AppBackupData crearAppBackupData() {
+    var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
+    var cobranzas = List<Cobranzas>.from(
+      storage.get([Cobranzas()]).map((json) => Cobranzas.fromJson(json))
+    );
+    var cargosAbonos = List<CargosAbonos>.from(
+      storage.get([CargosAbonos()]).map((json) => CargosAbonos.fromJson(json))
+    );
+    var notas = List<Notas>.from(
+      storage.get([Notas()]).map((json) => Notas.fromJson(json))
+    );
+    var clientes = List<Clientes>.from(
+      storage.get([Clientes()]).map((json) => Clientes.fromJson(json))
+    );
+    var usuarios = List<Usuarios>.from(
+      storage.get([Usuarios()]).map((json) => Usuarios.fromJson(json))
+    );
+    var zonas = List<Zonas>.from(
+      storage.get([Zonas()]).map((json) => Zonas.fromJson(json))
+    );
+    var zonasUsuarios = List<ZonasUsuarios>.from(
+      storage.get([ZonasUsuarios()]).map((json) => ZonasUsuarios.fromJson(json))
+    );
+    var inventarios = List<Inventarios>.from(
+      storage.get([Inventarios()]).map((json) => Inventarios.fromJson(json))
+    );
+    var backupData = AppBackupData(
+      idUsuario: localStorage.idUsuario,
+      usuarioEnvia: esAdmin ? Literals.perfilAdministrador : localStorage.email,
+      cobranzas: cobranzas,
+      cargosAbonos: cargosAbonos,
+      notas: notas,
+      clientes: clientes,
+      usuarios: usuarios,
+      zonas: zonas,
+      zonasUsuarios: zonasUsuarios,
+      inventarios: inventarios,
+    );
+    return backupData;
   }
 
   void cerrar() {
