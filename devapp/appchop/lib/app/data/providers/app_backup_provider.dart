@@ -70,6 +70,17 @@ class AppBackupProvider {
     }
   }
 
+  Future<bool?> removerZonasUsuariosAsync(String idUsuario) async {
+    try {
+      var result = await _api.get(
+        "api/appbackup/removerZonasUsuarios/$idUsuario"
+      );
+      return result == Literals.apiTrue;
+    } catch(e) {
+      return null;
+    }
+  }
+
   Future<bool?> desbloquearCobranzasAdministradorAsync(List<Cobranzas> cobranzas) async {
     try {
       var result = await _api.post(

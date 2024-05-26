@@ -28,6 +28,10 @@ class AppBackupRepository {
     return await Get.find<AppBackupProvider>().backupZonasUsuariosAsync(zonasUsuarios);
   }
 
+  Future<bool?> removerZonasUsuariosAsync(String idUsuario) async {
+    return await Get.find<AppBackupProvider>().removerZonasUsuariosAsync(idUsuario);
+  }
+
   Future<bool?> desbloquearCobranzasAdministradorAsync(List<Cobranzas> cobranzas) async {
     return await Get.find<AppBackupProvider>().desbloquearCobranzasAdministradorAsync(cobranzas);
   }

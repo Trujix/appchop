@@ -257,6 +257,7 @@ class UsuariosController extends GetInjection {
         await tool.wait(1);
         await _desbloquearCobranzas();
       }
+      await _backupZonas();
       _cargarZonas();
       await Future.delayed(1.seconds);
       tool.msg("El usuario fue actualizado correctamente", 1);
@@ -296,6 +297,7 @@ class UsuariosController extends GetInjection {
       } else {
         var _ = await storage.put([ZonasUsuarios()]);
       }
+      await _backupZonas();
       _cargarZonas();
       var _ = _verificarUsuarioZona(usuario.usuario!);
       await _modificarCobranzas(agregar ? Literals.bloqueoSi : Literals.bloqueoNo);
@@ -426,6 +428,8 @@ class UsuariosController extends GetInjection {
 
   Future<void> _backupZonas() async {
     try {
+      await tool.wait(1);
+      var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
       var zonasBack = List<Zonas>.from(
         storage.get([Zonas()]).map((json) => Zonas.fromJson(json))
       );
@@ -433,7 +437,11 @@ class UsuariosController extends GetInjection {
         storage.get([ZonasUsuarios()]).map((json) => ZonasUsuarios.fromJson(json))
       );
       var _ = await appBackupRepository.backupZonasAsync(zonasBack);
-      _ = await appBackupRepository.backupZonasUsuariosAsync(zonasUsuariosBack);
+      if(zonasUsuariosBack.isNotEmpty) {
+        _ = await appBackupRepository.backupZonasUsuariosAsync(zonasUsuariosBack);
+      } else {
+         _ = await appBackupRepository.removerZonasUsuariosAsync(localStorage.idUsuario!);
+      }
     } finally { }
   }
 }
