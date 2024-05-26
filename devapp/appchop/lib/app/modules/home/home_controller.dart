@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
@@ -111,8 +111,9 @@ class HomeController extends GetInjection {
     );
   }
 
-  void abrirMenu() {
+  void abrirMenu() async {
     drawerController.toggle!.call();
+    await _limpiarCacheImagen();
   }
 
   void _abrirOpcion(MenuOpcion opcion) {
@@ -212,7 +213,8 @@ class HomeController extends GetInjection {
         throw Exception();
       }
       await tool.wait(1);
-      tool.isBusy(false);
+      tool.msg("Imagen almacenada correctamente", 1);
+      await _limpiarCacheImagen();
     } catch(e) {
       tool.msg("Ocurrió un error al intentar actualizar imagen", 3);
     } finally {
@@ -236,6 +238,15 @@ class HomeController extends GetInjection {
         duration: 1.seconds,
       );
     } finally { }
+  }
+
+  Future<void> _limpiarCacheImagen() async {
+    try {
+      var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
+      var _ = await CachedNetworkImage.evictFromCache("${Literals.uri}media/usuarios/${localStorage.idUsuario}.jpg");
+    } finally {
+      update();
+    }
   }
 }
 
