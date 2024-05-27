@@ -119,6 +119,10 @@ class UsuariosController extends GetInjection {
       await storage.update(listaZonasUsuarios);
       await _backupZonas();
       _cargarZonas();
+      var _ = _verificarUsuarioZona(usuarioAlta);
+      await _modificarCobranzas(Literals.bloqueoSi);
+      await tool.wait(1);
+      await _desbloquearCobranzas();
       await Future.delayed(1.seconds);
       tool.closeBottomSheet();
       tool.msg("El usuario registrado correctamente", 1);

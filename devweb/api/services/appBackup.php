@@ -119,6 +119,20 @@
             return json_encode($zonas_usuarios_add > 0);
         }
 
+        public static function removerZonasUsuarios($params) {
+            Auth::verify();
+            if(!isset($params[0]) || count($params) == 0) {
+                http_response_code(406);
+                die("Parámetros de zonas-usuario incorrectos");
+            }
+            $id_usuario = $params[0];
+            $mysql = new Mysql();
+            $remover_zonas_usuarios = $mysql->executeNonQuery(
+                "CALL STP_APP_BACKUP_ZONASUSUARIOS_DELETE('$id_usuario')"
+            );
+            return json_encode($remover_zonas_usuarios > 0);
+        }
+
         public static function desbloquearCobranzasAdministrador($params) {
             self::init($params);
             foreach($params as $array_cobranza) {

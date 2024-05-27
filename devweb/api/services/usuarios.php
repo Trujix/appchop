@@ -19,7 +19,7 @@
                 true
             );
             if($estatus->status != $activo) {
-                return json_encode("ERROR-ESTATUS");
+                return "ERROR-ESTATUS";
             }
             $perfil = $mysql->executeReader(
                 "CALL STP_VERIFICAR_PERFIL_USUARIO('$id_usuario', '$usuario')",
@@ -31,10 +31,10 @@
                     true
                 );
                 if($zona_usuario->VERIFY <= 0) {
-                    return json_encode("ERROR-ZONA");
+                    return "ERROR-ZONA";
                 }
             }
-            return json_encode("OK");
+            return "OK";
         }
 
         public static function verificarEstatus($params) {
