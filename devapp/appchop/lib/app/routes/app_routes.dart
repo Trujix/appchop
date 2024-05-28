@@ -14,5 +14,6 @@ class AppRoutes {
   static const inventarios = "/inventarios";
   static const login = "/login";
   static const pdfViewer = "/pdf_viewer";
+  static const reporteCargoAbono = "/reporte_cargo_abono";
   static const usuarios = "/usuarios";
 }

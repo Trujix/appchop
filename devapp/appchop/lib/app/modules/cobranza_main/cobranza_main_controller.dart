@@ -453,9 +453,17 @@ class CobranzaMainController extends GetInjection {
           saldoAbonos: saldoAbonos,
           totalCargos: totalCargos,
           totalAbonos: totalAbonos,
+          reporteador: _abrirReporteador,
         ),
       ],
-      height: 250,
+      height: 330,
+    );
+  }
+
+  void _abrirReporteador() {
+    tool.modalClose();
+    Get.toNamed(
+      AppRoutes.reporteCargoAbono,
     );
   }
 
@@ -464,7 +472,6 @@ class CobranzaMainController extends GetInjection {
       return;
     }
     await tool.wait(2);
-    
   }
 
   Future<void> _exportarConsultaCsv() async {

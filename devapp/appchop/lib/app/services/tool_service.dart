@@ -15,7 +15,6 @@ import 'package:http/http.dart' as http;
 import 'package:pdf/widgets.dart' as pdfwidget;
 import 'package:pdf/pdf.dart' as pdflib;
 
-import '../data/models/local_storage/inventarios.dart';
 import '../data/models/local_storage/zonas.dart';
 import '../data/models/local_storage/cobranzas.dart';
 import '../utils/color_list.dart';
@@ -363,18 +362,18 @@ class ToolService extends GetxController {
     return "$titulo$cuerpo";
   }
 
-  String inventarioCsv(
-    List<Inventarios> inventarios,
+  String crearCsv(
+    dynamic data,
     List<String> omisiones
   ) {
-    var listaElementos = jsonDecode(jsonEncode(inventarios)) as List<dynamic>;
+    var listaElementos = jsonDecode(jsonEncode(data)) as List<dynamic>;
     var titulo = "";
     var addTitulo = true;
     var cuerpo = "";
-    for (var cobranza in listaElementos) {
-      var cobranzaMap = jsonDecode(jsonEncode(cobranza)) as Map<String, dynamic>;
+    for (var elemento in listaElementos) {
+      var mapa = jsonDecode(jsonEncode(elemento)) as Map<String, dynamic>;
       var cuerpoTemp = "";
-      cobranzaMap.forEach((key, value) {
+      mapa.forEach((key, value) {
         if(!omisiones.contains(key)) {
           if(addTitulo) {
             if(titulo != "") {
@@ -385,7 +384,7 @@ class ToolService extends GetxController {
           if(cuerpoTemp != "") {
             cuerpoTemp += ",";
           }
-          cuerpoTemp += value.toString();
+          cuerpoTemp = "$cuerpoTemp${value.toString().trim().replaceAll("\n", "")}";
         }
       });
       if(addTitulo) {

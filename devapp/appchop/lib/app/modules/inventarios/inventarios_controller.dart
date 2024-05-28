@@ -193,11 +193,14 @@ class InventariosController extends GetInjection {
       inventariosLista = [];
       var primer = true;
       for(var inventario in csvInventario) {
+        if(inventario == "" || inventario == "\n") {
+          continue;
+        }
+        var elementos = inventario.split(",");
         if(primer) {
           primer = false;
           continue;
         }
-        var elementos = inventario.split(",");
         if(elementos.length == 1) {
           continue;
         }
@@ -232,6 +235,7 @@ class InventariosController extends GetInjection {
     } catch(e) {
       inventariosLista = [];
       tool.msg("No fue posible importar el documento (revise el formato que sea el correcto)", 3);
+      await cargarListaInventario();
     } finally {
       update();
     }
@@ -247,7 +251,7 @@ class InventariosController extends GetInjection {
         tool.msg("No tiene información de inventario para exportar");
         return;
       }
-      var contenido = tool.inventarioCsv(
+      var contenido = tool.crearCsv(
         inventariosLista,
         ["tabla", "idUsuario", "idArticulo",]
       );

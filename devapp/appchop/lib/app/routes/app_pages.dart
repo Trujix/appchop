@@ -30,6 +30,8 @@ import '../modules/login/login_binding.dart';
 import '../modules/login/login_page.dart';
 import '../modules/pdf_viewer/pdf_viewer_binding.dart';
 import '../modules/pdf_viewer/pdf_viewer_page.dart';
+import '../modules/reporte_cargo_abono/reporte_cargo_abono_binding.dart';
+import '../modules/reporte_cargo_abono/reporte_cargo_abono_page.dart';
 import '../modules/usuarios/usuarios_binding.dart';
 import '../modules/usuarios/usuarios_page.dart';
 import 'app_routes.dart';
@@ -110,6 +112,11 @@ class AppPages {
       name: AppRoutes.pdfViewer,
       page: () => const PdfViewerPage(),
       binding: PdfViewerBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.reporteCargoAbono,
+      page: () => const ReporteCargoAbonoPage(),
+      binding: ReporteCargoAbonoBinding(),
     ),
     GetPage(
       name: AppRoutes.usuarios,

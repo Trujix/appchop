@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:money_formatter/money_formatter.dart';
 
 import '../../utils/color_list.dart';
+import '../buttons/solid_button.dart';
 import '../containers/badge_container.dart';
 import '../containers/titulo_container.dart';
 
@@ -15,6 +17,7 @@ class TotalesModal extends StatelessWidget {
   final double saldoAbonos;
   final int totalCargos;
   final int totalAbonos;
+  final void Function() reporteador;
   const TotalesModal({
     super.key,
     this.estatus = "",
@@ -26,6 +29,7 @@ class TotalesModal extends StatelessWidget {
     this.saldoAbonos = 0,
     this.totalCargos = 0,
     this.totalAbonos = 0,
+    required this.reporteador,
   });
   @override
   Widget build(BuildContext context) {
@@ -118,6 +122,18 @@ class TotalesModal extends StatelessWidget {
                 textoColor: ColorList.sys[0],
               ),
             ],
+          ),
+          SolidButton(
+            texto: "Reporte",
+            icono: FontAwesome.file_excel_o,
+            fondoColor: ColorList.sys[0],
+            textoColor: ColorList.ui[0],
+            ltrbm: const [0, 15, 0, 0,],
+            ltrbp: const [15, 15, 15, 15,],
+            textoSize: 14,
+            onPressed: reporteador,
+            onLongPress: () {},
+            height: 60,
           ),
         ],
       ),
