@@ -4,10 +4,12 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 
 import '../../utils/color_list.dart';
+import '../../utils/literals.dart';
 import '../../widgets/appbars/back_appbar.dart';
 import '../../widgets/buttons/circular_buttons.dart';
 import '../../widgets/buttons/default_sliderbutton.dart';
 import '../../widgets/buttons/solid_button.dart';
+import '../../widgets/containers/card_button_container.dart';
 import '../../widgets/containers/card_container.dart';
 import '../../widgets/containers/titulo_container.dart';
 import '../../widgets/texts/etiqueta_jump_text.dart';
@@ -100,8 +102,28 @@ class ConfiguracionPage extends StatelessWidget with WidgetsBindingObserver {
                   onLongPress: () {},
                 ),
                 const TituloContainer(
+                  texto: "Reportes generales",
+                  ltrbp: [20, 5, 0, 10],
+                  size: 20,
+                ),
+                CardButtonContainer(
+                  texto: "Lista de clientes",
+                  icono: MaterialIcons.description,
+                  onTap: () => _.exportarReportes(Literals.reportesClientes),
+                ),
+                CardButtonContainer(
+                  texto: "Lista de usuario",
+                  icono: MaterialIcons.description,
+                  onTap: () => _.exportarReportes(Literals.reportesUsuarios),
+                ),
+                CardButtonContainer(
+                  texto: "Base inventarios",
+                  icono: MaterialIcons.description,
+                  onTap: () => _.exportarReportes(Literals.reportesBaseInventarios),
+                ),
+                const TituloContainer(
                   texto: "Configuración general",
-                  ltrbp: [20, 0, 0, 0],
+                  ltrbp: [20, 10, 0, 0],
                   size: 20,
                 ),
                 CardContainer(

@@ -36,6 +36,10 @@ class Literals {
   static const String cargoAbonoAuto = "AUTO";
   static const String cargoAbonoManual = "MANUAL";
 
+  static const String reportesClientes = "CLIENTES";
+  static const String reportesUsuarios = "USUARIOS";
+  static const String reportesBaseInventarios = "BASE-INVENTARIOS";
+
   static const String validacionErrorEstatus = "ERROR-ESTATUS";
   static const String validacionErrorZona = "ERROR-ZONA";
 
@@ -56,6 +60,9 @@ class Literals {
 
   static const String reporteCobranzaCsv = "reporte_cobranza.csv";
   static const String reporteInventariosCsv = "listado_inventario.csv";
+  static const String reporteClientesCsv = "listado_clientes.csv";
+  static const String reporteUsuariosCsv = "listado_usuarios.csv";
+  static const String reporteBaseInventariosCsv = "listado_base_inventario.csv";
   static const String reporteCargosAbonosCsv = "cargos_abonos.pdf";
   static const String reporteEstadoCuentaPdf = "estado_cuenta.pdf";
 

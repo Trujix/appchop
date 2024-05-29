@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:open_file_plus/open_file_plus.dart';
 
 import '../../data/models/app_backup/app_backup_data.dart';
 import '../../data/models/local_storage/cargos_abonos.dart';
@@ -16,6 +17,8 @@ import '../../data/models/local_storage/zonas_usuarios.dart';
 import '../../routes/app_routes.dart';
 import '../../utils/get_injection.dart';
 import '../../utils/literals.dart';
+import '../../widgets/modals/gestion_csv_modal.dart';
+import '../cobranza_main/cobranza_main_controller.dart';
 import '../login/login_binding.dart';
 import '../login/login_page.dart';
 
@@ -129,6 +132,9 @@ class ConfiguracionController extends GetInjection {
     } finally {
       cargarInformacionInicial();
       update();
+      try {
+        await Get.find<CobranzaMainController>().cargarListaCobranza();
+      } finally { }
     }
   }
  
@@ -203,6 +209,49 @@ class ConfiguracionController extends GetInjection {
       return correcto;
     } catch(_) {
       throw Exception();
+    }
+  }
+
+  Future<void> exportarReportes(String tipo) async {
+    try {
+      dynamic listaData = [];
+      List<String> omisiones = [];
+      var nombreCsv = "";
+      if(tipo == Literals.reportesClientes) {
+        listaData = List<Clientes>.from(
+          storage.get([Clientes()]).map((json) => Clientes.fromJson(json))
+        );
+        omisiones = ["tabla", "idUsuario"];
+        nombreCsv = Literals.reporteClientesCsv;
+      } else if(tipo == Literals.reportesUsuarios) {
+        listaData = List<Usuarios>.from(
+          storage.get([Usuarios()]).map((json) => Usuarios.fromJson(json))
+        );
+        omisiones = ["tabla"];
+        nombreCsv = Literals.reporteUsuariosCsv;
+      } else if(tipo == Literals.reportesBaseInventarios) {
+        List<Inventarios> inventarios = [Inventarios()];
+        listaData = inventarios;
+        omisiones = ["tabla", "idUsuario", "idArticulo"];
+        nombreCsv = Literals.reporteBaseInventariosCsv;
+      } else {
+        return;
+      }
+      if(listaData.isEmpty) {
+        tool.msg("No hay información que mostrar");
+        return;
+      }
+      var contenido = tool.crearCsv(listaData, omisiones);
+      var archivoCsv = await tool.crearArchivo(contenido, nombreCsv);
+      await Future.delayed(0.7.seconds);
+      tool.modal(
+        widgets: [GestionCsvModal(
+          abrirAccion: () async => await OpenFile.open(archivoCsv),
+          exportarAccion: () async => await tool.compartir(archivoCsv!, Literals.reporteCargosAbonosCsv),
+        ),]
+      );
+    } catch(_) {
+      tool.msg("Ocurrió un error al intentar exportar información de cargos y abonos", 3);
     }
   }
 
