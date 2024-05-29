@@ -4,9 +4,18 @@ class ColorList {
   var probador = const Color(0xFFFDFEFE);
 
   static const List<int> sys = [
-    0xFF0B4251,
+    0xFF01193F,
+    0xFF6BADDF,
+    0xFFD2B486,
+    
+    /*0xFF0E343E,
+    0xFFF9BE4A,
+    0xFFFFE18F,*/
+    
+    //ORIGINAL
+    /*0xFF0B4251,
     0xFF87BBD7,
-    0xFFF2C864,
+    0xFFF2C864,*/
   ];
 
   static const List<int> ui = [

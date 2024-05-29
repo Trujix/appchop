@@ -5,6 +5,7 @@ import 'package:material_color_gen/material_color_gen.dart';
 
 import '../../utils/color_list.dart';
 import '../../widgets/appbars/back_appbar.dart';
+import '../../widgets/columns/sin_elementos_column.dart';
 import '../../widgets/containers/card_container.dart';
 import '../../widgets/containers/titulo_container.dart';
 import '../../widgets/customscrollviews/cargo_abono_customscrollview.dart';
@@ -67,21 +68,35 @@ class ReporteCargoAbonoPage extends StatelessWidget {
                 ),
               ],
             ),
-            Expanded(
-              child: NestedScrollView(
-                headerSliverBuilder: (context, isScrolled) {
-                  return [const SmallHeader(height: 5,)];
-                },
-                body: CargoAbonoCustomscrollview(
-                  scrollController: _.scrollController,
-                  listaCargosAbonos: _.listaCargosAbonos,
-                  onPdf: (_) {},
-                  onBorrar: (_) {},
-                  onLongPress: (_) {},
-                  enabledSlider: false,
-                  esAdmin: _.esAdmin,
-                ),
-              ),
+            Builder(
+              builder: (context) {
+                if(_.listaCargosAbonos.isNotEmpty) {
+                  return Expanded(
+                    child: NestedScrollView(
+                      headerSliverBuilder: (context, isScrolled) {
+                        return [const SmallHeader(height: 5,)];
+                      },
+                      body: CargoAbonoCustomscrollview(
+                        scrollController: _.scrollController,
+                        listaCargosAbonos: _.listaCargosAbonos,
+                        onPdf: (_) {},
+                        onBorrar: (_) {},
+                        onLongPress: (_) {},
+                        enabledSlider: false,
+                        esAdmin: _.esAdmin,
+                      ),
+                    ),
+                  );
+                } else {
+                  return Expanded(
+                    child: SinElementosColumn(
+                      texto: "Su lista de ${_.tipoSelected.toLowerCase()}s está vacía",
+                      imagenAsset: "cargo_abonos_reporte",
+                      sizeAsset: 250,
+                    ),
+                  );
+                }
+              },
             ),
           ],
         ),
