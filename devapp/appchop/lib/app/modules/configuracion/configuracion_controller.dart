@@ -146,6 +146,17 @@ class ConfiguracionController extends GetInjection {
         return false;
       }
       tool.isBusy();
+      var desvincular = await _desvincularDispositivo();
+      return desvincular;
+    } catch(e) {
+      Get.back();
+      tool.msg("Ocurrió un problema al intentar desvincular dispositivo", 3);
+      return false;
+    }
+  }
+
+  Future<bool> _desvincularDispositivo() async {
+    try {
       var desvincular = await configuracionRepository.desvincularDispositivoAsync(idUsuario, usuario);
       if(!desvincular!) {
         throw Exception();
@@ -163,9 +174,7 @@ class ConfiguracionController extends GetInjection {
       );
       update();
       return true;
-    } catch(e) {
-      Get.back();
-      tool.msg("Ocurrió un problema al intentar desvincular dispositivo", 3);
+    } catch(_) {
       return false;
     }
   }
@@ -187,7 +196,7 @@ class ConfiguracionController extends GetInjection {
   Future<bool> _validarUsuario(String validacion, LocalStorage localStorage) async {
     try {
       var correcto = false;
-      if(validacion == Literals.validacionErrorEstatus) {
+      if(validacion == Literals.validacionErrorEstatus || validacion == Literals.usuarioAccionReiniciar) {
         localStorage.login = false;
         localStorage.activo = false;
         await storage.update(localStorage);
@@ -199,9 +208,14 @@ class ConfiguracionController extends GetInjection {
           duration: 1.5.seconds,
         );
         update();
-        tool.toast("Su usuario NO está Activo");
+        var mensaje = "Su usuario NO está Activo";
+        if(validacion == Literals.usuarioAccionReiniciar) {
+          mensaje = "Es necesario volver a iniciar sesión";
+        }
+        tool.toast(mensaje);
       } else if(validacion == Literals.validacionErrorZona) {
         await tool.wait(1);
+        var _ = await _desvincularDispositivo();
         tool.msg("La zona signada en su usuario fue modificada o eliminada. Consulte con su administrador", 2);
       } else {
         correcto = true;

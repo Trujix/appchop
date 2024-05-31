@@ -92,4 +92,15 @@ class AppBackupProvider {
       return null;
     }
   }
+
+  Future<bool?> agregarUsuarioAccionAsync(String idUsuario, String usuario, String accion) async {
+    try {
+      var result = await _api.get(
+        "api/appbackup/agregarUsuarioAccion/$idUsuario/$usuario/$accion"
+      );
+      return result == Literals.apiTrue;
+    } catch(e) {
+      return null;
+    }
+  }
 }

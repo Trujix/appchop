@@ -86,8 +86,18 @@ class LoginController extends GetInjection {
       if(usuarioTextEnabled) {
         localStorage.backupInicial = false;
       }
+      var accionUsuario = false;
+      if(result.accion == Literals.usuarioAccionReiniciar) {
+        accionUsuario = true;
+        localStorage.backupInicial = false;
+      }
       await storage.update(localStorage);
       await storage.update(configuracion);
+      if(accionUsuario) {
+        tool.wait(1);
+        var _ = await usuariosRepository.eliminarUsuarioAccionAsync(result.idSistema!, usuarioLogin);
+        await localStorageClassInit();
+      }
       tool.isBusy(false);
       Get.offAll(
         const HomePage(),

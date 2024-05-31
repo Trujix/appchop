@@ -44,7 +44,17 @@ BEGIN
         US1.perfil,
         US1.sesion,
         US1.acepta,
-        AU1.token
+        AU1.token,
+        IFNULL(
+            (
+                SELECT 
+                    UA1.accion 
+                FROM appchop.app_usuarios_acciones UA1
+                    WHERE UA1.id_sistema = US1.id_sistema
+                        AND UA1.usuario = _USUARIO
+            ),
+            '-'
+        ) AS accion
     FROM appchop.usuarios AS US1
         LEFT OUTER JOIN appchop.autorization AU1 ON AU1.id = US1.id_autorization
     WHERE US1.id = _ID;
@@ -259,6 +269,59 @@ BEGIN
     FROM appchop.usuarios
         WHERE id_sistema = _IDSISTEMA
             AND perfil = 'COBRADOR';
+END $$
+DELIMITER ;
+
+
+
+/* ------------------------------------------------------------------------------------*/
+DROP PROCEDURE IF EXISTS STP_APP_BACKUP_ACCION_GET;
+DELIMITER $$
+CREATE PROCEDURE STP_APP_BACKUP_ACCION_GET(
+    IN _IDSISTEMA VARCHAR(120), IN _USUARIO VARCHAR(150)
+)
+BEGIN
+    SELECT
+        IFNULL(accion, '-') AS accion
+    FROM appchop.app_usuarios_acciones
+        WHERE id_sistema = _IDSISTEMA
+            AND usuario = _USUARIO;
+END $$
+DELIMITER ;
+
+
+/* ------------------------------------------------------------------------------------*/
+DROP PROCEDURE IF EXISTS STP_APP_BACKUP_ACCION_INSERT;
+DELIMITER $$
+CREATE PROCEDURE STP_APP_BACKUP_ACCION_INSERT(
+    IN _IDSISTEMA VARCHAR(120), IN _USUARIO VARCHAR(150),
+    IN _ACCION VARCHAR(120)
+)
+BEGIN
+    INSERT INTO appchop.app_usuarios_acciones (
+        id_sistema, 
+        usuario, 
+        accion
+    ) VALUES (
+        _IDSISTEMA, 
+        _USUARIO, 
+        _ACCION
+    );
+END $$
+DELIMITER ;
+
+
+
+/* ------------------------------------------------------------------------------------*/
+DROP PROCEDURE IF EXISTS STP_APP_BACKUP_ACCION_DELETE;
+DELIMITER $$
+CREATE PROCEDURE STP_APP_BACKUP_ACCION_DELETE(
+    IN _IDSISTEMA VARCHAR(120), IN _USUARIO VARCHAR(150)
+)
+BEGIN
+    DELETE FROM appchop.app_usuarios_acciones
+        WHERE id_sistema = _IDSISTEMA
+            AND usuario = _USUARIO;
 END $$
 DELIMITER ;
 

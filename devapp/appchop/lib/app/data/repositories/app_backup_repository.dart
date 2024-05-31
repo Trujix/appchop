@@ -35,4 +35,8 @@ class AppBackupRepository {
   Future<bool?> desbloquearCobranzasAdministradorAsync(List<Cobranzas> cobranzas) async {
     return await Get.find<AppBackupProvider>().desbloquearCobranzasAdministradorAsync(cobranzas);
   }
+
+  Future<bool?> agregarUsuarioAccionAsync(String idUsuario, String usuario, String accion) async {
+    return await Get.find<AppBackupProvider>().agregarUsuarioAccionAsync(idUsuario, usuario, accion);
+  }
 }

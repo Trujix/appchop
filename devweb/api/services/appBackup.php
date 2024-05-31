@@ -147,6 +147,27 @@
             return json_encode(true);
         }
 
+        public static function agregarUsuarioAccion($params) {
+            Auth::verify();
+            if(!isset($params[0]) 
+                || !isset($params[1]) 
+                || !isset($params[2]) 
+                || count($params) == 0) {
+                http_response_code(406);
+                die("Parámetros de usuario incorrectos");
+            }
+            $id_usuario = $params[0];
+            $usuario = $params[1];
+            $accion = $params[2];
+            $mysql = new Mysql();
+            $agregar_accion = $mysql->executeNonQuery(
+                "CALL STP_APP_BACKUP_ACCION_INSERT(
+                    '$id_usuario', '$usuario', '$accion'
+                )"
+            );
+            return json_encode($agregar_accion == 1);
+        }
+
         static function crearAppBackup($id_usuario, $usuario) {
             $encryption_key = getenv('ENCRYPTKEY');
             $esAdmin = $usuario == "ADMINISTRADOR";

@@ -50,6 +50,8 @@ class Literals {
 
   static const String busquedaClientes = "BUSCAR-CLIENTES";
 
+  static const String usuarioAccionReiniciar = "REINICIAR";
+
   static const String notificacionUsuarioPassword = "USUARIO-PASSWORD";
 
   static const String sinVencimiento = "31-12-2999";

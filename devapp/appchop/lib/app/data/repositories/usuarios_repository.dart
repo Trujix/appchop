@@ -10,4 +10,8 @@ class UsuariosRepository {
   Future<String?> verificarEstatusAsync(String idUsuario, String usuario) async {
     return await Get.find<UsuariosProvider>().verificarEstatusAsync(idUsuario, usuario);
   }
+
+  Future<bool?> eliminarUsuarioAccionAsync(String idUsuario, String usuario) async {
+    return await Get.find<UsuariosProvider>().eliminarUsuarioAccionAsync(idUsuario, usuario);
+  }
 }

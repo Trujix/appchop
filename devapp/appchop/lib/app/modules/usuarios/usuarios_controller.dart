@@ -293,6 +293,7 @@ class UsuariosController extends GetInjection {
           idZona: zonaSelected,
           usuario: usuario.usuario,
         ));
+        var _ = await appBackupRepository.agregarUsuarioAccionAsync(localStorage.idUsuario!, usuario.usuario!, Literals.usuarioAccionReiniciar);
       } else {
         listaZonasUsuarios.removeWhere((zu) => zu.usuario == usuario.usuario);
       }

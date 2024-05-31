@@ -16,6 +16,7 @@ class LoginData {
   String? token;
   String? sesion;
   int? acepta;
+  String? accion;
 
   LoginData({
     this.id = 0,
@@ -30,6 +31,7 @@ class LoginData {
     this.token = "",
     this.sesion = "",
     this.acepta = 0,
+    this.accion = "",
   });
 
   Map toJson() => {
@@ -45,6 +47,7 @@ class LoginData {
     'token'           : token,
     'sesion'          : sesion,
     'acepta'          : acepta,
+    'accion'          : accion,
   };
 
   LoginData.fromApi(Map<String, dynamic> json) {
@@ -60,5 +63,6 @@ class LoginData {
     token = json['token'].toString();
     sesion = json['sesion'].toString();
     acepta = _tool.str2int(json['acepta'].toString());
+    accion = json['accion'].toString();
   }
 }

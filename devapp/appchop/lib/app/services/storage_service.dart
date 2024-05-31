@@ -60,6 +60,7 @@ class StorageService {
       tabla = _tool.isArray(jsonData) ? jsonData[0]['tabla'] : jsonData['tabla'];
       await _storage!.delete(tabla);
       await _storage!.put(tabla, jsonEncode(elem));
+      await Future.delayed(1.seconds);
       return;
     } catch(e) {
       return;
