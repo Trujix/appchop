@@ -11,7 +11,6 @@ class UsuariosProvider {
       var result = await _api.get(
         "api/usuarios/validarUsuario/$idUsuario/$usuario"
       );
-      print(result);
       return result;
     } catch(e) {
       return null;

@@ -3,17 +3,11 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:open_file_plus/open_file_plus.dart';
 
-import '../../data/models/app_backup/app_backup_data.dart';
-import '../../data/models/local_storage/cargos_abonos.dart';
 import '../../data/models/local_storage/clientes.dart';
-import '../../data/models/local_storage/cobranzas.dart';
 import '../../data/models/local_storage/configuracion.dart';
 import '../../data/models/local_storage/inventarios.dart';
 import '../../data/models/local_storage/local_storage.dart';
-import '../../data/models/local_storage/notas.dart';
 import '../../data/models/local_storage/usuarios.dart';
-import '../../data/models/local_storage/zonas.dart';
-import '../../data/models/local_storage/zonas_usuarios.dart';
 import '../../routes/app_routes.dart';
 import '../../utils/get_injection.dart';
 import '../../utils/literals.dart';
@@ -86,12 +80,13 @@ class ConfiguracionController extends GetInjection {
       if(!await _validarUsuario(validarUsuario, localStorage)) {
         return;
       }
-      var backupData = crearAppBackupData();
+      var backupData = crearAppBackupData(esAdmin);
       var appBackupData = await appBackupRepository.sincronizarAsync(backupData);
       if(appBackupData == null) {
         throw Exception();
       }
       await storage.backup(appBackupData);
+      idBackup = appBackupData.idBackup!;
       localStorage.idBackup = appBackupData.idBackup;
       localStorage.fechaBackup = DateFormat("dd-MM-yyyy").format(DateTime.now()).toString();
       await storage.update(localStorage);
@@ -216,7 +211,7 @@ class ConfiguracionController extends GetInjection {
       } else if(validacion == Literals.validacionErrorZona) {
         await tool.wait(1);
         var _ = await _desvincularDispositivo();
-        tool.msg("La zona signada en su usuario fue modificada o eliminada. Consulte con su administrador", 2);
+        tool.msg("La zona asignada a su usuario fue modificada o eliminada. Consulte con su administrador", 2);
       } else {
         correcto = true;
       }
@@ -267,47 +262,6 @@ class ConfiguracionController extends GetInjection {
     } catch(_) {
       tool.msg("Ocurrió un error al intentar exportar información de cargos y abonos", 3);
     }
-  }
-
-  AppBackupData crearAppBackupData() {
-    var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
-    var cobranzas = List<Cobranzas>.from(
-      storage.get([Cobranzas()]).map((json) => Cobranzas.fromJson(json))
-    );
-    var cargosAbonos = List<CargosAbonos>.from(
-      storage.get([CargosAbonos()]).map((json) => CargosAbonos.fromJson(json))
-    );
-    var notas = List<Notas>.from(
-      storage.get([Notas()]).map((json) => Notas.fromJson(json))
-    );
-    var clientes = List<Clientes>.from(
-      storage.get([Clientes()]).map((json) => Clientes.fromJson(json))
-    );
-    var usuarios = List<Usuarios>.from(
-      storage.get([Usuarios()]).map((json) => Usuarios.fromJson(json))
-    );
-    var zonas = List<Zonas>.from(
-      storage.get([Zonas()]).map((json) => Zonas.fromJson(json))
-    );
-    var zonasUsuarios = List<ZonasUsuarios>.from(
-      storage.get([ZonasUsuarios()]).map((json) => ZonasUsuarios.fromJson(json))
-    );
-    var inventarios = List<Inventarios>.from(
-      storage.get([Inventarios()]).map((json) => Inventarios.fromJson(json))
-    );
-    var backupData = AppBackupData(
-      idUsuario: localStorage.idUsuario,
-      usuarioEnvia: esAdmin ? Literals.perfilAdministrador : localStorage.email,
-      cobranzas: cobranzas,
-      cargosAbonos: cargosAbonos,
-      notas: notas,
-      clientes: clientes,
-      usuarios: usuarios,
-      zonas: zonas,
-      zonasUsuarios: zonasUsuarios,
-      inventarios: inventarios,
-    );
-    return backupData;
   }
 
   void cerrar() {

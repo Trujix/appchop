@@ -246,6 +246,8 @@ class AltaCargoAbonoController extends GetInjection {
       saldoTotal: saldoPendiente,
       saldoAbonos: saldoAbonos,
       saldoCargos: saldoCargos,
+      fechaVencimiento: cobranzaEditar!.fechaVencimiento!,
+      porcentajeInteres: configuracion.porcentajeMoratorio!,
     );
     var pdf = await tool.crearPdf(estadoCuenta, Literals.reporteEstadoCuentaPdf);
     await tool.compartir(pdf!, Literals.reporteEstadoCuentaPdf);

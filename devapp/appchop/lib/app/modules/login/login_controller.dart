@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
+import '../../data/models/local_storage/configuracion.dart';
 import '../../data/models/login/login_form.dart';
 import '../../utils/get_injection.dart';
 import '../../data/models/local_storage/local_storage.dart';
@@ -64,10 +65,8 @@ class LoginController extends GetInjection {
         tool.msg('No se pudo actualizar su información en el inicio de sesión', 2);
         return;
       }
-      var configuracion = await configuracionRepository.obtenerConfiguracionUsuarioAsync(result.idSistema!);
-      if(configuracion == null) {
-
-      }
+      var configuracion = await configuracionRepository.obtenerConfiguracionUsuarioAsync(result.idSistema!) 
+        ?? Configuracion(idUsuario: result.idSistema,);
       localStorage.activo = result.status == Literals.statusActivo;
       if(!localStorage.activo!) {
         tool.msg("Su cuenta de usuario se encuentra como INACTIVA, consulte con el administrador", 2);

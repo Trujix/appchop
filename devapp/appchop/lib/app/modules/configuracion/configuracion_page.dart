@@ -101,25 +101,37 @@ class ConfiguracionPage extends StatelessWidget with WidgetsBindingObserver {
                   onPressed: _.sincronizar,
                   onLongPress: () {},
                 ),
-                const TituloContainer(
-                  texto: "Reportes generales",
-                  ltrbp: [20, 5, 0, 10],
-                  size: 20,
+                Visibility(
+                  visible: _.esAdmin,
+                  child: const TituloContainer(
+                    texto: "Reportes generales",
+                    ltrbp: [20, 5, 0, 10],
+                    size: 20,
+                  ),
                 ),
-                CardButtonContainer(
-                  texto: "Lista de clientes",
-                  icono: MaterialIcons.description,
-                  onTap: () => _.exportarReportes(Literals.reportesClientes),
+                Visibility(
+                  visible: _.esAdmin,
+                  child: CardButtonContainer(
+                    texto: "Lista de clientes",
+                    icono: MaterialIcons.description,
+                    onTap: () => _.exportarReportes(Literals.reportesClientes),
+                  ),
                 ),
-                CardButtonContainer(
-                  texto: "Lista de usuario",
-                  icono: MaterialIcons.description,
-                  onTap: () => _.exportarReportes(Literals.reportesUsuarios),
+                Visibility(
+                  visible: _.esAdmin,
+                  child: CardButtonContainer(
+                    texto: "Lista de usuario",
+                    icono: MaterialIcons.description,
+                    onTap: () => _.exportarReportes(Literals.reportesUsuarios),
+                  ),
                 ),
-                CardButtonContainer(
-                  texto: "Base inventarios",
-                  icono: MaterialIcons.description,
-                  onTap: () => _.exportarReportes(Literals.reportesBaseInventarios),
+                Visibility(
+                  visible: _.esAdmin,
+                  child: CardButtonContainer(
+                    texto: "Base inventarios",
+                    icono: MaterialIcons.description,
+                    onTap: () => _.exportarReportes(Literals.reportesBaseInventarios),
+                  ),
                 ),
                 const TituloContainer(
                   texto: "Configuración general",

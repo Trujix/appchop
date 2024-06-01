@@ -9,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../data/models/configuracion/imagen_logo.dart';
 import '../../data/models/local_storage/local_storage.dart';
+import '../../data/models/local_storage/zonas.dart';
 import '../../routes/app_routes.dart';
 import '../../utils/color_list.dart';
 import '../../utils/get_injection.dart';
@@ -122,6 +123,15 @@ class HomeController extends GetInjection {
     dynamic arguments = {};
     switch(opcion) {
       case MenuOpcion.nuevaCobranza:
+          if(!esAdmin) {
+          var zonaStorage = List<Zonas>.from(
+            storage.get([Zonas()]).map((json) => Zonas.fromJson(json))
+          );
+          if(zonaStorage.isEmpty) {
+            tool.msg("No tiene zonas registradas. Obtenga un respaldo desde el menú Configuración, o consulte con su administrador");
+            return;
+          }
+        }
         pagina = AppRoutes.altaCobranza;
         arguments = {
           "tipoCobranza": Literals.tipoCobranzaMeDeben

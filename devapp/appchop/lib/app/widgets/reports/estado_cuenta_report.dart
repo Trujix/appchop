@@ -7,12 +7,16 @@ class EstadoCuentaReport extends StatelessWidget {
   final double saldoTotal;
   final double saldoCargos;
   final double saldoAbonos;
+  final String fechaVencimiento;
+  final double porcentajeInteres;
   EstadoCuentaReport({
     this.tablaCargosAbonos = const [],
     this.nombre = "",
     this.saldoTotal = 0,
     this.saldoCargos = 0,
     this.saldoAbonos = 0,
+    this.fechaVencimiento = "",
+    this.porcentajeInteres = 0,
   });
 
   @override
@@ -84,6 +88,20 @@ class EstadoCuentaReport extends StatelessWidget {
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 17,
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 6,),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(
+              "Apreciable cliente: le recordamos que la fecha de vencimiento es el dia $fechaVencimiento, por lo que le \nrecomendamos realizar sus pagos de manera puntual, de lo contrario, por cada semana \nde atrazo se le cobrará el %$porcentajeInteres de interes sobre su saldo restante.",
+              softWrap: true,
+              style: TextStyle(
+                fontItalic: Font.timesItalic(),
+                fontSize: 11,
               ),
             ),
           ],

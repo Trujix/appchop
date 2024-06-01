@@ -39,6 +39,8 @@ class UsuariosController extends GetInjection {
 
   List<ZonasUsuarios> listaZonasUsuarios = [];
 
+  final bool esAdmin = GetInjection.administrador;
+
   @override
   void onInit() {
     _init();
@@ -234,6 +236,12 @@ class UsuariosController extends GetInjection {
         tool.msg(Literals.msgOffline, 2);
         return;
       }
+      if(usuario.activo!) {
+        var crearBackup = await _crearBackup();
+        if(!crearBackup) {
+          throw Exception();
+        }
+      }
       var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
       var cobrador = AltaCobrador(
         idUsuario: localStorage.idUsuario,
@@ -288,6 +296,10 @@ class UsuariosController extends GetInjection {
       tool.isBusy();
       if(agregar) {
         var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
+        var crearBackup = await _crearBackup();
+        if(!crearBackup) {
+          throw Exception();
+        }
         listaZonasUsuarios.add(ZonasUsuarios(
           idUsuario: localStorage.idUsuario!,
           idZona: zonaSelected,
@@ -354,6 +366,20 @@ class UsuariosController extends GetInjection {
           },
         ),
       );
+    }
+  }
+
+  Future<bool> _crearBackup() async {
+    try {
+      var backupData = crearAppBackupData(esAdmin);
+      var appBackupData = await appBackupRepository.sincronizarAsync(backupData);
+      if(appBackupData == null) {
+        throw Exception();
+      }
+      await storage.backup(appBackupData);
+      return true;
+    } catch(_) {
+      return false;
     }
   }
 
