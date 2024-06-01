@@ -74,7 +74,7 @@ class AlertaDialog extends StatelessWidget {
                               color: Color(ColorList.sys[0]),
                               fontWeight: FontWeight.bold,
                             ),
-                            minFontSize: 12,
+                            minFontSize: 8,
                             maxLines: 3,
                             textAlign: TextAlign.center,
                           ),
