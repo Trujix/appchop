@@ -94,6 +94,10 @@ class UsuariosController extends GetInjection {
         tool.msg("Ya existe un registro con el nombre de usuario ($usuarioAlta)", 2);
         return;
       }
+      var crearBackup = await _crearBackup();
+      if(!crearBackup) {
+        throw Exception();
+      }
       var altaForm = AltaCobrador(
         idUsuario: localStorage.idUsuario!,
         usuario: usuarioAlta,
