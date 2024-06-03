@@ -36,7 +36,6 @@ class LoginController extends GetInjection {
     var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
     usuario.text = localStorage.email!;
     usuarioTextEnabled = localStorage.email! == "";
-    usuario.text = "manuel_trujillo@ucol.mx";
     update();
   }
 
