@@ -16,9 +16,14 @@ class Literals {
   static const String perfilCobrador = "COBRADOR";
   static const String statusActivo = "ACTIVO";
   static const String statusInactivo = "INACTIVO";
+  static const String statusPassTemporal = "PASSTEMPORAL";
   static const String statusIdDispositivo = "NONE";
   static const String bloqueoSi = "SI";
   static const String bloqueoNo = "NO";
+
+  static const String newPasswordNoUsuario = "NO-USUARIO";
+  static const String newPasswordEnviado = "PASSWORD-ENVIADO";
+  static const String newPasswordError = "ERROR";
 
   static const String defaultZonaTodo = "TODO";
   static const String defaultZonaTodoTxt = "Mostrar todo";

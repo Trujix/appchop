@@ -43,7 +43,7 @@ class LoginPage extends StatelessWidget with WidgetsBindingObserver {
                 ),
                 StandardTextform(
                   controller: _.usuario,
-                  focusNode: _.usuaroFocus,
+                  focusNode: _.usuarioFocus,
                   text: "Usuario",
                   enabled: _.usuarioTextEnabled,
                 ),
@@ -66,7 +66,7 @@ class LoginPage extends StatelessWidget with WidgetsBindingObserver {
                 SolidButton(
                   texto: "Recuperar contraseña",
                   icono: MaterialIcons.rotate_left,
-                  onPressed: _.iniciarSesion,
+                  onPressed: _.recuperarPassword,
                   textoColor: ColorList.sys[0],
                   fondoColor: ColorList.sys[1],
                   onLongPress: () {},
