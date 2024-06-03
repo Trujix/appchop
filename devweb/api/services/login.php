@@ -15,6 +15,49 @@
             return json_encode($resultado_login);
         }
 
+        public static function recuperarPassword($params) {
+            $password_form = (object)$params;
+            if(!isset($password_form->usuario)) {
+                http_response_code(406);
+                die("Parámetros de contraseña incorrectos");
+            }
+            $usuario = $password_form->usuario;
+            $mysql = new Mysql();
+            $verificar_usuario = $mysql->executeReader(
+                "CALL STP_VERIFICAR_USUARIO('$usuario')",
+                true
+            );
+            if($verificar_usuario->EXISTE <= 0) {
+                return "NO-USUARIO";
+            }
+            $nueva_pass = rand(100000, 199999);
+            $actualizar_password = $mysql->executeNonQuery(
+                "CALL STP_RECUPERACION_USUARIO_PASSWORD('$usuario', '$nueva_pass', 'PASSTEMPORAL')"
+            );
+            $email = new Email();
+            if($email->nuevoPassword($usuario, $nueva_pass)) {
+                return "PASSWORD-ENVIADO";
+            }
+            return "ERROR";
+        }
+
+        public static function actualizarPassword($params) {
+            Auth::verify();
+            $password_form = (object)$params;
+            if(!isset($password_form->usuario)
+                || !isset($password_form->password)) {
+                http_response_code(406);
+                die("Parámetros de contraseña incorrectos");
+            }
+            $usuario = $password_form->usuario;
+            $nueva_pass = $password_form->password;
+            $mysql = new Mysql();
+            $actualizar_password = $mysql->executeNonQuery(
+                "CALL STP_RECUPERACION_USUARIO_PASSWORD('$usuario', '$nueva_pass', 'ACTIVO')"
+            );
+            return json_encode($actualizar_password == 1);
+        }
+
         public static function actualizarUsuario($params) {
             Auth::verify();
             $usuario_form = (object)$params;

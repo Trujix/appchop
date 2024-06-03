@@ -17,6 +17,43 @@ END $$
 DELIMITER ;
 
 
+
+/* ------------------------------------------------------------------------------------*/
+DROP PROCEDURE IF EXISTS STP_VERIFICAR_USUARIO;
+DELIMITER $$
+CREATE PROCEDURE STP_VERIFICAR_USUARIO(
+    IN _USUARIO VARCHAR(150)
+)
+BEGIN
+    DECLARE _VERIFY INT DEFAULT 0;
+    SET _VERIFY = (
+        SELECT 
+            COUNT(*) AS VERIFY
+        FROM appchop.usuarios WHERE 
+            usuario = _USUARIO
+    );
+    SELECT _VERIFY AS EXISTE;
+END $$
+DELIMITER ;
+
+
+
+/* ------------------------------------------------------------------------------------*/
+DROP PROCEDURE IF EXISTS STP_RECUPERACION_USUARIO_PASSWORD;
+DELIMITER $$
+CREATE PROCEDURE STP_RECUPERACION_USUARIO_PASSWORD(
+    IN _USUARIO VARCHAR(150), IN _PASSWORD VARCHAR(150), IN _STATUS VARCHAR(15)
+)
+BEGIN
+    UPDATE appchop.usuarios SET
+        password = MD5(_PASSWORD),
+        status = _STATUS
+    WHERE 
+        usuario = _USUARIO;
+END $$
+DELIMITER ;
+
+
 /* ------------------------------------------------------------------------------------*/
 DROP PROCEDURE IF EXISTS STP_INICIAR_SESION;
 DELIMITER $$
