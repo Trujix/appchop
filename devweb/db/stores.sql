@@ -1102,7 +1102,8 @@ DROP PROCEDURE IF EXISTS STP_APP_BACKUP_INVENTARIOS_INSERT;
 DELIMITER $$
 CREATE PROCEDURE STP_APP_BACKUP_INVENTARIOS_INSERT(
     IN _TABLA VARCHAR(50), IN _IDSISTEMA VARCHAR(120), IN _IDARTICULO VARCHAR(120), 
-    IN _CODIGOARTICULO VARCHAR(120), IN _DESCRIPCION VARCHAR(40), IN _PRECIOCOMPRA FLOAT, 
+    IN _CODIGOARTICULO VARCHAR(120), IN _DESCRIPCION VARCHAR(40), IN _MARCA VARCHAR(40), 
+    IN _TALLA VARCHAR(40), IN _PRECIOCOMPRA FLOAT, 
     IN _PRECIOVENTA FLOAT, IN _EXISTENCIA FLOAT, IN _MAXIMO FLOAT, 
     IN _MINIMO FLOAT, IN _FECHACAMBIO VARCHAR(10), IN _USUARIO VARCHAR(120) 
 )
@@ -1113,6 +1114,8 @@ BEGIN
         id_articulo,
         codigo_articulo,
         descripcion,
+        marca,
+        talla,
         precio_compra,
         precio_venta,
         existencia,
@@ -1126,6 +1129,8 @@ BEGIN
         _IDARTICULO,
         _CODIGOARTICULO,
         CONVERT(_DESCRIPCION USING UTF8),
+        CONVERT(_MARCA USING UTF8),
+        CONVERT(_TALLA USING UTF8),
         _PRECIOCOMPRA,
         _PRECIOVENTA,
         _EXISTENCIA,
@@ -1151,6 +1156,8 @@ BEGIN
         id_articulo AS idArticulo,
         codigo_articulo AS codigoArticulo,
         descripcion,
+        marca,
+        talla,
         precio_compra AS precioCompra,
         precio_venta AS precioVenta,
         existencia,

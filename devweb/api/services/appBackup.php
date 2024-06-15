@@ -322,6 +322,8 @@
                         '$inventario->idArticulo',
                         '$inventario->codigoArticulo',
                         '$inventario->descripcion',
+                        '$inventario->marca',
+                        '$inventario->talla',
                         $inventario->precioCompra,
                         $inventario->precioVenta,
                         $inventario->existencia,

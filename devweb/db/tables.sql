@@ -130,6 +130,8 @@ CREATE TABLE IF NOT EXISTS app_inventarios(
     id_articulo VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de registro de articulo',
     codigo_articulo VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Codigo clave sku de articulo',
     descripcion VARCHAR(40) NOT NULL DEFAULT '-' COMMENT 'Descripcion de articulo',
+    marca VARCHAR(40) NOT NULL DEFAULT '-' COMMENT 'Marca de articulo',
+    talla VARCHAR(40) NOT NULL DEFAULT '-' COMMENT 'Talla de articulo',
     precio_compra FLOAT NOT NULL DEFAULT 0 COMMENT 'Precio de compra',
     precio_venta FLOAT NOT NULL DEFAULT 0 COMMENT 'Precio de venta',
     existencia FLOAT NOT NULL DEFAULT 0 COMMENT 'Existencias del articulo',
