@@ -9,6 +9,8 @@ class Inventarios {
   String? idArticulo;
   String? codigoArticulo;
   String? descripcion;
+  String? marca;
+  String? talla;
   double? precioCompra;
   double? precioVenta;
   double? existencia;
@@ -22,6 +24,8 @@ class Inventarios {
     this.idArticulo = "",
     this.codigoArticulo = "",
     this.descripcion = "",
+    this.marca = "",
+    this.talla = "",
     this.precioCompra = 0.0,
     this.precioVenta = 0.0,
     this.existencia = 0.0,
@@ -48,6 +52,8 @@ class Inventarios {
     'idArticulo'      : idArticulo,
     'codigoArticulo'  : codigoArticulo,
     'descripcion'     : descripcion,
+    'marca'           : marca,
+    'talla'           : talla,
     'precioCompra'    : precioCompra,
     'precioVenta'     : precioVenta,
     'existencia'      : existencia,
@@ -62,6 +68,8 @@ class Inventarios {
     idArticulo: json['idArticulo'] ?? "",
     codigoArticulo: json['codigoArticulo'] ?? "",
     descripcion: json['descripcion'] ?? "",
+    marca: json['marca'] ?? "",
+    talla: json['talla'] ?? "",
     precioCompra: Get.find<ToolService>().str2double(json['precioCompra'].toString()),
     precioVenta: Get.find<ToolService>().str2double(json['precioVenta'].toString()),
     existencia: Get.find<ToolService>().str2double(json['existencia'].toString()),

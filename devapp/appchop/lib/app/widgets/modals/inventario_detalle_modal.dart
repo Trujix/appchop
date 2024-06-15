@@ -30,6 +30,16 @@ class InventarioDetalleModal extends StatelessWidget {
           icono: MaterialIcons.inventory,
         ),
         EtiquetaJumpText(
+          texto1: "Marca:",
+          texto2: inventarios.marca!,
+          icono: MaterialCommunityIcons.tshirt_v,
+        ),
+        EtiquetaJumpText(
+          texto1: "Talla:",
+          texto2: inventarios.talla!,
+          icono: MaterialCommunityIcons.size_xs,
+        ),
+        EtiquetaJumpText(
           texto1: "Precio compra:",
           texto2: MoneyFormatter(amount: inventarios.precioCompra!).output.symbolOnLeft,
           icono: MaterialIcons.money,

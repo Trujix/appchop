@@ -12,6 +12,10 @@ class InventarioFormColumn extends StatelessWidget {
   final FocusNode? codigoArticuloFocus;
   final TextEditingController? descripcion;
   final FocusNode? descripcionFocus;
+  final TextEditingController? marca;
+  final FocusNode? marcaFocus;
+  final TextEditingController? talla;
+  final FocusNode? tallaFocus;
   final TextEditingController? precioCompra;
   final FocusNode? precioCompraFocus;
   final TextEditingController? precioVenta;
@@ -31,6 +35,10 @@ class InventarioFormColumn extends StatelessWidget {
     this.codigoArticuloFocus,
     this.descripcion,
     this.descripcionFocus,
+    this.marca,
+    this.marcaFocus,
+    this.talla,
+    this.tallaFocus,
     this.precioCompra,
     this.precioCompraFocus,
     this.precioVenta,
@@ -74,6 +82,24 @@ class InventarioFormColumn extends StatelessWidget {
                 focusNode: descripcionFocus,
                 text: "Descripción *",
                 icon: MaterialIcons.inventory,
+                keyboardType: TextInputType.text,
+                ltrbp: const [0, 10, 0, 10],
+                maxLength: 40,
+              ),
+              StandardTextform(
+                controller: marca,
+                focusNode: marcaFocus,
+                text: "Marca *",
+                icon: MaterialCommunityIcons.tshirt_v,
+                keyboardType: TextInputType.text,
+                ltrbp: const [0, 10, 0, 10],
+                maxLength: 40,
+              ),
+              StandardTextform(
+                controller: talla,
+                focusNode: tallaFocus,
+                text: "Talla *",
+                icon: MaterialCommunityIcons.size_xs,
                 keyboardType: TextInputType.text,
                 ltrbp: const [0, 10, 0, 10],
                 maxLength: 40,

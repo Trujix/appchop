@@ -25,6 +25,10 @@ class InventariosController extends GetInjection {
   FocusNode codigoArticuloFocus = FocusNode();
   TextEditingController descripcion = TextEditingController();
   FocusNode descripcionFocus = FocusNode();
+  TextEditingController marca = TextEditingController();
+  FocusNode marcaFocus = FocusNode();
+  TextEditingController talla = TextEditingController();
+  FocusNode tallaFocus = FocusNode();
   TextEditingController precioCompra = TextEditingController();
   FocusNode precioCompraFocus = FocusNode();
   TextEditingController precioVenta = TextEditingController();
@@ -192,6 +196,8 @@ class InventariosController extends GetInjection {
       var csvInventario = csvArhivo.split("\n");
       inventariosLista = [];
       var primer = true;
+      var fechaCambio = DateFormat("dd-MM-yyyy").format(DateTime.now()).toString();
+      var usuario = esAdmin ? Literals.perfilAdministrador : localStorage.email;
       for(var inventario in csvInventario) {
         if(inventario == "" || inventario == "\n") {
           continue;
@@ -209,19 +215,22 @@ class InventariosController extends GetInjection {
           continue;
         }
         var idArticulo = tool.guid();
+        
         inventariosLista.add(
           Inventarios(
             idUsuario: localStorage.idUsuario,
             idArticulo: idArticulo,
             codigoArticulo: elementos[0],
             descripcion: elementos[1],
-            precioCompra: tool.str2double(elementos[2]),
-            precioVenta: tool.str2double(elementos[3]),
-            existencia: tool.str2double(elementos[4]),
-            maximo: tool.str2double(elementos[5]),
-            minimo: tool.str2double(elementos[6]),
-            fechaCambio: elementos[7],
-            usuario: esAdmin ? Literals.perfilAdministrador : localStorage.email,
+            marca: elementos[2],
+            talla: elementos[3],
+            precioCompra: tool.str2double(elementos[4]),
+            precioVenta: tool.str2double(elementos[5]),
+            existencia: tool.str2double(elementos[6]),
+            maximo: tool.str2double(elementos[7]),
+            minimo: tool.str2double(elementos[8]),
+            fechaCambio: fechaCambio,
+            usuario: usuario,
           ),
         );
         _inventariosListaImportados = inventariosLista;
@@ -253,7 +262,7 @@ class InventariosController extends GetInjection {
       }
       var contenido = tool.crearCsv(
         inventariosLista,
-        ["tabla", "idUsuario", "idArticulo",]
+        ["tabla", "idUsuario", "idArticulo"]
       );
       var archivoCsv = await tool.crearArchivo(contenido, Literals.reporteInventariosCsv);
       await Future.delayed(0.7.seconds);
@@ -485,6 +494,8 @@ class InventariosController extends GetInjection {
       idArticulo: idArticulo,
       codigoArticulo: codigoArticulo.text,
       descripcion: descripcion.text,
+      marca: marca.text,
+      talla: talla.text,
       precioCompra: tool.str2double(precioCompra.text),
       precioVenta: tool.str2double(precioVenta.text),
       existencia: tool.str2double(existencia.text),
@@ -571,6 +582,10 @@ class InventariosController extends GetInjection {
       mensaje = "Ya existe un artículo con ese código";
     } else if(tool.isNullOrEmpty(descripcion)) {
       mensaje = "Escriba la descripción";
+    } else if(tool.isNullOrEmpty(marca)) {
+      mensaje = "Escriba la marca";
+    } else if(tool.isNullOrEmpty(talla)) {
+      mensaje = "Escriba la talla";
     } else if(tool.isNullOrEmpty(precioCompra)) {
       mensaje = "Escriba el precio de compra";
     } else if(tool.isNullOrEmpty(precioVenta)) {
@@ -594,6 +609,8 @@ class InventariosController extends GetInjection {
     if(editandoElemento) {
       codigoArticulo.text = inventario!.codigoArticulo!;
       descripcion.text = inventario.descripcion!;
+      marca.text = inventario.marca!;
+      talla.text = inventario.talla!;
       precioCompra.text = inventario.precioCompra!.toString();
       precioVenta.text = inventario.precioVenta!.toString();
       existencia.text = inventario.existencia!.toString();
@@ -602,6 +619,8 @@ class InventariosController extends GetInjection {
     } else {
       codigoArticulo.clear();
       descripcion.clear();
+      marca.clear();
+      talla.clear();
       precioCompra.clear();
       precioVenta.clear();
       existencia.clear();
@@ -629,6 +648,10 @@ class InventariosController extends GetInjection {
               codigoArticuloFocus: codigoArticuloFocus,
               descripcion: descripcion,
               descripcionFocus: descripcionFocus,
+              marca: marca,
+              marcaFocus: marcaFocus,
+              talla: talla,
+              tallaFocus: tallaFocus,
               precioCompra: precioCompra,
               precioCompraFocus: precioCompraFocus,
               precioVenta: precioVenta,

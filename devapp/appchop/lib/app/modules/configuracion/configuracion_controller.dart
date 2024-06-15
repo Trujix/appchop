@@ -241,7 +241,7 @@ class ConfiguracionController extends GetInjection {
       } else if(tipo == Literals.reportesBaseInventarios) {
         List<Inventarios> inventarios = [Inventarios()];
         listaData = inventarios;
-        omisiones = ["tabla", "idUsuario", "idArticulo"];
+        omisiones = ["tabla", "idUsuario", "idArticulo", "fechaCambio", "usuario"];
         nombreCsv = Literals.reporteBaseInventariosCsv;
       } else {
         return;
