@@ -1,5 +1,5 @@
 class Literals {
-  static const String version = "1.0.4+4";
+  static const String version = "1.0.8+8";
   static const String notificacionTopic = "appchop_notif";
 
   static const String storageName = "appchopStorage";
@@ -10,7 +10,8 @@ class Literals {
   static const String contentType = "ContentType";
   static const String applicationJson = "application/json";
   static const String autorization = "Authorization";
-  static const String terminosCondicionesFile = "media/documentos/terminos_y_condiciones_de_uso_appchop.pdf";
+  static const String terminosCondicionesFile =
+      "media/documentos/terminos_y_condiciones_de_uso_appchop.pdf";
 
   static const String perfilAdministrador = "ADMINISTRADOR";
   static const String perfilCobrador = "COBRADOR";
@@ -60,9 +61,9 @@ class Literals {
   static const String notificacionUsuarioPassword = "USUARIO-PASSWORD";
 
   static const String sinVencimiento = "31-12-2999";
- 
+
   static const String noneStorage = "NONE";
-  
+
   static const String apiTrue = "true";
 
   static const String reporteCobranzaCsv = "reporte_cobranza.csv";
@@ -73,7 +74,9 @@ class Literals {
   static const String reporteCargosAbonosCsv = "cargos_abonos.pdf";
   static const String reporteEstadoCuentaPdf = "estado_cuenta.pdf";
 
-  static const String msgOffline = "Es necesario estar conectado a internet para esta acción";
+  static const String msgOffline =
+      "Es necesario estar conectado a internet para esta acción";
 
-  static const String regexEmail = r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
+  static const String regexEmail =
+      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
 }
