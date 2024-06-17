@@ -20,6 +20,7 @@ import '../../widgets/modals/inventario_existencia_modal.dart';
 class InventariosController extends GetInjection {
   ScrollController scrollController = ScrollController();
   ScrollController formScrollController = ScrollController();
+  ScrollController detalleScrollcontroler = ScrollController();
   TextEditingController busqueda = TextEditingController();
   TextEditingController codigoArticulo = TextEditingController();
   FocusNode codigoArticuloFocus = FocusNode();
@@ -401,18 +402,21 @@ class InventariosController extends GetInjection {
 
   void mostrarDetalle(Inventarios inventarios) {
     var context = Get.context!;
+    var height = MediaQuery.of(context).size.height;
     tool.modal(
       widgets: [
         const TituloContainer(
           texto: "Detalle de artículo",
           size: 18,
-          ltrbp: [10, 10, 10, 5],
+          ltrbp: [10, 10, 10, 0],
         ),
         InventarioDetalleModal(
           inventarios: inventarios,
+          scrollController: detalleScrollcontroler,
+          height: height - 400,
         ),
       ],
-      height: MediaQuery.of(context).size.height - 300,
+      height: height - 300,
     );
   }
 
