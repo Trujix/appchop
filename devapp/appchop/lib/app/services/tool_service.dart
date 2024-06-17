@@ -32,13 +32,13 @@ class ToolService extends GetxController {
   void isBusy([bool open = true]) {
     try {
       var thisContext = Get.context;
-      if(!open && _loadingOpen) {
+      if (!open && _loadingOpen) {
         try {
           Navigator.pop(thisContext!);
-        } finally { }
+        } finally {}
       }
       _loadingOpen = open;
-      if(open) {
+      if (open) {
         showDialog(
           context: thisContext!,
           builder: (BuildContext context) {
@@ -47,7 +47,7 @@ class ToolService extends GetxController {
           },
         );
       }
-    } finally { }
+    } finally {}
   }
 
   Future<bool> isOnline() async {
@@ -56,7 +56,7 @@ class ToolService extends GetxController {
       var wifi = coneccion.contains(ConnectivityResult.wifi);
       var datosMobiles = coneccion.contains(ConnectivityResult.mobile);
       return wifi || datosMobiles;
-    } catch(_) {
+    } catch (_) {
       return false;
     }
   }
@@ -64,7 +64,7 @@ class ToolService extends GetxController {
   void msg(String mensaje, [int tipo = 0]) {
     try {
       var thisContext = Get.context;
-      if(_loadingOpen) {
+      if (_loadingOpen) {
         isBusy(false);
       }
       List<IconData> iconos = [
@@ -90,13 +90,10 @@ class ToolService extends GetxController {
           );
         },
       );
-    } finally { }
+    } finally {}
   }
 
-  void modal({
-    List<Widget> widgets = const [],
-    double height = 150
-  }) {
+  void modal({List<Widget> widgets = const [], double height = 150}) {
     var modalContext = Get.context!;
     showDialog(
       context: modalContext,
@@ -120,28 +117,28 @@ class ToolService extends GetxController {
     Navigator.of(altaContext, rootNavigator: true).pop(true);
   }
 
-  Future<bool> ask(String mensaje, String pregunta, {String si = "Aceptar", String no = "Cancelar"}) async {
+  Future<bool> ask(String mensaje, String pregunta,
+      {String si = "Aceptar", String no = "Cancelar"}) async {
     try {
       var askDialog = Get.context!;
       bool respuesta = false;
       await showDialog(
-        context: askDialog,
-        builder: (BuildContext context) {
-          context = context;
-          return PreguntaDialog(
-            mensaje: mensaje,
-            pregunta: pregunta,
-            siBoton: si,
-            noBoton: no,
-            respuesta: (resp) {
-              respuesta = resp;
-              Navigator.of(context).pop();
-            },
-          );
-        }
-      );
+          context: askDialog,
+          builder: (BuildContext context) {
+            context = context;
+            return PreguntaDialog(
+              mensaje: mensaje,
+              pregunta: pregunta,
+              siBoton: si,
+              noBoton: no,
+              respuesta: (resp) {
+                respuesta = resp;
+                Navigator.of(context).pop();
+              },
+            );
+          });
       return respuesta;
-    } catch(e) {
+    } catch (e) {
       return false;
     }
   }
@@ -162,20 +159,19 @@ class ToolService extends GetxController {
   void toastClose() {
     try {
       Fluttertoast.cancel();
-    } finally { }
+    } finally {}
   }
 
   void calculadora() {
     var calculadoraContext = Get.context!;
     showModalBottomSheet(
-      context: calculadoraContext,
-      builder: (BuildContext context) {
-        return SizedBox(
-          height: MediaQuery.of(context).size.height * 0.75,
-          child: const DefaultSimplecalculator(),
-        );
-      }
-    );
+        context: calculadoraContext,
+        builder: (BuildContext context) {
+          return SizedBox(
+            height: MediaQuery.of(context).size.height * 0.75,
+            child: const DefaultSimplecalculator(),
+          );
+        });
   }
 
   bool isNullOrEmpty(TextEditingController? input) {
@@ -196,7 +192,7 @@ class ToolService extends GetxController {
     var prohibidos = ["\n", " "];
     var letras = 0;
     for (var caracter in caracteres) {
-      if(!prohibidos.contains(caracter)) {
+      if (!prohibidos.contains(caracter)) {
         letras++;
       }
     }
@@ -205,26 +201,23 @@ class ToolService extends GetxController {
 
   String cadenaAleatoria(int length, [String tipo = 'LNX']) {
     var randomGenerator = Random();
-    var caracteresRandom = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
-    if(tipo == 'LNM') {
+    var caracteresRandom =
+        'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+    if (tipo == 'LNM') {
       caracteresRandom = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
-    } else if(tipo == 'LNm') {
+    } else if (tipo == 'LNm') {
       caracteresRandom = 'abcdefghijklmnopqrstuvwxyz1234567890';
-    } else if(tipo == 'Lm') {
+    } else if (tipo == 'Lm') {
       caracteresRandom = 'abcdefghijklmnopqrstuvwxyz';
-    } else if(tipo == 'LM') {
+    } else if (tipo == 'LM') {
       caracteresRandom = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    } else if(tipo == 'N') {
+    } else if (tipo == 'N') {
       caracteresRandom = '1234567890';
     }
-    return String.fromCharCodes(
-      Iterable.generate(
+    return String.fromCharCodes(Iterable.generate(
         length,
-        (_) => caracteresRandom.codeUnitAt(
-          randomGenerator.nextInt(caracteresRandom.length)
-        )
-      )
-    );
+        (_) => caracteresRandom
+            .codeUnitAt(randomGenerator.nextInt(caracteresRandom.length))));
   }
 
   String guid() {
@@ -241,7 +234,7 @@ class ToolService extends GetxController {
     try {
       var jsonCadena = jsonEncode(elemento);
       return jsonCadena[jsonCadena.length - 1] == "}";
-    } catch(e) {
+    } catch (e) {
       return false;
     }
   }
@@ -249,8 +242,8 @@ class ToolService extends GetxController {
   bool isArray(dynamic elemento) {
     try {
       var jsonCadena = jsonEncode(elemento);
-      return jsonCadena[jsonCadena.length -1] == "]";
-    } catch(e) {
+      return jsonCadena[jsonCadena.length - 1] == "]";
+    } catch (e) {
       return false;
     }
   }
@@ -260,7 +253,7 @@ class ToolService extends GetxController {
       var cadAux = jsonEncode(data);
       var cadJson = cadAux[cadAux.length - 2] + cadAux[cadAux.length - 1];
       return cadJson == "}]";
-    } catch(e) {
+    } catch (e) {
       return false;
     }
   }
@@ -287,10 +280,7 @@ class ToolService extends GetxController {
   DateTime str2date(String cadena) {
     var dateArr = cadena.split("-");
     return DateTime.utc(
-      int.parse(dateArr[2]),
-      int.parse(dateArr[1]),
-      int.parse(dateArr[0])
-    );
+        int.parse(dateArr[2]), int.parse(dateArr[1]), int.parse(dateArr[0]));
   }
 
   Future<void> wait([int segundos = 2]) async {
@@ -306,10 +296,12 @@ class ToolService extends GetxController {
           pageFormat: pdflib.PdfPageFormat.letter,
           orientation: pdfwidget.PageOrientation.portrait,
         ),
-        build: (context) => [pdfwidget.Padding(
-          padding: const pdfwidget.EdgeInsets.only(right: 20),
-          child: child,
-        )],
+        build: (context) => [
+          pdfwidget.Padding(
+            padding: const pdfwidget.EdgeInsets.only(right: 20),
+            child: child,
+          )
+        ],
       ),
     );
     var pdfArchivo = await documento.save();
@@ -321,30 +313,28 @@ class ToolService extends GetxController {
   }
 
   String cobranzaCsv(
-    List<Cobranzas> cobranzas,
-    List<Zonas> zonas,
-    List<String> omisiones
-  ) {
+      List<Cobranzas> cobranzas, List<Zonas> zonas, List<String> omisiones) {
     var listaElementos = jsonDecode(jsonEncode(cobranzas)) as List<dynamic>;
     var titulo = "";
     var addTitulo = true;
     var cuerpo = "";
     for (var cobranza in listaElementos) {
-      var cobranzaMap = jsonDecode(jsonEncode(cobranza)) as Map<String, dynamic>;
+      var cobranzaMap =
+          jsonDecode(jsonEncode(cobranza)) as Map<String, dynamic>;
       var cuerpoTemp = "";
       cobranzaMap.forEach((key, value) {
-        if(!omisiones.contains(key)) {
-          if(addTitulo) {
-            if(titulo != "") {
+        if (!omisiones.contains(key)) {
+          if (addTitulo) {
+            if (titulo != "") {
               titulo += ",";
             }
             titulo += key.toUpperCase();
           }
-          if(cuerpoTemp != "") {
+          if (cuerpoTemp != "") {
             cuerpoTemp += ",";
           }
           var valor = "";
-          if(key == "zona") {
+          if (key == "zona") {
             var zona = zonas.where((c) => c.valueZona == value).firstOrNull;
             valor = zona != null ? zona.labelZona! : value.toString();
           } else {
@@ -353,7 +343,7 @@ class ToolService extends GetxController {
           cuerpoTemp += valor;
         }
       });
-      if(addTitulo) {
+      if (addTitulo) {
         titulo += "\n";
       }
       cuerpo += "$cuerpoTemp\n";
@@ -362,10 +352,7 @@ class ToolService extends GetxController {
     return "$titulo$cuerpo";
   }
 
-  String crearCsv(
-    dynamic data,
-    List<String> omisiones
-  ) {
+  String crearCsv(dynamic data, List<String> omisiones) {
     var listaElementos = jsonDecode(jsonEncode(data)) as List<dynamic>;
     var titulo = "";
     var addTitulo = true;
@@ -374,20 +361,21 @@ class ToolService extends GetxController {
       var mapa = jsonDecode(jsonEncode(elemento)) as Map<String, dynamic>;
       var cuerpoTemp = "";
       mapa.forEach((key, value) {
-        if(!omisiones.contains(key)) {
-          if(addTitulo) {
-            if(titulo != "") {
+        if (!omisiones.contains(key)) {
+          if (addTitulo) {
+            if (titulo != "") {
               titulo += ",";
             }
             titulo += key.toUpperCase();
           }
-          if(cuerpoTemp != "") {
+          if (cuerpoTemp != "") {
             cuerpoTemp += ",";
           }
-          cuerpoTemp = "$cuerpoTemp${value.toString().trim().replaceAll("\n", "")}";
+          cuerpoTemp =
+              "$cuerpoTemp${value.toString().trim().replaceAll("\n", "")}";
         }
       });
-      if(addTitulo) {
+      if (addTitulo) {
         titulo += "\n";
       }
       cuerpo += "$cuerpoTemp\n";
@@ -405,7 +393,7 @@ class ToolService extends GetxController {
       var pdf = File(rutaArchivo);
       await pdf.writeAsBytes(archivoBytes, flush: true);
       return rutaArchivo;
-    } catch(e) {
+    } catch (e) {
       return null;
     }
   }
@@ -417,14 +405,14 @@ class ToolService extends GetxController {
       var txt = File(rutaArchivo);
       await txt.writeAsString(contenido, flush: true);
       return rutaArchivo;
-    } catch(e) {
+    } catch (e) {
       return null;
     }
   }
 
   Future<String> abrirCsv() async {
     var selectArchivo = await FilePicker.platform.pickFiles();
-    if(selectArchivo == null) {
+    if (selectArchivo == null) {
       return "";
     }
     var archivo = File(selectArchivo.files.single.path!);
@@ -450,8 +438,9 @@ class ToolService extends GetxController {
   }
 
   Future<void> googleMaps(String latitud, String longitud) async {
-    var googleMapUri = Uri.parse("https://www.google.com/maps/search/?api=1&query=$latitud,$longitud");
-    if(await canLaunchUrl(googleMapUri)) {
+    var googleMapUri = Uri.parse(
+        "https://www.google.com/maps/search/?api=1&query=$latitud,$longitud");
+    if (await canLaunchUrl(googleMapUri)) {
       await launchUrl(googleMapUri);
     } else {
       msg("No fue posible abrir los parametros de la ubicación", 2);
