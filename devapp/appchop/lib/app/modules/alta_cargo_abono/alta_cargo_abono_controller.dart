@@ -228,29 +228,33 @@ class AltaCargoAbonoController extends GetInjection {
   }
 
   Future<void> crearEstadoCuentaPdf() async {
-    cargosAbonosTabla = [];
-    cargosAbonosTabla.add(cargosAbonosPdfHeader);
-    for(var cargoAbono in listaCargosAbonos) {
-      var monto = MoneyFormatter(amount: cargoAbono.monto!).output.symbolOnLeft;
-      List<String> filaCargoAbono = [
-        cargoAbono.fechaRegistro!,
-        cargoAbono.tipo! == Literals.movimientoCargo ? monto : "\$ 0.00",
-        cargoAbono.tipo! == Literals.movimientoAbono ? monto : "\$ 0.00",
-        cargoAbono.referencia!,
-      ];
-      cargosAbonosTabla.add(filaCargoAbono);
+    try {
+      cargosAbonosTabla = [];
+      cargosAbonosTabla.add(cargosAbonosPdfHeader);
+      for(var cargoAbono in listaCargosAbonos) {
+        var monto = MoneyFormatter(amount: cargoAbono.monto!).output.symbolOnLeft;
+        List<String> filaCargoAbono = [
+          cargoAbono.fechaRegistro!,
+          cargoAbono.tipo! == Literals.movimientoCargo ? monto : "\$ 0.00",
+          cargoAbono.tipo! == Literals.movimientoAbono ? monto : "\$ 0.00",
+          cargoAbono.referencia!,
+        ];
+        cargosAbonosTabla.add(filaCargoAbono);
+      }
+      var estadoCuenta = EstadoCuentaReport(
+        tablaCargosAbonos: cargosAbonosTabla,
+        nombre: cobranzaEditar!.nombre!,
+        saldoTotal: saldoPendiente,
+        saldoAbonos: saldoAbonos,
+        saldoCargos: saldoCargos,
+        fechaVencimiento: cobranzaEditar!.fechaVencimiento!,
+        porcentajeInteres: configuracion.porcentajeMoratorio!,
+      );
+      var pdf = await tool.crearPdf(estadoCuenta, Literals.reporteEstadoCuentaPdf);
+      await tool.compartir(pdf!, Literals.reporteEstadoCuentaPdf);
+    } catch(e) {
+      tool.msg("Error: $e", 3);
     }
-    var estadoCuenta = EstadoCuentaReport(
-      tablaCargosAbonos: cargosAbonosTabla,
-      nombre: cobranzaEditar!.nombre!,
-      saldoTotal: saldoPendiente,
-      saldoAbonos: saldoAbonos,
-      saldoCargos: saldoCargos,
-      fechaVencimiento: cobranzaEditar!.fechaVencimiento!,
-      porcentajeInteres: configuracion.porcentajeMoratorio!,
-    );
-    var pdf = await tool.crearPdf(estadoCuenta, Literals.reporteEstadoCuentaPdf);
-    await tool.compartir(pdf!, Literals.reporteEstadoCuentaPdf);
   }
 
   void _cargarListaCargosAbonos() {
