@@ -421,8 +421,7 @@ class ToolService extends GetxController {
   }
 
   Future<void> compartir(String archivo, String texto) async {
-    // ignore: deprecated_member_use
-    var _ = await Share.shareFiles([(archivo)], text: texto);
+    var _ = await Share.shareXFiles([XFile(archivo)], text: texto);
   }
 
   Future<void> whatsapp(String numero) async {

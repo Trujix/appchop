@@ -11,7 +11,7 @@ import file_selector_macos
 import firebase_core
 import firebase_messaging
 import path_provider_foundation
-import share_plus_macos
+import share_plus
 import sqflite
 import url_launcher_macos
 
