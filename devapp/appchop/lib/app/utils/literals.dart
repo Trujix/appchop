@@ -1,5 +1,5 @@
 class Literals {
-  static const String version = "1.0.8+8";
+  static const String version = "1.0.9+9";
   static const String notificacionTopic = "appchop_notif";
 
   static const String storageName = "appchopStorage";
