@@ -3,7 +3,7 @@ import 'dart:convert';
 import '../../../utils/literals.dart';
 
 class LocalStorage {
-  static const int _localStorageVersion = 1;
+  static const int _localStorageVersion = 10;
 
   String? tabla = "local_storage";
   int? version = _localStorageVersion;
@@ -24,6 +24,7 @@ class LocalStorage {
   String? idBackup;
   String? fechaBackup;
   bool change = false;
+  String? fechaStatusManual;
 
   LocalStorage({
     this.version = _localStorageVersion,
@@ -44,6 +45,7 @@ class LocalStorage {
     this.idBackup = Literals.backUpClean,
     this.fechaBackup = "",
     this.change = false,
+    this.fechaStatusManual = "",
   });
 
   Map toJson() => {
@@ -66,6 +68,7 @@ class LocalStorage {
     'idBackup'          : idBackup,
     'fechaBackup'       : fechaBackup,
     'change'            : change,
+    'fechaStatusManual' : fechaStatusManual,
   };
   
   Map<String, dynamic> toMap() {
@@ -89,6 +92,7 @@ class LocalStorage {
       'idBackup'          : idBackup,
       'fechaBackup'       : fechaBackup,
       'change'            : change,
+      'fechaStatusManual' : fechaStatusManual,
     };
   }
 
@@ -111,6 +115,7 @@ class LocalStorage {
     idBackup = json['idBackup'] ?? "";
     fechaBackup = json['fechaBackup'] ?? "";
     change = json['change'] ?? false;
+    fechaStatusManual = json['fechaStatusManual'] ?? "";
   }
 
   LocalStorage.fromMap(Map<String, dynamic> json) {
@@ -131,6 +136,7 @@ class LocalStorage {
     idBackup = json['idBackup'] ?? "";
     fechaBackup = json['fechaBackup'] ?? "";
     change = json['change'] ?? false;
+    fechaStatusManual = json['fechaStatusManual'] ?? "";
   }
 
   factory LocalStorage.fromJson(Map<String, dynamic> json) => LocalStorage(
@@ -152,5 +158,6 @@ class LocalStorage {
     idBackup: json['idBackup'] ?? "",
     fechaBackup: json['fechaBackup'] ?? "",
     change: json['change'] ?? false,
+    fechaStatusManual: json['fechaStatusManual'] ?? "",
   );
 }

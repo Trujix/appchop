@@ -2,6 +2,7 @@ import 'package:adaptive_action_sheet/adaptive_action_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:open_file_plus/open_file_plus.dart';
 
 import '../../data/models/local_storage/clientes.dart';
@@ -86,6 +87,7 @@ class CobranzaMainController extends GetInjection {
 
   Future<void> _init() async {
     var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
+    await configuracionGeneral(localStorage);
     await configurarZonas(localStorage);
     _cargarOpcionesPopup();
     await cargarListaCobranza();
@@ -299,6 +301,34 @@ class CobranzaMainController extends GetInjection {
         totalAbonos++;
       }
     }
+  }
+
+  Future<void> configuracionGeneral(LocalStorage localStorage) async {
+    try {
+      var configurarEstatus = false;
+      if(localStorage.fechaStatusManual != "") {
+        if(DateTime.now().isAfter(tool.str2date(localStorage.fechaStatusManual!))) {
+          configurarEstatus = true;
+        }
+      } else {
+        configurarEstatus = true;
+      }
+      if(!configurarEstatus) {
+        return;
+      }
+      localStorage.fechaStatusManual = _proximoLunes();
+      var cobranzaStorage = List<Cobranzas>.from(
+        storage.get([Cobranzas()]).map((json) => Cobranzas.fromJson(json))
+      );
+      for (var i = 0; i < cobranzaStorage.length; i++) {
+        if(cobranzaStorage[i].estatus == Literals.statusCobranzaPagada) {
+
+        }
+        cobranzaStorage[i].estatusManual = Literals.estatusManualPendiente;
+      }
+      await storage.update(cobranzaStorage);
+      await storage.update(localStorage);
+    } finally { }
   }
 
   Future<void> configurarZonas(LocalStorage localStorage) async {
@@ -542,5 +572,27 @@ class CobranzaMainController extends GetInjection {
         );
       }
     } finally { }
+  }
+
+  String _proximoLunes() {
+    var hoyDia = DateFormat("EEEE").format(DateTime.now()).toString().toUpperCase();
+    var agregar = 1.days;
+    if(hoyDia == "SUNDAY") {
+      agregar = 7.days;
+    } else if(hoyDia == "MONDAY") {
+      agregar = 6.days;
+    } else if(hoyDia == "TUESDAY") {
+      agregar = 5.days;
+    } else if(hoyDia == "WEDNESDAY") {
+      agregar = 4.days;
+    } else if(hoyDia == "THURSDAY") {
+      agregar = 3.days;
+    } else if(hoyDia == "FRIDAY") {
+      agregar = 2.days;
+    } else if(hoyDia == "SATURDAY") {
+      agregar = 1.days;
+    }
+    var fechaLunes = DateTime.now().add(agregar);
+    return DateFormat("dd-MM-yyyy").format(fechaLunes).toString();
   }
 }

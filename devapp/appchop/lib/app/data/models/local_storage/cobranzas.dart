@@ -30,6 +30,7 @@ class Cobranzas {
   String? estatus;
   String? bloqueado;
   String? idCobrador;
+  String? estatusManual;
 
   Cobranzas({
     this.idUsuario = "",
@@ -56,6 +57,7 @@ class Cobranzas {
     this.estatus = Literals.statusCobranzaPendiente,
     this.bloqueado = Literals.bloqueoNo,
     this.idCobrador = "",
+    this.estatusManual = Literals.estatusManualPendiente,
   });
 
   static Future<void> init() async {
@@ -95,6 +97,7 @@ class Cobranzas {
     'estatus'           : estatus,
     'bloqueado'         : bloqueado,
     'idCobrador'        : idCobrador,
+    'estatusManual'     : estatusManual,
   };
 
   factory Cobranzas.fromJson(Map<String, dynamic> json) => Cobranzas(
@@ -122,5 +125,6 @@ class Cobranzas {
     estatus: json['estatus'] ?? "",
     bloqueado: json['bloqueado'] ?? "",
     idCobrador: json['idCobrador'] ?? "",
+    estatusManual: json['estatusManual'] ?? "",
   );
 }
