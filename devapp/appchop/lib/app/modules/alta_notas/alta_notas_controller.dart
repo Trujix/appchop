@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../data/models/local_storage/cobranzas.dart';
 import '../../data/models/local_storage/local_storage.dart';
@@ -9,6 +11,7 @@ import '../../utils/get_injection.dart';
 import '../../utils/literals.dart';
 
 class AltaNotasController extends GetInjection {
+  ScrollController scrollController = ScrollController();
   TextEditingController nota = TextEditingController();
   FocusNode notaFocus = FocusNode();
   Cobranzas? cobranza = Cobranzas();
@@ -17,36 +20,63 @@ class AltaNotasController extends GetInjection {
   String fechaVencimiento = "";
   String idUsuario = "";
   List<Notas> listaNotas = [];
-  Notas? notaCargada;
+
+  String usuario = "";
 
   final bool esAdmin = GetInjection.administrador;
 
   @override
-  void onInit() {
-    _init();
+  Future<void> onInit() async {
+    await _init();
     super.onInit();
   }
 
-  void _init() {
-    var arguments = Get.arguments;
-    cobranza = arguments['cobranza'] as Cobranzas;
-    if(cobranza == null) {
-      Get.back();
-      tool.msg("Ocurrió un problema al cargar información de la nota", 3);
-    }
-    var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
-    idUsuario = localStorage.idUsuario!;
-    listaNotas = List<Notas>.from(
+  @override
+  void onClose() async {
+    var actualizar = false;
+    var notas = List<Notas>.from(
       storage.get([Notas()]).map((json) => Notas.fromJson(json))
     );
-    notaCargada = listaNotas.where((n) => n.idCobranza == cobranza!.idCobranza).firstOrNull;
-    if(notaCargada != null) {
-      nota.text = notaCargada!.nota!;
+    for (var i = 0; i < notas.length; i++) {
+      if(notas[i].idCobranza != cobranza!.idCobranza) {
+        continue;
+      }
+      if(notas[i].usuarioCrea == usuario) {
+        continue;
+      }
+      if(notas[i].usuarioVisto == "") {
+        notas[i].usuarioVisto = usuario;
+        actualizar = true;
+      }
     }
-    opcionesTelefonia = cobranza!.telefono! != "";
-    abrirUbicacion = cobranza!.latitud! != "" && cobranza!.longitud! != "";
-    if(cobranza!.fechaVencimiento! != Literals.sinVencimiento) {
-      fechaVencimiento = cobranza!.fechaVencimiento!;
+    if(actualizar) {
+      await storage.update(notas);
+    }
+    super.onClose();
+  }
+
+  Future<void> _init() async {
+    try {
+      var arguments = Get.arguments;
+      cobranza = arguments['cobranza'] as Cobranzas;
+      if(cobranza == null) {
+        Get.back();
+        tool.msg("Ocurrió un problema al cargar información de la nota", 3);
+      }
+      var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
+      usuario = esAdmin ? Literals.perfilAdministrador : localStorage.email!;
+      idUsuario = localStorage.idUsuario!;
+      var notas = List<Notas>.from(
+        storage.get([Notas()]).map((json) => Notas.fromJson(json))
+      );
+      listaNotas = notas.where((n) => n.idCobranza == cobranza!.idCobranza).toList();
+      opcionesTelefonia = cobranza!.telefono! != "";
+      abrirUbicacion = cobranza!.latitud! != "" && cobranza!.longitud! != "";
+      if(cobranza!.fechaVencimiento! != Literals.sinVencimiento) {
+        fechaVencimiento = cobranza!.fechaVencimiento!;
+      }
+    } finally {
+      update();
     }
   }
 
@@ -68,27 +98,29 @@ class AltaNotasController extends GetInjection {
         return;
       }
       tool.isBusy();
-      await Future.delayed(1.seconds);
-      if(notaCargada != null) {
-        for(var notaEdit in listaNotas) {
-          if(notaEdit.idNota == notaCargada!.idNota) {
-            notaEdit.nota = nota.text;
-          }
-        }
-      } else {
-        var idNota = tool.guid();
-        listaNotas.add(Notas(
-          idUsuario: idUsuario,
-          idCobranza: cobranza!.idCobranza,
-          idNota: idNota,
-          nota: nota.text,
-        ));
-      }
-      await storage.update(listaNotas);
-      Get.back();
+      await tool.wait(1);
+      var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
+      var notas = List<Notas>.from(
+        storage.get([Notas()]).map((json) => Notas.fromJson(json))
+      );
+      var idNota = tool.guid();
+      var nuevaNota = Notas(
+        idUsuario: idUsuario,
+        idCobranza: cobranza!.idCobranza,
+        idNota: idNota,
+        nota: nota.text,
+        usuarioCrea: esAdmin ? Literals.perfilAdministrador : localStorage.email,
+        fechaCrea: DateFormat("dd-MM-yyyy").format(DateTime.now()).toString(),
+      );
+      notas.add(nuevaNota);
+      await storage.update(notas);
+      listaNotas.add(nuevaNota);
+      tool.closeBottomSheet();
       tool.msg("Nota almacenada correctamente", 1);
     } catch(e) {
       tool.msg("Ocurrió un problema al intentar guardar nota", 3);
+    } finally {
+      update();
     }
   }
 

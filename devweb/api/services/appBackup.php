@@ -55,7 +55,8 @@
                 $agregar_notas = $mysql->executeNonQuery(
                     "CALL STP_APP_BACKUP_NOTAS_INSERT(
                         '$nota->tabla', '$nota->idUsuario', '$nota->idNota', 
-                        '$nota->idCobranza', '$nota->nota'
+                        '$nota->idCobranza', '$nota->nota', '$nota->usuarioCrea',
+                        '$nota->usuarioVisto', '$nota->fechaCrea'
                     )"
                 );
             }

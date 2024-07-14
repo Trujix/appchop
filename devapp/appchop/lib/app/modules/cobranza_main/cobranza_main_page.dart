@@ -55,6 +55,8 @@ class CobranzaMainPage extends StatelessWidget with WidgetsBindingObserver {
                       body: CobranzaCustomscrollview(
                         scrollController: _.scrollController,
                         listaCobranzas: _.listaCobranzas,
+                        listaNotas: _.listaNotas,
+                        usuario: _.usuario,
                         onTap: _.mensajeCobranzaElemento,
                         onLongPress: _.editarCobranzaElemento,
                         aregarNota: _.agregarNota,

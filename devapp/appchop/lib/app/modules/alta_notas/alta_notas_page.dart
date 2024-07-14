@@ -1,13 +1,18 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
+import 'package:material_color_gen/material_color_gen.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../../utils/color_list.dart';
-import '../../utils/literals.dart';
 import '../../widgets/appbars/back_appbar.dart';
 import '../../widgets/buttons/circular_buttons.dart';
 import '../../widgets/buttons/solid_button.dart';
+import '../../widgets/containers/basic_bottom_sheet_container.dart';
 import '../../widgets/containers/card_container.dart';
+import '../../widgets/containers/card_scrollable_container.dart';
+import '../../widgets/containers/sin_notas_container.dart';
 import '../../widgets/containers/titulo_container.dart';
 import '../../widgets/textforms/multiline_textform.dart';
 import '../../widgets/texts/etiqueta_text.dart';
@@ -27,9 +32,10 @@ class AltaNotasPage extends StatelessWidget with WidgetsBindingObserver {
           fondo: ColorList.ui[1],
         ),
         body: ListView(
+          controller: _.scrollController,
           children: <Widget>[
             const TituloContainer(
-              texto: "Información de la nota",
+              texto: "Información general",
               ltrbp: [20, 0, 0, 0],
               size: 20,
             ),
@@ -47,22 +53,8 @@ class AltaNotasPage extends StatelessWidget with WidgetsBindingObserver {
                   texto2: _.cobranza!.descripcion!,
                   icono: MaterialIcons.verified_user,
                 ),
-              ],
-            ),
-            CardContainer(
-              padding: const EdgeInsets.all(10,),
-              fondo: ColorList.ui[3],
-              children: <Widget>[
-                MultilineTextform(
-                  controller: _.nota,
-                  focusNode: _.notaFocus,
-                  text: "Nota",
-                  icon: MaterialIcons.note_add,
-                  lines: 5,
-                  maxLength: 500,
-                ),
                 Container(
-                  padding: const EdgeInsets.fromLTRB(15, 5, 15, 10,),
+                  padding: const EdgeInsets.fromLTRB(0, 5, 0, 0,),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -97,7 +89,7 @@ class AltaNotasPage extends StatelessWidget with WidgetsBindingObserver {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.fromLTRB(15, 10, 15, 5,),
+                  padding: const EdgeInsets.fromLTRB(0, 5, 0, 0,),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -121,7 +113,7 @@ class AltaNotasPage extends StatelessWidget with WidgetsBindingObserver {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.fromLTRB(15, 10, 15, 5,),
+                  padding: const EdgeInsets.fromLTRB(0, 5, 0, 0,),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -136,7 +128,7 @@ class AltaNotasPage extends StatelessWidget with WidgetsBindingObserver {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.fromLTRB(15, 5, 15, 5,),
+                  padding: const EdgeInsets.fromLTRB(0, 5, 0, 10,),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -159,21 +151,118 @@ class AltaNotasPage extends StatelessWidget with WidgetsBindingObserver {
                 ),
               ],
             ),
-            Visibility(
-              visible: (!_.esAdmin && _.cobranza!.bloqueado == Literals.bloqueoSi || _.cobranza!.bloqueado == Literals.bloqueoNo) 
-                && _.cobranza!.estatus == Literals.statusCobranzaPendiente,
-              child: SolidButton(
-                texto: "Guardar nota",
-                icono: MaterialIcons.save,
-                fondoColor: ColorList.sys[2],
-                textoColor: ColorList.sys[0],
-                ltrbm: const [0, 0, 0, 15,],
-                onPressed: _.guardarNota,
-                onLongPress: () {},
-              ),
+            const TituloContainer(
+              texto: "Listado de notas",
+              ltrbp: [20, 0, 0, 0],
+              size: 20,
+            ),
+            Builder(
+              builder: (context) {
+                if(_.listaNotas.isNotEmpty) {
+                  return Column(
+                    children: _.listaNotas.map((nota) {
+                      return InkWell(
+                        onTap: () {},
+                        child: CardContainer(
+                          padding: const EdgeInsets.all(15),
+                          margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+                          fondo: ColorList.ui[3],
+                          children: [
+                            Row(
+                              children: [
+                                Visibility(
+                                  visible: nota.usuarioCrea != _.usuario && nota.usuarioVisto == "",
+                                  child: Container(
+                                    padding: const EdgeInsets.only(right: 8),
+                                    child: Icon(
+                                      MaterialIcons.new_releases,
+                                      color: Color(ColorList.theme[2]),
+                                      size: 16,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: AutoSizeText(
+                                    nota.nota!,
+                                    maxLines: 4,
+                                    minFontSize: 10,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      color: Color(ColorList.sys[0]),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                  );
+                } else {
+                  return const SinNotasContainer();
+                }
+              },
             ),
           ],
         ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            showMaterialModalBottomSheet(
+              context: context,
+              expand: true,
+              enableDrag: false,
+              backgroundColor: Colors.transparent,
+              builder: (context) => StatefulBuilder(builder: (context, setState) {
+                return BasicBottomSheetContainer(
+                  context: context,
+                  cerrar: true,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const TituloContainer(
+                        texto: "Crear nueva nota (max. 150 caracteres)",
+                        ltrbp: [10, 0, 0, 0],
+                        size: 16,
+                      ),
+                      Expanded(
+                        child: CardScrollableContainer(
+                          margin: const EdgeInsets.fromLTRB(0, 10, 0, 0,),
+                          children: [
+                            MultilineTextform(
+                              controller: _.nota,
+                              focusNode: _.notaFocus,
+                              text: "Nota",
+                              icon: MaterialIcons.note_add,
+                              lines: 5,
+                              maxLength: 150,
+                            ),
+                          ],
+                        ),
+                      ),
+                      SolidButton(
+                        texto: "Guardar nota",
+                        icono: MaterialIcons.save,
+                        fondoColor: ColorList.sys[2],
+                        textoColor: ColorList.sys[0],
+                        ltrbm: const [0, 0, 0, 0,],
+                        onPressed: _.guardarNota,
+                        onLongPress: () {},
+                      ),
+                    ],
+                  ),
+                );
+              },),
+            );
+          },
+          shape: const CircleBorder(),
+          backgroundColor: Color(ColorList.sys[2]),
+          child: Icon(
+            MaterialIcons.note_add,
+            color: Color(ColorList.sys[0]).toMaterialColor(),
+          ),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.miniEndTop,
       ),
     );
   }

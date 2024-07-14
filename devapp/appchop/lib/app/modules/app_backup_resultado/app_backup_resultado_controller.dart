@@ -177,6 +177,7 @@ class AppBackupResultadoController extends GetInjection {
     if(tipo == 1) {
       await Get.find<CobranzaMainController>().configurarZonas(localStorage);
       await Get.find<CobranzaMainController>().cargarListaCobranza();
+      Get.find<CobranzaMainController>().verificarNotasSinVisualizar();
       await Get.find<CobranzaMainController>().validarNuevosClientes(_clientesNuevos);
     }
   }

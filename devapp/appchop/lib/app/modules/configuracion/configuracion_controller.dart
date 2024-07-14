@@ -129,6 +129,7 @@ class ConfiguracionController extends GetInjection {
       update();
       try {
         await Get.find<CobranzaMainController>().cargarListaCobranza();
+        Get.find<CobranzaMainController>().verificarNotasSinVisualizar();
       } finally { }
     }
   }

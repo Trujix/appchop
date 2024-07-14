@@ -943,7 +943,10 @@ BEGIN
         id_sistema AS idUsuario,
         id_nota AS idNota,
         id_cobranza AS idCobranza,
-        nota
+        nota,
+        usuario_crea AS usuarioCrea,
+        usuario_visto AS usuarioVisto,
+        fecha_crea AS fechaCrea
     FROM appchop.app_notas 
         WHERE id_sistema = _IDSISTEMA;
 END $$
@@ -963,7 +966,10 @@ BEGIN
         N1.id_sistema AS idUsuario,
         N1.id_nota AS idNota,
         N1.id_cobranza AS idCobranza,
-        N1.nota
+        N1.nota,
+        N1.usuario_crea AS usuarioCrea,
+        N1.usuario_visto AS usuarioVisto,
+        N1.fecha_crea AS fechaCrea
     FROM appchop.app_notas N1
         LEFT OUTER JOIN appchop.app_cobranzas C1 ON N1.id_cobranza = C1.id_cobranza
         LEFT OUTER JOIN appchop.app_zonas_usuarios ZU1 ON C1.zona = ZU1.id_zona
@@ -979,7 +985,8 @@ DELIMITER $$
 CREATE PROCEDURE STP_APP_BACKUP_NOTAS_INSERT(
     IN _TABLA VARCHAR(50), IN _IDSISTEMA VARCHAR(120), 
     IN _IDNOTA VARCHAR(120), IN _IDCOBRANZA VARCHAR(120),
-    IN _NOTA VARCHAR(200)
+    IN _NOTA VARCHAR(200), IN _USUARIOCREA VARCHAR(120),
+    IN _USUARIOVISTO VARCHAR(120), IN _FECHACREA VARCHAR(10)
 )
 BEGIN
 DECLARE _VERIFY INT DEFAULT 0;
@@ -996,20 +1003,35 @@ DECLARE _VERIFY INT DEFAULT 0;
             id_sistema, 
             id_nota, 
             id_cobranza, 
-            nota
+            nota,
+            usuario_crea,
+            usuario_visto,
+            fecha_crea
         ) VALUES (
             _TABLA, 
             _IDSISTEMA,
             _IDNOTA, 
             _IDCOBRANZA, 
-            CONVERT(_NOTA USING UTF8)
+            CONVERT(_NOTA USING UTF8),
+            _USUARIOCREA,
+            _USUARIOVISTO,
+            _FECHACREA
         );
     ELSE
-        UPDATE appchop.app_notas SET
-            nota = _NOTA
-        WHERE
-            id_sistema = _IDSISTEMA 
-            AND id_nota = _IDNOTA;
+        IF _USUARIOVISTO = "" THEN
+            UPDATE appchop.app_notas SET
+                nota = CONVERT(_NOTA USING UTF8)
+            WHERE
+                id_sistema = _IDSISTEMA 
+                AND id_nota = _IDNOTA;
+        ELSE
+            UPDATE appchop.app_notas SET
+                nota = CONVERT(_NOTA USING UTF8),
+                usuario_visto = _USUARIOVISTO
+            WHERE
+                id_sistema = _IDSISTEMA 
+                AND id_nota = _IDNOTA;
+        END IF;
     END IF;
 END $$
 DELIMITER ;

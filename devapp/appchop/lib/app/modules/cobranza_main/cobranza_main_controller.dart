@@ -60,6 +60,10 @@ class CobranzaMainController extends GetInjection {
   List<Cobranzas> _listaCobranzaBusqueda = [];
   List<Cobranzas> _listaCobranzaCsv = [];
 
+  List<Notas> listaNotas = [];
+
+  String usuario = "";
+
   double saldoMeDeben = 0.0;
   double saldoDebo = 0.0;
   int totalMeDeben = 0;
@@ -87,10 +91,12 @@ class CobranzaMainController extends GetInjection {
 
   Future<void> _init() async {
     var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
+    usuario = esAdmin ? Literals.perfilAdministrador : localStorage.email!;
     await configuracionGeneral(localStorage);
     await configurarZonas(localStorage);
     _cargarOpcionesPopup();
     await cargarListaCobranza();
+    verificarNotasSinVisualizar();
     return;
   }
 
@@ -253,6 +259,9 @@ class CobranzaMainController extends GetInjection {
           (c) => !zonasOff.contains(c.zona)
         ).toList();
       }
+      listaNotas = List<Notas>.from(
+        storage.get([Notas()]).map((json) => Notas.fromJson(json))
+      );
       listaCobranzas = cobranzaStorage;
       _listaCobranzaBusqueda = cobranzaStorage;
       _listaCobranzaCsv = cobranzaStorage;
@@ -262,6 +271,13 @@ class CobranzaMainController extends GetInjection {
       tool.msg("Ocurrió un error al cargar la lista de cobranza", 3);
     } finally {
       update();
+    }
+  }
+
+  void verificarNotasSinVisualizar() {
+    var notasSinVer = listaNotas.where((n) => n.usuarioCrea != usuario && n.usuarioVisto == "").toList();
+    if(notasSinVer.isNotEmpty) {
+      tool.toast("Tiene notas pendientes de leer");
     }
   }
 

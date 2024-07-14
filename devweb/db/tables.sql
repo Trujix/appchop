@@ -94,7 +94,10 @@ CREATE TABLE IF NOT EXISTS app_notas(
     id_sistema VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de registro de sistema',
     id_nota VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de registro de nota',
     id_cobranza VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de registro cobranza',
-    nota VARCHAR(200) NOT NULL DEFAULT '-' COMMENT 'Descripcion de la nota'
+    nota VARCHAR(200) NOT NULL DEFAULT '-' COMMENT 'Descripcion de la nota',
+    usuario_crea VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Usuario que crea la nota',
+    usuario_visto VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Usuario que visualiza nota',
+    fecha_crea VARCHAR(10) NOT NULL DEFAULT '-' COMMENT 'Fecha creacion de la nota'
 );
 
 CREATE TABLE IF NOT EXISTS app_zonas(
@@ -189,3 +192,16 @@ INSERT INTO configuracion (
     2
 );
 */
+
+INSERT INTO appchop.app_notas (tabla, id_sistema, id_nota, id_cobranza, nota, usuario_crea, usuario_visto, fecha_crea) VALUES ('notas',	'ed794927-cd27-40b6-ae3d-faa48f4a903c',	'556786d3-d4ac-4a60-934c-cab649d0339c',	'122e726e-af3f-4625-a645-ec5e8fc9d80a',	'pendiente checar si le quedaron', 'ADMINISTRADOR', '', '14-07-2024');
+INSERT INTO appchop.app_notas (tabla, id_sistema, id_nota, id_cobranza, nota, usuario_crea, usuario_visto, fecha_crea) VALUES ('notas',	'ed794927-cd27-40b6-ae3d-faa48f4a903c',	'27c0c7a8-1aec-46f8-b341-5b9cfae9ecaa',	'd8668e75-ec3d-46a1-bdc3-4a620adbd2c6',	'01 de julio, hara transferencia', 'ADMINISTRADOR', '', '14-07-2024');
+INSERT INTO appchop.app_notas (tabla, id_sistema, id_nota, id_cobranza, nota, usuario_crea, usuario_visto, fecha_crea) VALUES ('notas',	'ed794927-cd27-40b6-ae3d-faa48f4a903c',	'd9f73ab9-b342-4901-b490-26fc74c684d2',	'9d8f59cf-1107-4668-9598-e59231aaaefc',	'prueba',  'ADMINISTRADOR', '', '14-07-2024');
+INSERT INTO appchop.app_notas (tabla, id_sistema, id_nota, id_cobranza, nota, usuario_crea, usuario_visto, fecha_crea) VALUES ('notas',	'ed794927-cd27-40b6-ae3d-faa48f4a903c',	'4bf2dc40-9468-4d00-9790-fb1ef45f6f66',	'8116065d-4f69-4790-8435-c3ac539b930c',	'transfiere  el viernes',  'ADMINISTRADOR', '', '14-07-2024');
+INSERT INTO appchop.app_notas (tabla, id_sistema, id_nota, id_cobranza, nota, usuario_crea, usuario_visto, fecha_crea) VALUES ('notas',	'ed794927-cd27-40b6-ae3d-faa48f4a903c',	'cc9d3ea9-a4ca-4ada-90f5-90eb9d25e797',	'ec512acf-0765-4ad7-a171-ab95d93cc51a',	'se anoto abono de 200 del 1 de julio que le hacía falta',  'ADMINISTRADOR', '', '14-07-2024');
+INSERT INTO appchop.app_notas (tabla, id_sistema, id_nota, id_cobranza, nota, usuario_crea, usuario_visto, fecha_crea) VALUES ('notas',	'ed794927-cd27-40b6-ae3d-faa48f4a903c',	'f87d166a-b961-4ce0-b9ff-353382178644',	'282251c6-20a0-4263-a3f1-5a55b8bd7c3b',	'nota prueba', 'ADMINISTRADOR', '', '14-07-2024');
+INSERT INTO appchop.app_notas (tabla, id_sistema, id_nota, id_cobranza, nota, usuario_crea, usuario_visto, fecha_crea) VALUES ('notas',	'ed794927-cd27-40b6-ae3d-faa48f4a903c',	'015398aa-0f08-4a4a-9e0d-03aaedb1fc41',	'f4d95861-f44c-4897-9abc-71448ea094a4',	'nota prueba',  'ADMINISTRADOR', '', '14-07-2024');
+INSERT INTO appchop.app_notas (tabla, id_sistema, id_nota, id_cobranza, nota, usuario_crea, usuario_visto, fecha_crea) VALUES ('notas',	'ed794927-cd27-40b6-ae3d-faa48f4a903c',	'6fda0d0d-7bb4-4a43-9ff9-917556759f24',	'bc15a030-2b5f-4205-a2bb-5577ed028b83',	'se liquido nota de  $109 pasado con abono de 300 y se agrego el resto $191', 'ADMINISTRADOR', '', '14-07-2024');
+INSERT INTO appchop.app_notas (tabla, id_sistema, id_nota, id_cobranza, nota, usuario_crea, usuario_visto, fecha_crea) VALUES ('notas',	'ed794927-cd27-40b6-ae3d-faa48f4a903c',	'6e9992aa-a23e-4503-bf2f-a3ec81fb2374',	'd33ffd37-e60d-43c9-be57-05a936fbf209',	'mandar estado de cuenta',  'ADMINISTRADOR', '', '14-07-2024');
+INSERT INTO appchop.app_notas (tabla, id_sistema, id_nota, id_cobranza, nota, usuario_crea, usuario_visto, fecha_crea) VALUES ('notas',	'ed794927-cd27-40b6-ae3d-faa48f4a903c',	'abc01e67-70dc-4646-b497-bfb37d2dd1f1',	'aca91422-9a94-4a09-8417-c8c5adb33047',	'tiene un pantalon  asu fabor',  'ADMINISTRADOR', '', '14-07-2024');
+INSERT INTO appchop.app_notas (tabla, id_sistema, id_nota, id_cobranza, nota, usuario_crea, usuario_visto, fecha_crea) VALUES ('notas',	'ed794927-cd27-40b6-ae3d-faa48f4a903c',	'd03f05ef-3e0d-4bad-aeed-9dc030fe0c38',	'd336da2b-4c5d-42d6-ad42-3627daa20ea4',	'pendiente balance a su favor por defecto',  'ADMINISTRADOR', '', '14-07-2024');
+INSERT INTO appchop.app_notas (tabla, id_sistema, id_nota, id_cobranza, nota, usuario_crea, usuario_visto, fecha_crea) VALUES ('notas',	'ed794927-cd27-40b6-ae3d-faa48f4a903c',	'569c7ccf-5074-4117-a9b0-65cc601a0372',	'd3818651-9696-4a4e-ae40-df73f238b812',	'nota prueba', 'ADMINISTRADOR', '', '14-07-2024');

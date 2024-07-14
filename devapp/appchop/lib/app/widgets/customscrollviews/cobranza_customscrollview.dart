@@ -4,6 +4,7 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:money_formatter/money_formatter.dart';
 
 import '../../data/models/local_storage/cobranzas.dart';
+import '../../data/models/local_storage/notas.dart';
 import '../../utils/color_list.dart';
 import '../../utils/literals.dart';
 import '../buttons/circular_buttons.dart';
@@ -13,6 +14,8 @@ import '../slidables/borrar_slidable.dart';
 class CobranzaCustomscrollview extends StatelessWidget {
   final ScrollController? scrollController;
   final List<Cobranzas> listaCobranzas;
+  final List<Notas> listaNotas;
+  final String? usuario;
   final void Function() onTap;
   final void Function(Cobranzas) onLongPress;
   final void Function(Cobranzas) aregarNota;
@@ -23,6 +26,8 @@ class CobranzaCustomscrollview extends StatelessWidget {
     super.key,
     this.scrollController,
     this.listaCobranzas = const [],
+    this.listaNotas = const [],
+    required this.usuario,
     required this.onTap,
     required this.onLongPress,
     required this.aregarNota,
@@ -36,6 +41,10 @@ class CobranzaCustomscrollview extends StatelessWidget {
     return CustomScrollView(
       controller: scrollController,
       slivers: listaCobranzas.map((cobranza) {
+        final notas = listaNotas.where((n) => 
+          n.idCobranza == cobranza.idCobranza 
+          && n.usuarioCrea != usuario 
+          && n.usuarioVisto == "").toList();
         return SliverToBoxAdapter(
           child: InkWell(
             onTap: onTap,
@@ -166,13 +175,29 @@ class CobranzaCustomscrollview extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: <Widget>[
-                              CircularButton(
-                                colorIcono: ColorList.sys[0],
-                                color: ColorList.sys[
-                                    cobranza.tipoCobranza == Literals.tipoCobranzaMeDeben ? 1 : 2],
-                                icono: MaterialIcons.note_add,
-                                onPressed: () {
-                                  aregarNota(cobranza);
+                              Builder(
+                                builder: (context) {
+                                  if(notas.isEmpty) {
+                                    return CircularButton(
+                                      colorIcono: ColorList.sys[0],
+                                      color: ColorList.sys[
+                                          cobranza.tipoCobranza == Literals.tipoCobranzaMeDeben ? 1 : 2],
+                                      icono: MaterialIcons.note_add,
+                                      onPressed: () {
+                                        aregarNota(cobranza);
+                                      },
+                                    );
+                                  } else {
+                                    return CircularButton(
+                                      colorIcono: ColorList.sys[0],
+                                      color: ColorList.sys[
+                                          cobranza.tipoCobranza == Literals.tipoCobranzaMeDeben ? 2 : 1],
+                                      icono: MaterialIcons.notifications_active,
+                                      onPressed: () {
+                                        aregarNota(cobranza);
+                                      },
+                                    );
+                                  }
                                 },
                               ),
                               const SizedBox(
