@@ -1,14 +1,15 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../../data/models/local_storage/cobranzas.dart';
 import '../../data/models/local_storage/local_storage.dart';
 import '../../data/models/local_storage/notas.dart';
 import '../../utils/get_injection.dart';
 import '../../utils/literals.dart';
+import '../../widgets/columns/nota_detalle_column.dart';
+import '../../widgets/containers/basic_bottom_sheet_container.dart';
 
 class AltaNotasController extends GetInjection {
   ScrollController scrollController = ScrollController();
@@ -122,6 +123,25 @@ class AltaNotasController extends GetInjection {
     } finally {
       update();
     }
+  }
+
+  Future<void> detalleNota(Notas nota) async {
+    var context = Get.context;
+    showMaterialModalBottomSheet(
+      context: context!,
+      expand: true,
+      enableDrag: false,
+      backgroundColor: Colors.transparent,
+      builder: (context) => StatefulBuilder(builder: (context, setState) {
+        return BasicBottomSheetContainer(
+          context: context,
+          cerrar: true,
+          child: NotaDetalleColumn(
+            nota: nota,
+          ),
+        );
+      },),
+    );
   }
 
   void cerrar() {

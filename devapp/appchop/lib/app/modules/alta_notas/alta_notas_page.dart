@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
@@ -9,6 +8,7 @@ import '../../utils/color_list.dart';
 import '../../widgets/appbars/back_appbar.dart';
 import '../../widgets/buttons/circular_buttons.dart';
 import '../../widgets/buttons/solid_button.dart';
+import '../../widgets/columns/notas_listado_column.dart';
 import '../../widgets/containers/basic_bottom_sheet_container.dart';
 import '../../widgets/containers/card_container.dart';
 import '../../widgets/containers/card_scrollable_container.dart';
@@ -159,45 +159,10 @@ class AltaNotasPage extends StatelessWidget with WidgetsBindingObserver {
             Builder(
               builder: (context) {
                 if(_.listaNotas.isNotEmpty) {
-                  return Column(
-                    children: _.listaNotas.map((nota) {
-                      return InkWell(
-                        onTap: () {},
-                        child: CardContainer(
-                          padding: const EdgeInsets.all(15),
-                          margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-                          fondo: ColorList.ui[3],
-                          children: [
-                            Row(
-                              children: [
-                                Visibility(
-                                  visible: nota.usuarioCrea != _.usuario && nota.usuarioVisto == "",
-                                  child: Container(
-                                    padding: const EdgeInsets.only(right: 8),
-                                    child: Icon(
-                                      MaterialIcons.new_releases,
-                                      color: Color(ColorList.theme[2]),
-                                      size: 16,
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  child: AutoSizeText(
-                                    nota.nota!,
-                                    maxLines: 4,
-                                    minFontSize: 10,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      color: Color(ColorList.sys[0]),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      );
-                    }).toList(),
+                  return NotasListadoColumn(
+                    listaNotas: _.listaNotas,
+                    usuario: _.usuario,
+                    onTap: _.detalleNota,
                   );
                 } else {
                   return const SinNotasContainer();
