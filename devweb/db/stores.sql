@@ -89,6 +89,7 @@ BEGIN
                 FROM appchop.app_usuarios_acciones UA1
                     WHERE UA1.id_sistema = US1.id_sistema
                         AND UA1.usuario = _USUARIO
+                LIMIT 1
             ),
             '-'
         ) AS accion

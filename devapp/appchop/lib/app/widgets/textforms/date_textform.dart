@@ -14,6 +14,7 @@ class DateTextform extends StatelessWidget {
   final String text;
   final IconData icon;
   final bool canTap;
+  final double? height;
 
   const DateTextform({
     super.key,
@@ -26,11 +27,13 @@ class DateTextform extends StatelessWidget {
     this.icon = Icons.lock,
     required this.dateSelected,
     this.canTap = true,
+    this.height,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: height,
       padding: EdgeInsets.fromLTRB(
         ltrbp[0],
         ltrbp[1],

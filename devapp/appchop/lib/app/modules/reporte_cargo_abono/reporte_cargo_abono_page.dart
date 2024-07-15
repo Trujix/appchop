@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 import 'package:material_color_gen/material_color_gen.dart';
+import 'package:money_formatter/money_formatter.dart';
 
 import '../../utils/color_list.dart';
+import '../../utils/literals.dart';
 import '../../widgets/appbars/back_appbar.dart';
 import '../../widgets/columns/sin_elementos_column.dart';
+import '../../widgets/combo/selection_combo.dart';
+import '../../widgets/containers/badge_container.dart';
 import '../../widgets/containers/card_container.dart';
 import '../../widgets/containers/titulo_container.dart';
 import '../../widgets/customscrollviews/cargo_abono_customscrollview.dart';
@@ -53,6 +57,7 @@ class ReporteCargoAbonoPage extends StatelessWidget {
                         dateSelected: _.dateSelected,
                         text: "Fecha Inicio",
                         canTap: false,
+                        height: 63,
                       ),
                     ),
                     Expanded(
@@ -62,7 +67,42 @@ class ReporteCargoAbonoPage extends StatelessWidget {
                         dateSelected: _.dateSelected,
                         text: "Fecha Fin",
                         canTap: false,
+                        height: 63,
                       ),
+                    ),
+                  ],
+                ),
+                SelectionCombo(
+                  titulo: "- Elige zona -",
+                  controller: _.zona,
+                  values: _.listaZona,
+                  icono: MaterialIcons.list_alt,
+                  height: 35,
+                  ltrb: const [10, 0, 10, 0,],
+                  textAlignVertical: TextAlignVertical.bottom,
+                ),
+              ],
+            ),
+            CardContainer(
+              margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+              fondo: ColorList.ui[3],
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      'Total: ',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w900,
+                        color: Color(ColorList.sys[0]),
+                      ),
+                    ),
+                    BadgeContainer(
+                      texto: MoneyFormatter(
+                        amount: _.totalConsulta,
+                      ).output.symbolOnLeft,
+                      textoColor: ColorList.sys[0],
+                      fondoColor: ColorList.sys[_.tipoSelected == Literals.movimientoAbono ? 1 : 2],
                     ),
                   ],
                 ),

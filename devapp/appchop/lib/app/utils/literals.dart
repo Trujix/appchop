@@ -28,6 +28,7 @@ class Literals {
 
   static const String defaultZonaTodo = "TODO";
   static const String defaultZonaTodoTxt = "Mostrar todo";
+  static const String defaultZonaTodoV2Txt = "Todas las zonas";
   static const String defaultZonaSin = "SIN_ZONA";
   static const String defaultZonaSinTxt = "Sin zona";
 
