@@ -20,6 +20,7 @@ class CobranzaCustomscrollview extends StatelessWidget {
   final void Function(Cobranzas) onLongPress;
   final void Function(Cobranzas) aregarNota;
   final void Function(Cobranzas) agregarCargoAbono;
+  final void Function(Cobranzas) aplicarEstatusManual;
   final void Function(Cobranzas) borrarCobranza;
   final bool esAdmin;
   const CobranzaCustomscrollview({
@@ -32,6 +33,7 @@ class CobranzaCustomscrollview extends StatelessWidget {
     required this.onLongPress,
     required this.aregarNota,
     required this.agregarCargoAbono,
+    required this.aplicarEstatusManual,
     required this.borrarCobranza,
     this.esAdmin = false,
   });
@@ -170,7 +172,7 @@ class CobranzaCustomscrollview extends StatelessWidget {
                             ],
                           ),
                           const SizedBox(
-                            height: 35,
+                            height: 6,
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
@@ -211,6 +213,26 @@ class CobranzaCustomscrollview extends StatelessWidget {
                                 onPressed: () {
                                   agregarCargoAbono(cobranza);
                                 },
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              Visibility(
+                                visible: cobranza.estatus != Literals.statusCobranzaPagada,
+                                child: CircularButton(
+                                  colorIcono: ColorList.sys[0],
+                                  color: ColorList.sys[
+                                      cobranza.tipoCobranza == Literals.tipoCobranzaMeDeben ? 1 : 2],
+                                  icono: MaterialIcons.push_pin,
+                                  onPressed: () {
+                                    aplicarEstatusManual(cobranza);
+                                  },
+                                ),
                               ),
                             ],
                           ),

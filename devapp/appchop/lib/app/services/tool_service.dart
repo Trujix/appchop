@@ -220,6 +220,10 @@ class ToolService extends GetxController {
             .codeUnitAt(randomGenerator.nextInt(caracteresRandom.length))));
   }
 
+  String capitalize(String cadena) {
+    return cadena[0].toUpperCase() + cadena.substring(1).toLowerCase();
+  }
+
   String guid() {
     const uuid = Uuid();
     var newGuid = uuid.v4();

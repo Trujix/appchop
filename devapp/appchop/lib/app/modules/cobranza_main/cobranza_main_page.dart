@@ -61,6 +61,7 @@ class CobranzaMainPage extends StatelessWidget with WidgetsBindingObserver {
                         onLongPress: _.editarCobranzaElemento,
                         aregarNota: _.agregarNota,
                         agregarCargoAbono: _.agregarCargoAbono,
+                        aplicarEstatusManual: _.aplicarEstatusManual,
                         borrarCobranza: _.borrarCobranza,
                         esAdmin: _.esAdmin,
                       ),
@@ -89,7 +90,7 @@ class CobranzaMainPage extends StatelessWidget with WidgetsBindingObserver {
           children: [
             Expanded(
               child: NavigationBar(
-                height: 60,
+                height: 65,
                 elevation: 0,
                 selectedIndex: _.opcionDeudaSeleccion,
                 indicatorColor: Color(ColorList.sys[
@@ -126,16 +127,44 @@ class CobranzaMainPage extends StatelessWidget with WidgetsBindingObserver {
             const SizedBox(width: 50,),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: _.altaCobranza,
-          shape: const CircleBorder(),
-          backgroundColor: Color(ColorList.sys[2]),
-          child: Icon(
-            MaterialIcons.post_add,
-            color: Color(ColorList.sys[0]).toMaterialColor(),
-          ),
+        floatingActionButton: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            SizedBox(
+              width: 45,
+              height: 45,
+              child: FittedBox(
+                child: FloatingActionButton(
+                  onPressed: _.altaCobranza,
+                  shape: const CircleBorder(),
+                  backgroundColor: Color(ColorList.sys[2]),
+                  child: Icon(
+                    MaterialIcons.post_add,
+                    color: Color(ColorList.sys[0]).toMaterialColor(),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 10,),
+            SizedBox(
+              width: 45,
+              height: 45,
+              child: FittedBox(
+                child: FloatingActionButton(
+                  onPressed: _.filtrarCobranzaEspecial,
+                  shape: const CircleBorder(),
+                  backgroundColor: Color(ColorList.sys[2]),
+                  child: Icon(
+                    MaterialIcons.filter_list,
+                    color: Color(ColorList.sys[0]).toMaterialColor(),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 10,),
+          ],
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.miniEndDocked,
+        floatingActionButtonLocation: FloatingActionButtonLocation.endContained,
       ),
     );
   }

@@ -56,6 +56,11 @@ class CobranzaMainController extends GetInjection {
   String zonaSelected = "";
   List<String> zonasOff = [];
 
+  List<BottomSheetAction> _listaEstatusManual = [];
+  Cobranzas _cobranzaSelectedEstatusManual = Cobranzas();
+  int _accionEstatusManual = 0;
+  String _estatusManualSelected = Literals.estatusManualTodos;
+
   List<Cobranzas> listaCobranzas = [];
   List<Cobranzas> _listaCobranzaBusqueda = [];
   List<Cobranzas> _listaCobranzaCsv = [];
@@ -142,6 +147,11 @@ class CobranzaMainController extends GetInjection {
           : tiposCobranza[opcionDeudaSeleccion],
       },
     );
+  }
+
+  void filtrarCobranzaEspecial() {
+    _accionEstatusManual = 2;
+    _mostrarListadoEstatusManual();
   }
 
   Future<void> opcionDeudaSeleccionar(int opcion) async {
@@ -259,6 +269,11 @@ class CobranzaMainController extends GetInjection {
           (c) => !zonasOff.contains(c.zona)
         ).toList();
       }
+      if(_estatusManualSelected != Literals.estatusManualTodos) {
+        cobranzaStorage = cobranzaStorage.where(
+          (c) => c.estatusManual == _estatusManualSelected
+        ).toList();
+      }
       listaNotas = List<Notas>.from(
         storage.get([Notas()]).map((json) => Notas.fromJson(json))
       );
@@ -338,7 +353,7 @@ class CobranzaMainController extends GetInjection {
       );
       for (var i = 0; i < cobranzaStorage.length; i++) {
         if(cobranzaStorage[i].estatus == Literals.statusCobranzaPagada) {
-
+          continue;
         }
         cobranzaStorage[i].estatusManual = Literals.estatusManualPendiente;
       }
@@ -467,6 +482,12 @@ class CobranzaMainController extends GetInjection {
     }
   }
 
+  void aplicarEstatusManual(Cobranzas cobranza) async {
+    _cobranzaSelectedEstatusManual = cobranza;
+    _accionEstatusManual = 1;
+    _mostrarListadoEstatusManual();
+  }
+
   void mensajeCobranzaElemento() {
     tool.toast("Deje presionado para editar");
   }
@@ -518,6 +539,108 @@ class CobranzaMainController extends GetInjection {
       return;
     }
     await tool.wait(2);
+  }
+
+  void _mostrarListadoEstatusManual() {
+    _listaEstatusManual  = [];
+    if(_accionEstatusManual == 2) {
+      _listaEstatusManual.add(
+        BottomSheetAction(
+          title: ComboText(
+            texto: tool.capitalize(Literals.estatusManualTodos),
+            fontWeight: _estatusManualBold(Literals.estatusManualTodos),
+          ),
+          onPressed: (context) async {
+            var estatusAnterior = _estatusManualSelected;
+            _estatusManualSelected = Literals.estatusManualTodos;
+            update();
+            Navigator.of(context).pop();
+            await _ejecutarEstatusManual(estatusAnterior);
+          },
+        )
+      );
+    }
+    if(_accionEstatusManual == 2 || 
+      (_accionEstatusManual == 1 
+        && _cobranzaSelectedEstatusManual.estatusManual != Literals.estatusManualPendiente)
+    ) {
+        _listaEstatusManual.add(
+        BottomSheetAction(
+          title: ComboText(
+            texto: tool.capitalize(Literals.estatusManualPendiente),
+            fontWeight: _estatusManualBold(Literals.estatusManualPendiente),
+          ),
+          onPressed: (context) async {
+            var estatusAnterior = _estatusManualSelected;
+            _estatusManualSelected = Literals.estatusManualPendiente;
+            update();
+            Navigator.of(context).pop();
+            await _ejecutarEstatusManual(estatusAnterior);
+          },
+        )
+      );
+    }
+    var listaEstatus = Literals.estatusManualListado.split("&");
+    for(var estatus in listaEstatus) {
+      if(_accionEstatusManual == 1 && _cobranzaSelectedEstatusManual.estatusManual == estatus) {
+        continue;
+      }
+      _listaEstatusManual.add(
+        BottomSheetAction(
+          title: ComboText(
+            texto: tool.capitalize(estatus),
+            fontWeight: _estatusManualBold(estatus),
+          ),
+          onPressed: (context) async {
+            var estatusAnterior = _estatusManualSelected;
+            _estatusManualSelected = estatus;
+            update();
+            Navigator.of(context).pop();
+            await _ejecutarEstatusManual(estatusAnterior);
+          },
+        )
+      ); 
+    }
+    var context = Get.context!;
+    showAdaptiveActionSheet(
+      context: context,
+      title: Text(
+        _accionEstatusManual == 1 ? 'Asignar estatus' : 'Filtrar por estatus',
+      ),
+      androidBorderRadius: 30,
+      actions: _listaEstatusManual,
+    );
+  }
+
+  FontWeight _estatusManualBold(String estatus) {
+    var verify = _accionEstatusManual == 2 && _estatusManualSelected == estatus;
+    return verify ? FontWeight.w900 : FontWeight.normal;
+  }
+
+  Future<void> _ejecutarEstatusManual(String estatusAnterior) async {
+    try {
+      if(_accionEstatusManual == 1) {
+        var cambiarEstatus = await tool.ask("Cambiar estatus", "¿Desea asignar el estatus $_estatusManualSelected a la nota?");
+        if(cambiarEstatus) {
+          tool.isBusy();
+          var cobranzaStorage = List<Cobranzas>.from(
+            storage.get([Cobranzas()]).map((json) => Cobranzas.fromJson(json))
+          );
+          for (var i = 0; i < cobranzaStorage.length; i++) {
+            if(cobranzaStorage[i].idCobranza == _cobranzaSelectedEstatusManual.idCobranza) {
+              cobranzaStorage[i].estatusManual = _estatusManualSelected;
+            }
+          }
+          await storage.update(cobranzaStorage);
+          await tool.wait(1);
+          tool.isBusy(false);
+        }
+        _estatusManualSelected = estatusAnterior;
+      }
+      await cargarListaCobranza();
+    } catch(_) {
+      tool.msg("Ocurrió un problema al intentar cambiar estatus de la nota", 3);
+    }
   }
 
   Future<void> _exportarConsultaCsv() async {
