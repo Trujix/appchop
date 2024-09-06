@@ -352,9 +352,6 @@ class CobranzaMainController extends GetInjection {
         storage.get([Cobranzas()]).map((json) => Cobranzas.fromJson(json))
       );
       for (var i = 0; i < cobranzaStorage.length; i++) {
-        if(cobranzaStorage[i].estatus == Literals.statusCobranzaPagada) {
-          continue;
-        }
         cobranzaStorage[i].estatusManual = Literals.estatusManualPendiente;
       }
       await storage.update(cobranzaStorage);

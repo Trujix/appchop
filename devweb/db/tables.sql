@@ -73,7 +73,8 @@ CREATE TABLE IF NOT EXISTS app_cobranzas(
     usuario_ultimo_abono VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Usuario ultimo abono',
     estatus VARCHAR(20) NOT NULL DEFAULT '-' COMMENT 'Estatus de nota de cobranza',
     bloqueado VARCHAR(20) NOT NULL DEFAULT '-' COMMENT 'Estatus bloqueo de nota cobranza',
-    id_cobrador VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de usuario cobrador'
+    id_cobrador VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Id de usuario cobrador',
+    estatus_manual VARCHAR(60) NOT NULL DEFAULT '-' COMMENT 'Estatus manual'
 );
 
 CREATE TABLE IF NOT EXISTS app_cargos_abonos(
@@ -192,6 +193,8 @@ INSERT INTO configuracion (
     2
 );
 */
+
+ALTER TABLE app_cobranzas ADD estatus_manual VARCHAR(60) NOT NULL DEFAULT '-' COMMENT 'Estatus manual';
 
 INSERT INTO appchop.app_notas (tabla, id_sistema, id_nota, id_cobranza, nota, usuario_crea, usuario_visto, fecha_crea) VALUES ('notas',	'ed794927-cd27-40b6-ae3d-faa48f4a903c',	'556786d3-d4ac-4a60-934c-cab649d0339c',	'122e726e-af3f-4625-a645-ec5e8fc9d80a',	'pendiente checar si le quedaron', 'ADMINISTRADOR', '', '14-07-2024');
 INSERT INTO appchop.app_notas (tabla, id_sistema, id_nota, id_cobranza, nota, usuario_crea, usuario_visto, fecha_crea) VALUES ('notas',	'ed794927-cd27-40b6-ae3d-faa48f4a903c',	'27c0c7a8-1aec-46f8-b341-5b9cfae9ecaa',	'd8668e75-ec3d-46a1-bdc3-4a620adbd2c6',	'01 de julio, hara transferencia', 'ADMINISTRADOR', '', '14-07-2024');

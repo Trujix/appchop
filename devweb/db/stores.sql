@@ -616,7 +616,7 @@ CREATE PROCEDURE STP_APP_BACKUP_COBRANZAS_PROCESS(
     IN _ULTIMOCARGO FLOAT, IN _FECHAULTIMOCARGO VARCHAR(10), IN _USUARIOULTIMOCARGO VARCHAR(120), 
     IN _ULTIMOABONO FLOAT, IN _FECHAULTIMOABONO VARCHAR(10), IN _USUARIOULTIMOABONO VARCHAR(120), 
     IN _ESTATUS VARCHAR(20), IN _BLOQUEADO VARCHAR(20), IN _IDCOBRADOR VARCHAR(120), 
-    IN _ENCRYPTKEY VARCHAR(30), IN _USUARIOENVIA VARCHAR(150)
+    IN _ESTATUSMANUAL VARCHAR(120), IN _ENCRYPTKEY VARCHAR(30), IN _USUARIOENVIA VARCHAR(150)
 )
 BEGIN
     DECLARE _VERIFY INT DEFAULT 0;
@@ -655,7 +655,8 @@ BEGIN
             usuario_ultimo_abono, 
             estatus, 
             bloqueado, 
-            id_cobrador
+            id_cobrador,
+            estatus_manual
         ) VALUES (
             _TABLA,
             _IDSISTEMA,
@@ -681,7 +682,8 @@ BEGIN
             _USUARIOULTIMOABONO,
             _ESTATUS,
             _BLOQUEADO,
-            _IDCOBRADOR
+            _IDCOBRADOR,
+            _ESTATUSMANUAL
         );
     ELSE
         IF _USUARIOENVIA = 'ADMINISTRADOR' THEN
@@ -719,7 +721,8 @@ BEGIN
                 usuario_ultimo_abono = _USUARIOULTIMOABONO,
                 estatus = _ESTATUS,
                 bloqueado = _BLOQUEADO,
-                id_cobrador = _IDCOBRADOR
+                id_cobrador = _IDCOBRADOR,
+                estatus_manual = _ESTATUSMANUAL
             WHERE 
                 id_sistema = _IDSISTEMA 
                 AND id_cobranza = _IDCOBRANZA;
@@ -780,7 +783,8 @@ BEGIN
         usuario_ultimo_abono AS usuarioUltimoAbono,
         estatus AS estatus,
         bloqueado AS bloqueado,
-        id_cobrador AS idCobrador
+        id_cobrador AS idCobrador,
+        estatus_manual AS estatusManual
     FROM appchop.app_cobranzas
         WHERE id_sistema = _IDSISTEMA;
 END $$
@@ -820,7 +824,8 @@ BEGIN
         COB1.usuario_ultimo_abono AS usuarioUltimoAbono,
         COB1.estatus AS estatus,
         COB1.bloqueado AS bloqueado,
-        _USUARIO AS idCobrador
+        _USUARIO AS idCobrador,
+        COB1.estatus_manual AS estatusManual
     FROM appchop.app_cobranzas COB1
     LEFT OUTER JOIN appchop.app_zonas_usuarios ZU1 ON COB1.zona = ZU1.id_zona
         WHERE COB1.id_sistema = _IDSISTEMA

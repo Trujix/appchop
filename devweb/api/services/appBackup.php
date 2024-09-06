@@ -35,7 +35,7 @@
                         '$cobranza->longitud', '$cobranza->ultimoCargo' , '$cobranza->fechaUltimoCargo', 
                         '$cobranza->usuarioUltimoCargo', $cobranza->ultimoAbono , '$cobranza->fechaUltimoAbono', 
                         '$cobranza->usuarioUltimoAbono', '$cobranza->estatus', '$cobranza->bloqueado', 
-                        '$cobranza->idCobrador', '$encryption_key', '$usuario_envia'
+                        '$cobranza->idCobrador', '$cobranza->estatusManual', '$encryption_key', '$usuario_envia'
                     )"
                 );
             }
