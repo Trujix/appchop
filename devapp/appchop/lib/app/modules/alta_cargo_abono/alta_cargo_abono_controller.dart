@@ -372,7 +372,9 @@ class AltaCargoAbonoController extends GetInjection {
         cargosAbonosTemp.add(interes);
       }
       if(agrega) {
+        saldoCargos = saldoCobranza;
         cobranzaEditar!.saldo = saldoCobranza;
+        saldoPendiente = saldoCobranza;
         var listaCobranzas = List<Cobranzas>.from(
           storage.get([Cobranzas()]).map((json) => Cobranzas.fromJson(json))
         );
