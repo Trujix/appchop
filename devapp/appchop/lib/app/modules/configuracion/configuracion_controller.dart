@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:open_file_plus/open_file_plus.dart';
 
 import '../../data/models/local_storage/clientes.dart';
+import '../../data/models/local_storage/cobranzas.dart';
 import '../../data/models/local_storage/configuracion.dart';
 import '../../data/models/local_storage/inventarios.dart';
 import '../../data/models/local_storage/local_storage.dart';
@@ -263,6 +264,56 @@ class ConfiguracionController extends GetInjection {
     } catch(_) {
       tool.msg("Ocurrió un error al intentar exportar información de cargos y abonos", 3);
     }
+  }
+
+  Future<void> reestablecerEstatusManual() async {
+    try {
+      var online = await tool.isOnline();
+      if(!online) {
+        tool.msg(Literals.msgOffline, 2);
+      }
+      tool.isBusy();
+      var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
+      if(!DateTime.now().isAfter(tool.str2date(localStorage.fechaStatusManual!))) {
+        await tool.wait(1);
+        tool.msg("La fecha de actualización automática es el ${localStorage.fechaStatusManual!}, por lo tanto no puede hacer el reestablecimiento manual");
+        return;
+      }
+      var cobranzaStorage = List<Cobranzas>.from(
+        storage.get([Cobranzas()]).map((json) => Cobranzas.fromJson(json))
+      );
+      for (var i = 0; i < cobranzaStorage.length; i++) {
+        cobranzaStorage[i].estatusManual = Literals.estatusManualPendiente;
+      }
+      localStorage.fechaStatusManual = _proximoLunes();
+      await storage.update(cobranzaStorage);
+      await storage.update(localStorage);
+      tool.msg("Reestablecimiento realizado correctamente", 1);
+    } catch(_) {
+      tool.msg("Ocurrió un error al intentar reestablecer estatus manual", 3);
+    }
+  }
+
+  String _proximoLunes() {
+    var hoyDia = DateFormat("EEEE").format(DateTime.now()).toString().toUpperCase();
+    var agregar = 1.days;
+    if(hoyDia == "SUNDAY") {
+      agregar = 7.days;
+    } else if(hoyDia == "MONDAY") {
+      agregar = 6.days;
+    } else if(hoyDia == "TUESDAY") {
+      agregar = 5.days;
+    } else if(hoyDia == "WEDNESDAY") {
+      agregar = 4.days;
+    } else if(hoyDia == "THURSDAY") {
+      agregar = 3.days;
+    } else if(hoyDia == "FRIDAY") {
+      agregar = 2.days;
+    } else if(hoyDia == "SATURDAY") {
+      agregar = 1.days;
+    }
+    var fechaLunes = DateTime.now().add(agregar);
+    return DateFormat("dd-MM-yyyy").format(fechaLunes).toString();
   }
 
   void cerrar() {

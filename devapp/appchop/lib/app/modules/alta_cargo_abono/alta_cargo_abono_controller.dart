@@ -68,7 +68,7 @@ class AltaCargoAbonoController extends GetInjection {
     var mensaje = "¿Desea registrar el pago total (~MONTOTOTAL~)?";
     var montoBonificacion = 0.0;
     if(!tool.str2date(cobranzaEditar!.fechaVencimiento!).isBefore(DateTime.now().add(-1.days))) {
-      montoBonificacion = (saldoPendiente * (configuracion.porcentajeBonificacion! / 100));
+      montoBonificacion = tool.str2double((saldoPendiente * (configuracion.porcentajeBonificacion! / 100)).toStringAsFixed(2));
       var saldoBonificacion = saldoPendiente - montoBonificacion;
       mensaje = mensaje.replaceAll("~MONTOTOTAL~", MoneyFormatter(amount: saldoBonificacion).output.symbolOnLeft);
       var bonificacion = tool.isInteger(configuracion.porcentajeBonificacion!) 
@@ -92,7 +92,8 @@ class AltaCargoAbonoController extends GetInjection {
   }
 
   Future<void> crearCargo() async {
-    var nuevoSaldo = saldoPendiente + tool.str2double(cantidad.text);
+    var monto = tool.str2double(cantidad.text).toStringAsFixed(2);
+    var nuevoSaldo = saldoPendiente + tool.str2double(monto);
     await _crearRegistroCargoAbono(Literals.movimientoCargo, nuevoSaldo);
   }
 
@@ -101,7 +102,8 @@ class AltaCargoAbonoController extends GetInjection {
       tool.msg("El abono no puede ser MAYOR al saldo pendiente (${MoneyFormatter(amount: saldoPendiente).output.symbolOnLeft})", 2);
       return;
     }
-    var nuevoSaldo = saldoPendiente - tool.str2double(cantidad.text);
+    var monto = tool.str2double(cantidad.text).toStringAsFixed(2);
+    var nuevoSaldo = saldoPendiente - tool.str2double(monto);
     await _crearRegistroCargoAbono(Literals.movimientoAbono, nuevoSaldo);
   }
 
@@ -122,12 +124,13 @@ class AltaCargoAbonoController extends GetInjection {
           if(pagar) {
             listaCobranzas[i].estatus = Literals.statusCobranzaPagada;
           }
+          var ultimoMonto = tool.str2double(cantidad.text).toStringAsFixed(2);
           if(tipo == Literals.movimientoCargo) {
-            listaCobranzas[i].ultimoCargo = pagar ? saldoPendiente : tool.str2double(cantidad.text);
+            listaCobranzas[i].ultimoCargo = pagar ? saldoPendiente : tool.str2double(ultimoMonto);
             listaCobranzas[i].fechaUltimoCargo = DateFormat("dd-MM-yyyy").format(DateTime.now()).toString();
             listaCobranzas[i].usuarioUltimoCargo = esAdmin ? Literals.perfilAdministrador : localStorage.email;
           } else if(tipo == Literals.movimientoAbono) {
-            listaCobranzas[i].ultimoAbono = pagar ? saldoPendiente : tool.str2double(cantidad.text);
+            listaCobranzas[i].ultimoAbono = pagar ? saldoPendiente : tool.str2double(ultimoMonto);
             listaCobranzas[i].fechaUltimoAbono = DateFormat("dd-MM-yyyy").format(DateTime.now()).toString();
             listaCobranzas[i].usuarioUltimoAbono = esAdmin ? Literals.perfilAdministrador : localStorage.email;
           }
@@ -137,12 +140,13 @@ class AltaCargoAbonoController extends GetInjection {
         storage.get([CargosAbonos()]).map((json) => CargosAbonos.fromJson(json))
       );
       var genera = manual ? Literals.cargoAbonoManual : Literals.cargoAbonoAuto;
+      var monto = tool.str2double(cantidad.text).toStringAsFixed(2);
       cargosAbonos.add(CargosAbonos(
         idUsuario: localStorage.idUsuario,
         idCobranza: cobranzaEditar!.idCobranza,
         idMovimiento: tool.guid(),
         tipo: tipo,
-        monto: pagar ? saldoPendiente : tool.str2double(cantidad.text),
+        monto: pagar ? saldoPendiente : tool.str2double(monto),
         referencia: pagar ? "Pago total" : referencia.text,
         usuarioRegistro: esAdmin ? Literals.perfilAdministrador : localStorage.email,
         fechaRegistro: DateFormat("dd-MM-yyyy").format(DateTime.now()).toString(),
@@ -330,7 +334,7 @@ class AltaCargoAbonoController extends GetInjection {
         finaliza = fechaVencimiento.isBefore(hoy.add(-1.days));
         if(finaliza) {
           var idMovimiento = tool.guid();
-          var monto = (saldoCobranza * (configuracion.porcentajeMoratorio! / 100));
+          var monto = tool.str2double((saldoCobranza * (configuracion.porcentajeMoratorio! / 100)).toStringAsFixed(2));
           saldoCobranza = saldoCobranza + monto;
           intereses.add(CargosAbonos(
             idUsuario: localStorage.idUsuario,

@@ -138,6 +138,11 @@ class ConfiguracionPage extends StatelessWidget with WidgetsBindingObserver {
                   ltrbp: [20, 10, 0, 0],
                   size: 20,
                 ),
+                CardButtonContainer(
+                  texto: "Reestablecer estatus manual",
+                  icono: MaterialIcons.restore,
+                  onTap: () => _.reestablecerEstatusManual(),
+                ),
                 CardContainer(
                   padding: const EdgeInsets.all(20,),
                   fondo: ColorList.ui[3],
