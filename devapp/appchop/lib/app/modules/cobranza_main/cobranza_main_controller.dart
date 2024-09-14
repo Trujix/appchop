@@ -36,7 +36,8 @@ class CobranzaMainController extends GetInjection {
     "Saldo~R",
     "Vencimiento~R",
     "Ver Pagadas~B",
-    "Exportar~B"
+    "Exportar~B",
+    "Filtro Manual~B",
   ];
   String estatusFiltro = Literals.statusCobranzaPendiente;
   List<String> tiposCobranza = [
@@ -48,6 +49,7 @@ class CobranzaMainController extends GetInjection {
     null, null, null, null,
     MaterialIcons.money_off,
     MaterialIcons.get_app,
+    MaterialIcons.filter_list,
   ];
   bool mostrarResultados = false;
   int opcionDeudaSeleccion = 0;
@@ -181,6 +183,9 @@ class CobranzaMainController extends GetInjection {
         break;
       case "5":
         await _exportarConsultaCsv();
+        break;
+      case "6":
+        filtrarCobranzaEspecial();
         break;
       default:
         return;

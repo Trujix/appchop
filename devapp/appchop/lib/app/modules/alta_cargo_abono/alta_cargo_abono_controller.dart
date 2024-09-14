@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:money_formatter/money_formatter.dart';
@@ -7,6 +10,7 @@ import '../../data/models/local_storage/cargos_abonos.dart';
 import '../../data/models/local_storage/cobranzas.dart';
 import '../../data/models/local_storage/configuracion.dart';
 import '../../data/models/local_storage/local_storage.dart';
+import '../../data/models/menu_popup_opciones.dart';
 import '../../utils/get_injection.dart';
 import '../../utils/literals.dart';
 import '../../widgets/reports/estado_cuenta_report.dart';
@@ -19,6 +23,17 @@ class AltaCargoAbonoController extends GetInjection {
   FocusNode cantidadFocus = FocusNode();
   TextEditingController referencia = TextEditingController();
   FocusNode referenciaFocus = FocusNode();
+
+  String opcionSelected = "";
+  List<MenuPopupOpciones> opcionesConsulta = [];
+  List<String> opcionesBase = [
+    "Exportar~B",
+    "Ajustar saldo~B",
+  ];
+  List<IconData?> opcionesIcono = [
+    MaterialIcons.share,
+    MaterialIcons.attach_money,
+  ];
 
   Cobranzas? cobranzaEditar = Cobranzas();
   String etiqueta = "Nombre: ";
@@ -50,6 +65,7 @@ class AltaCargoAbonoController extends GetInjection {
       Get.back();
       tool.msg("Ocurrió un problema al cargar datos de Cargo y abono", 3);
     }
+    _cargarOpcionesPopup();
     configuracion = Configuracion.fromJson(storage.get(Configuracion()));
     pendiente = cobranzaEditar!.estatus == Literals.statusCobranzaPendiente 
       && (!esAdmin && cobranzaEditar!.bloqueado == Literals.bloqueoSi || cobranzaEditar!.bloqueado == Literals.bloqueoNo);
@@ -245,6 +261,7 @@ class AltaCargoAbonoController extends GetInjection {
         ];
         cargosAbonosTabla.add(filaCargoAbono);
       }
+      print(jsonEncode(cargosAbonosTabla));
       var estadoCuenta = EstadoCuentaReport(
         tablaCargosAbonos: cargosAbonosTabla,
         nombre: cobranzaEditar!.nombre!,
@@ -286,6 +303,62 @@ class AltaCargoAbonoController extends GetInjection {
 
   void abrirCalculadora() {
     tool.calculadora();
+  }
+
+  Future<void> operacionPopUp(String? id) async {
+    switch(id) {
+      case "0":
+        await crearEstadoCuentaPdf();
+        break;
+      case "1":
+        await ajustarSaldo();
+        break;
+      default:
+        return;
+    }
+  }
+
+  Future<void> ajustarSaldo() async {
+    try {
+      var ajustar = await tool.ask("Ajustar saldo", "Se volverá a calcular el saldo ¿Desea continuar?");
+      if(!ajustar) {
+        return;
+      }
+      tool.isBusy();
+      await tool.wait(1);
+      var cargosAbonos = List<CargosAbonos>.from(
+        storage.get([CargosAbonos()]).map((json) => CargosAbonos.fromJson(json))
+      );
+      var notaCargosAbonos = cargosAbonos.where((c) => c.idCobranza == cobranzaEditar!.idCobranza!).toList();
+      var cargos = cobranzaEditar!.cantidad!;
+      var abonos = 0.0;
+      var nuevoSaldo = 0.0;
+      for (var i = 0; i < notaCargosAbonos.length; i++) {
+        if(notaCargosAbonos[i].tipo == Literals.movimientoCargo) {
+          cargos += notaCargosAbonos[i].monto!;
+        } else if(notaCargosAbonos[i].tipo == Literals.movimientoAbono) {
+          abonos += notaCargosAbonos[i].monto!;
+        }
+      }
+      nuevoSaldo = cargos - abonos;
+      cobranzaEditar!.saldo = nuevoSaldo;
+      saldoPendiente = nuevoSaldo;
+      var listaCobranzas = List<Cobranzas>.from(
+        storage.get([Cobranzas()]).map((json) => Cobranzas.fromJson(json))
+      );
+      for (var i = 0; i < listaCobranzas.length; i++) {
+        if(listaCobranzas[i].idCobranza == cobranzaEditar!.idCobranza) {
+          listaCobranzas[i].saldo = nuevoSaldo;
+          break;
+        }
+      }
+      await storage.update(listaCobranzas);
+      tool.msg("Se ajustó el saldo correctamente", 1);
+    } catch(_) {
+      tool.msg("Ocurrió un error al intentar recalcular el saldo", 3);
+    } finally {
+      update();
+    }
   }
 
   void cerrar() {
@@ -395,6 +468,26 @@ class AltaCargoAbonoController extends GetInjection {
     } finally {
       update();
     }
+  }
+
+  void _cargarOpcionesPopup() {
+    try {
+      print(jsonEncode(cobranzaEditar));
+      opcionesConsulta = [];
+      for (var i = 0; i < opcionesBase.length; i++) {
+        var opciones = opcionesBase[i].split("~");
+        if(opciones[0] == "Ajustar saldo" && (cobranzaEditar!.bloqueado == Literals.bloqueoSi && esAdmin)) {
+          continue;
+        }
+        opcionesConsulta.add(MenuPopupOpciones(
+          id: i.toString(),
+          value: opciones[0],
+          tipo: opciones[1],
+          icono: opcionesIcono[i],
+        ));
+      }
+      update();
+    } finally { }
   }
 
   void _limpiaForm() {

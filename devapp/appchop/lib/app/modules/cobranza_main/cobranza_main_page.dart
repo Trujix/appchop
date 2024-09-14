@@ -90,7 +90,7 @@ class CobranzaMainPage extends StatelessWidget with WidgetsBindingObserver {
           children: [
             Expanded(
               child: NavigationBar(
-                height: 65,
+                height: 60,
                 elevation: 0,
                 selectedIndex: _.opcionDeudaSeleccion,
                 indicatorColor: Color(ColorList.sys[
@@ -127,7 +127,17 @@ class CobranzaMainPage extends StatelessWidget with WidgetsBindingObserver {
             const SizedBox(width: 50,),
           ],
         ),
-        floatingActionButton: Column(
+        floatingActionButton: FloatingActionButton(
+          onPressed: _.altaCobranza,
+          shape: const CircleBorder(),
+          backgroundColor: Color(ColorList.sys[2]),
+          child: Icon(
+            MaterialIcons.post_add,
+            color: Color(ColorList.sys[0]).toMaterialColor(),
+          ),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.miniEndDocked,
+        /*floatingActionButton: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             SizedBox(
@@ -163,8 +173,7 @@ class CobranzaMainPage extends StatelessWidget with WidgetsBindingObserver {
             ),
             const SizedBox(height: 10,),
           ],
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endContained,
+        ),*/
       ),
     );
   }

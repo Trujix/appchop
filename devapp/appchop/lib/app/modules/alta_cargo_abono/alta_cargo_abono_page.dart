@@ -6,7 +6,7 @@ import 'package:money_formatter/money_formatter.dart';
 
 import '../../utils/color_list.dart';
 import '../../utils/literals.dart';
-import '../../widgets/appbars/back_appbar.dart';
+import '../../widgets/appbars/menu_appbar.dart';
 import '../../widgets/buttons/solid_button.dart';
 import '../../widgets/containers/card_container.dart';
 import '../../widgets/containers/titulo_container.dart';
@@ -26,9 +26,11 @@ class AltaCargoAbonoPage extends StatelessWidget with WidgetsBindingObserver {
       builder: (_) => Scaffold(
         resizeToAvoidBottomInset: true,
         backgroundColor: Color(ColorList.ui[1]),
-        appBar: BackAppbar(
+        appBar: MenuAppbar(
           cerrar: _.cerrar,
           fondo: ColorList.ui[1],
+          opciones: _.opcionesConsulta,
+          onTapPopup: _.operacionPopUp,
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -193,16 +195,19 @@ class AltaCargoAbonoPage extends StatelessWidget with WidgetsBindingObserver {
             ),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: _.crearEstadoCuentaPdf,
-          shape: const CircleBorder(),
-          backgroundColor: Color(ColorList.sys[2]),
-          child: Icon(
-            MaterialIcons.share,
-            color: Color(ColorList.sys[0]).toMaterialColor(),
+        /*floatingActionButton: Container(
+          margin: const EdgeInsets.only(top: 60,),
+          child: FloatingActionButton(
+            onPressed: _.crearEstadoCuentaPdf,
+            shape: const CircleBorder(),
+            backgroundColor: Color(ColorList.sys[2]),
+            child: Icon(
+              MaterialIcons.share,
+              color: Color(ColorList.sys[0]).toMaterialColor(),
+            ),
           ),
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.miniEndTop,
+        floatingActionButtonLocation: FloatingActionButtonLocation.endTop,*/
       ),
     );
   }

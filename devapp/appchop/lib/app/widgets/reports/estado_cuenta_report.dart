@@ -21,9 +21,8 @@ class EstadoCuentaReport extends StatelessWidget {
 
   @override
   Widget build(Context context) {
-    return Column(
-      children: [
-        Row(
+    List<Widget> contenido = [
+      Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
@@ -47,13 +46,11 @@ class EstadoCuentaReport extends StatelessWidget {
               ),
             ),
           ],
-        ),SizedBox(height: 2,),
-        TableHelper.fromTextArray(
-          context: context,
-          cellAlignment: Alignment.center,
-          data: tablaCargosAbonos,
         ),
-        SizedBox(height: 13,),
+        SizedBox(height: 2,),
+    ];
+    List<Widget> contenido2 = [
+      SizedBox(height: 13,),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -106,7 +103,64 @@ class EstadoCuentaReport extends StatelessWidget {
             ),
           ],
         ),
-      ],
+    ];
+    for(var data in tablaCargosAbonos) {
+      contenido.add(
+        Row(
+          children: [
+            Container(
+              width: 100,
+              decoration: BoxDecoration(
+                border: Border.all(),
+              ),
+              child: Text(
+                data[0],
+                style: const TextStyle(),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            Container(
+              width: 100,
+              decoration: BoxDecoration(
+                border: Border.all(),
+              ),
+              child: Text(
+                data[1],
+                style: const TextStyle(),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            Container(
+              width: 100,
+              decoration: BoxDecoration(
+                border: Border.all(),
+              ),
+              child: Text(
+                data[2],
+                style: const TextStyle(),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            Container(
+              width: 170,
+              decoration: BoxDecoration(
+                border: Border.all(),
+              ),
+              child: Text(
+                data[3].toString() == "" ? "-" : data[3],
+                style: const TextStyle(),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+    for(var data in contenido2) {
+      contenido.add(data);
+    }
+    return Column(
+      children: contenido,
     );
   }
 }
