@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
-import 'package:material_color_gen/material_color_gen.dart';
 import 'package:money_formatter/money_formatter.dart';
 
 import '../../utils/color_list.dart';
@@ -195,19 +194,6 @@ class AltaCargoAbonoPage extends StatelessWidget with WidgetsBindingObserver {
             ),
           ],
         ),
-        /*floatingActionButton: Container(
-          margin: const EdgeInsets.only(top: 60,),
-          child: FloatingActionButton(
-            onPressed: _.crearEstadoCuentaPdf,
-            shape: const CircleBorder(),
-            backgroundColor: Color(ColorList.sys[2]),
-            child: Icon(
-              MaterialIcons.share,
-              color: Color(ColorList.sys[0]).toMaterialColor(),
-            ),
-          ),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endTop,*/
       ),
     );
   }

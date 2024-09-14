@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
@@ -261,7 +259,6 @@ class AltaCargoAbonoController extends GetInjection {
         ];
         cargosAbonosTabla.add(filaCargoAbono);
       }
-      print(jsonEncode(cargosAbonosTabla));
       var estadoCuenta = EstadoCuentaReport(
         tablaCargosAbonos: cargosAbonosTabla,
         nombre: cobranzaEditar!.nombre!,
@@ -472,7 +469,6 @@ class AltaCargoAbonoController extends GetInjection {
 
   void _cargarOpcionesPopup() {
     try {
-      print(jsonEncode(cobranzaEditar));
       opcionesConsulta = [];
       for (var i = 0; i < opcionesBase.length; i++) {
         var opciones = opcionesBase[i].split("~");
