@@ -1198,3 +1198,31 @@ BEGIN
         AND usuario = _USUARIO;
 END $$
 DELIMITER ;
+
+
+/* -------------------- AUX ------------------------------ */
+DROP PROCEDURE IF EXISTS STP_ACTUALIZAR_SESION_AUX;
+DELIMITER $$
+CREATE PROCEDURE STP_ACTUALIZAR_SESION_AUX(
+    IN _FUNCION VARCHAR(150),
+    IN _IDSISTEMA VARCHAR(400),
+    IN _USUARIO VARCHAR(400),
+    IN _SESSION VARCHAR(400),
+    IN _FIREBASE VARCHAR(400)
+)
+BEGIN
+    INSERT INTO appchop.app_aux (
+        funcion,
+        value1, 
+        value2, 
+        value3, 
+        value4
+    ) VALUES (
+        _FUNCION,
+        _IDSISTEMA, 
+        _USUARIO, 
+        _SESSION, 
+        _FIREBASE
+    );
+END $$
+DELIMITER ;

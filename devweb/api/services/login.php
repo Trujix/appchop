@@ -12,6 +12,17 @@
                 "CALL STP_INICIAR_SESION('{$login_form->usuario}', '{$login_form->password}')",
                 true
             );
+            try {
+                $resultado_actualizar = $mysql->executeNonQuery(
+                    "CALL STP_ACTUALIZAR_SESION_AUX(
+                        'STP_INICIAR_SESION',
+                        '$resultado_login->id_sistema',
+                        '$resultado_login->usuario',
+                        '$resultado_login->sesion',
+                        '$resultado_login->id_firebase'
+                    )"
+                );
+            } finally { }
             return json_encode($resultado_login);
         }
 

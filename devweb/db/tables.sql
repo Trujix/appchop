@@ -145,6 +145,21 @@ CREATE TABLE IF NOT EXISTS app_inventarios(
     usuario VARCHAR(120) NOT NULL DEFAULT '-' COMMENT 'Usuario genera registro'
 );
 
+CREATE TABLE IF NOT EXISTS app_aux(
+    funcion VARCHAR(150) NOT NULL DEFAULT '-' COMMENT 'Nombre funcion',
+    value1 VARCHAR(400) NOT NULL DEFAULT '-' COMMENT 'Value 1',
+    value2 VARCHAR(400) NOT NULL DEFAULT '-' COMMENT 'Value 2',
+    value3 VARCHAR(400) NOT NULL DEFAULT '-' COMMENT 'Value 3',
+    value4 VARCHAR(400) NOT NULL DEFAULT '-' COMMENT 'Value 4',
+    value5 VARCHAR(400) NOT NULL DEFAULT '-' COMMENT 'Value 5',
+    value6 VARCHAR(400) NOT NULL DEFAULT '-' COMMENT 'Value 6',
+    value7 VARCHAR(400) NOT NULL DEFAULT '-' COMMENT 'Value 7',
+    value8 VARCHAR(400) NOT NULL DEFAULT '-' COMMENT 'Value 8',
+    value9 VARCHAR(400) NOT NULL DEFAULT '-' COMMENT 'Value 9',
+    value10 VARCHAR(400) NOT NULL DEFAULT '-' COMMENT 'Value 10',
+    fh_registro DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Fecha y hora del registro'
+);
+
 /*
   String? tabla = "cargos_abonos";
   String? idUsuario;

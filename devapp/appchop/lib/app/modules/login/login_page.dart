@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
 import '../../utils/color_list.dart';
-import '../../utils/literals.dart';
+import '../../utils/app_info.dart';
 import '../../utils/svg_assets.dart';
 import '../../widgets/appbars/off_appbar.dart';
 import '../../widgets/buttons/solid_button.dart';
@@ -77,7 +77,7 @@ class LoginPage extends StatelessWidget with WidgetsBindingObserver {
                     bottom: 15,
                   ),
                   child: AutoSizeText(
-                    "Versión: ${Literals.version}",
+                    "Versión: ${AppInfo.version}",
                     style: TextStyle(
                       color: Color(ColorList.sys[0]),
                       fontWeight: FontWeight.w700,

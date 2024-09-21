@@ -2,7 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 import '../../utils/color_list.dart';
-import '../../utils/literals.dart';
+import '../../utils/app_info.dart';
 
 class MenuVersionContainer extends StatelessWidget {
   const MenuVersionContainer({
@@ -20,7 +20,7 @@ class MenuVersionContainer extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           AutoSizeText(
-            "Version: ${Literals.version}",
+            "Version: ${AppInfo.version}",
             style: TextStyle(
               color: Color(ColorList.sys[1]),
               fontWeight: FontWeight.w500,

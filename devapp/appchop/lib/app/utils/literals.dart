@@ -1,5 +1,4 @@
 class Literals {
-  static const String version = "1.0.12+12";
   static const String notificacionTopic = "appchop_notif";
 
   static const String storageName = "appchopStorage";
@@ -50,7 +49,9 @@ class Literals {
   static const String validacionErrorEstatus = "ERROR-ESTATUS";
   static const String validacionErrorZona = "ERROR-ZONA";
 
+  static const String estatusManualTodos = "TODOS";
   static const String estatusManualPendiente = "PENDIENTE";
+  static const String estatusManualListado = "VISITA&ABONO";
 
   static const String cargoAbonoMsgBonificacion = "Bonificacion pronto pago";
   static const String cargoAbonoMsgIntereses = "Cargo de intereses";
