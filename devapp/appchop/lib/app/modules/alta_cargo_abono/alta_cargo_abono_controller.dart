@@ -192,15 +192,26 @@ class AltaCargoAbonoController extends GetInjection {
 
   Future<void> revertirCargoAbono(CargosAbonos cargosAbonos) async {
     var borrar = await tool.ask(
-      "Atención!",
+      "Atención! (Requiere internet)",
       "¿Está seguro de querer ELIMINAR definitivamente el ${cargosAbonos.tipo!.toLowerCase()} (${MoneyFormatter(amount: cargosAbonos.monto!).output.symbolOnLeft})?"
     );
     if(!borrar) {
       return;
     }
     try {
+      var online = await tool.isOnline();
+      if(!online) {
+        tool.msg(Literals.msgOffline, 2);
+      }
       tool.isBusy();
       await Future.delayed(1.seconds);
+      var eliminarCargoAbono = await appBackupRepository.eliminarCargoAbonoAsync(
+        cargosAbonos.idUsuario!,
+        cargosAbonos.idCobranza!,
+        cargosAbonos.idMovimiento!);
+      if(!eliminarCargoAbono!) {
+        throw Exception();
+      }
       var nuevoSaldo = cargosAbonos.tipo! == Literals.movimientoAbono 
         ? saldoPendiente + cargosAbonos.monto!
         : saldoPendiente - cargosAbonos.monto!;
@@ -216,6 +227,7 @@ class AltaCargoAbonoController extends GetInjection {
         storage.get([CargosAbonos()]).map((json) => CargosAbonos.fromJson(json))
       );
       listaCargosAbonos.removeWhere((c) => c.idMovimiento == cargosAbonos.idMovimiento);
+      saldoCargos = nuevoSaldo;
       cobranzaEditar!.saldo = nuevoSaldo;
       saldoPendiente = nuevoSaldo;
       await storage.update(listaCargosAbonos);

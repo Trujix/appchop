@@ -103,4 +103,15 @@ class AppBackupProvider {
       return null;
     }
   }
+
+  Future<bool?> eliminarCargoAbonoAsync(String idUsuario, String idCobranza, String idMovimiento) async {
+    try {
+      var result = await _api.get(
+        "api/appbackup/eliminarCargoAbono/$idUsuario/$idCobranza/$idMovimiento"
+      );
+      return result == Literals.apiTrue;
+    } catch(e) {
+      return null;
+    }
+  }
 }

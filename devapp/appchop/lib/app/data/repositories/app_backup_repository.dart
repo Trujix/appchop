@@ -39,4 +39,8 @@ class AppBackupRepository {
   Future<bool?> agregarUsuarioAccionAsync(String idUsuario, String usuario, String accion) async {
     return await Get.find<AppBackupProvider>().agregarUsuarioAccionAsync(idUsuario, usuario, accion);
   }
+
+  Future<bool?> eliminarCargoAbonoAsync(String idUsuario, String idCobranza, String idMovimiento) async {
+    return await Get.find<AppBackupProvider>().eliminarCargoAbonoAsync(idUsuario, idCobranza, idMovimiento);
+  }
 }

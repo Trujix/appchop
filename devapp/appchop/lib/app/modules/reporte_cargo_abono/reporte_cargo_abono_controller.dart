@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:money_formatter/money_formatter.dart';
 import 'package:open_file_plus/open_file_plus.dart';
 
 import '../../data/models/local_storage/cargos_abonos.dart';
@@ -11,6 +12,7 @@ import '../../data/models/local_storage/zonas.dart';
 import '../../utils/get_injection.dart';
 import '../../utils/literals.dart';
 import '../../widgets/modals/gestion_csv_modal.dart';
+import '../../widgets/reports/recibo_abono_report.dart';
 import '../../widgets/texts/combo_texts.dart';
 
 class ReporteCargoAbonoController extends GetInjection {
@@ -85,6 +87,29 @@ class ReporteCargoAbonoController extends GetInjection {
     } finally {
       update();
     }
+  }
+
+  Future<void> quitarCargoAbono(CargosAbonos cargosAbonos) async {
+    try {
+      totalConsulta = 0;
+      listaCargosAbonos.removeWhere((c) => c.idMovimiento == cargosAbonos.idMovimiento);
+      for(var cargosAbonos in listaCargosAbonos) {
+        totalConsulta += cargosAbonos.monto!;
+      }
+    } catch(e) {
+      tool.msg("Ocurrió un error al intentar quitar cargos/abonos", 3);
+    } finally {
+      update();
+    }
+  }
+
+  Future<void> crearCargoAbonoReportePdf(CargosAbonos cargosAbonos) async {
+    var estadoCuenta = ReciboAbonoReport(
+      fecha: cargosAbonos.fechaRegistro!,
+      monto: MoneyFormatter(amount: cargosAbonos.monto!).output.symbolOnLeft,
+    );
+    var pdf = await tool.crearPdf(estadoCuenta, Literals.reporteEstadoCuentaPdf);
+    await tool.compartir(pdf!, Literals.reporteEstadoCuentaPdf);
   }
 
   Future<void> exportar() async {

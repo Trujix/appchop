@@ -119,10 +119,10 @@ class ReporteCargoAbonoPage extends StatelessWidget {
                       body: CargoAbonoCustomscrollview(
                         scrollController: _.scrollController,
                         listaCargosAbonos: _.listaCargosAbonos,
-                        onPdf: (_) {},
-                        onBorrar: (_) {},
+                        onPdf: _.crearCargoAbonoReportePdf,
+                        onBorrar: _.quitarCargoAbono,
                         onLongPress: (_) {},
-                        enabledSlider: false,
+                        enabledSlider: true,
                         esAdmin: _.esAdmin,
                       ),
                     ),

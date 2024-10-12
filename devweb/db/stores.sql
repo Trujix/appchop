@@ -836,6 +836,35 @@ DELIMITER ;
 
 
 /* ------------------------------------------------------------------------------------*/
+DROP PROCEDURE IF EXISTS STP_APP_BACKUP_CARGOSABONOS_DELETE;
+DELIMITER $$
+CREATE PROCEDURE STP_APP_BACKUP_CARGOSABONOS_DELETE(
+    IN _IDSISTEMA VARCHAR(120), IN _IDCOBRANZA VARCHAR(120), IN _IDMOVIMIENTO VARCHAR(120)
+)
+BEGIN
+    DECLARE _VERIFY INT DEFAULT 0;
+    SET _VERIFY = (
+        SELECT 
+            COUNT(*) AS VERIFY
+        FROM appchop.app_cargos_abonos WHERE 
+            id_sistema = _IDSISTEMA 
+            AND id_cobranza = _IDCOBRANZA 
+            AND id_movimiento = _IDMOVIMIENTO
+    );
+    IF _VERIFY > 0 THEN
+        DELETE FROM appchop.app_cargos_abonos 
+            WHERE id_sistema = _IDSISTEMA 
+                AND id_cobranza = _IDCOBRANZA 
+                AND id_movimiento = _IDMOVIMIENTO;
+    ELSE
+        SET _VERIFY = 1;
+        SELECT _VERIFY FROM appchop.app_cargos_abonos;
+    END IF;
+END $$
+DELIMITER ;
+
+
+/* ------------------------------------------------------------------------------------*/
 DROP PROCEDURE IF EXISTS STP_APP_BACKUP_CARGOSABONOS_INSERT;
 DELIMITER $$
 CREATE PROCEDURE STP_APP_BACKUP_CARGOSABONOS_INSERT(
@@ -845,7 +874,7 @@ CREATE PROCEDURE STP_APP_BACKUP_CARGOSABONOS_INSERT(
     IN _FECHAREGISTRO VARCHAR(10), IN _GENERA VARCHAR(15)
 )
 BEGIN
-DECLARE _VERIFY INT DEFAULT 0;
+    DECLARE _VERIFY INT DEFAULT 0;
     SET _VERIFY = (
         SELECT 
             COUNT(*) AS VERIFY
@@ -995,7 +1024,7 @@ CREATE PROCEDURE STP_APP_BACKUP_NOTAS_INSERT(
     IN _USUARIOVISTO VARCHAR(120), IN _FECHACREA VARCHAR(10)
 )
 BEGIN
-DECLARE _VERIFY INT DEFAULT 0;
+    DECLARE _VERIFY INT DEFAULT 0;
     SET _VERIFY = (
         SELECT 
             COUNT(*) AS VERIFY

@@ -35,7 +35,7 @@ class CargoAbonoCustomscrollview extends StatelessWidget {
         return SliverToBoxAdapter(
           child: Builder(
             builder: (context) {
-              if(index == 0) {
+              if(index < 0) {
                 return CargoAbonoInkwell(
                   cargoAbono: cargoAbono,
                   onLongPress: () => onLongPress(cargoAbono),
