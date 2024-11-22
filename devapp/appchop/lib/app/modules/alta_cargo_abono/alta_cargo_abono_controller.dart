@@ -1,3 +1,4 @@
+import 'package:adaptive_action_sheet/adaptive_action_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
@@ -13,6 +14,7 @@ import '../../utils/get_injection.dart';
 import '../../utils/literals.dart';
 import '../../widgets/reports/estado_cuenta_report.dart';
 import '../../widgets/reports/recibo_abono_report.dart';
+import '../../widgets/texts/combo_texts.dart';
 import '../cobranza_main/cobranza_main_controller.dart';
 
 class AltaCargoAbonoController extends GetInjection {
@@ -27,10 +29,12 @@ class AltaCargoAbonoController extends GetInjection {
   List<String> opcionesBase = [
     "Exportar~B",
     "Ajustar saldo~B",
+    "Filtro Manual~B",
   ];
   List<IconData?> opcionesIcono = [
     MaterialIcons.share,
     MaterialIcons.attach_money,
+    MaterialIcons.filter_list,
   ];
 
   Cobranzas? cobranzaEditar = Cobranzas();
@@ -47,6 +51,8 @@ class AltaCargoAbonoController extends GetInjection {
   List<List<dynamic>> cargosAbonosTabla = [];
 
   Configuracion configuracion = Configuracion();
+  List<BottomSheetAction> _listaEstatusManual = [];
+  String _estatusManualSelected = "";
 
   final bool esAdmin = GetInjection.administrador;
 
@@ -59,6 +65,7 @@ class AltaCargoAbonoController extends GetInjection {
   Future<void> _init() async {
     var arguments = Get.arguments;
     cobranzaEditar = arguments['cobranza'] as Cobranzas;
+    _estatusManualSelected = cobranzaEditar!.estatusManual!;
     if(cobranzaEditar == null) {
       Get.back();
       tool.msg("Ocurrió un problema al cargar datos de Cargo y abono", 3);
@@ -322,6 +329,9 @@ class AltaCargoAbonoController extends GetInjection {
       case "1":
         await ajustarSaldo();
         break;
+      case "2":
+        filtrarCobranzaEspecial();
+        break;
       default:
         return;
     }
@@ -365,6 +375,81 @@ class AltaCargoAbonoController extends GetInjection {
       tool.msg("Se ajustó el saldo correctamente", 1);
     } catch(_) {
       tool.msg("Ocurrió un error al intentar recalcular el saldo", 3);
+    } finally {
+      update();
+    }
+  }
+
+  void filtrarCobranzaEspecial() {
+    _listaEstatusManual  = [];
+    var listaEstatus = Literals.estatusManualListadoFull.split("&");
+    for(var estatus in listaEstatus) {
+      if(cobranzaEditar!.estatusManual == estatus) {
+        continue;
+      }
+      _listaEstatusManual.add(
+        BottomSheetAction(
+          title: ComboText(
+            texto: tool.capitalize(estatus),
+            fontWeight: FontWeight.normal,
+          ),
+          onPressed: (context) async {
+            var estatusAnterior = _estatusManualSelected;
+            _estatusManualSelected = estatus;
+            update();
+            Navigator.of(context).pop();
+            await _ejecutarEstatusManual(estatusAnterior);
+          },
+        )
+      ); 
+    }
+    var context = Get.context!;
+    showAdaptiveActionSheet(
+      context: context,
+      title: RichText(
+        text: TextSpan(
+          text: 'Estatus actual: ',
+          style: const TextStyle(
+            color: Colors.black,
+            fontSize: 16,
+          ),
+          children: [
+            TextSpan(
+              text: cobranzaEditar!.estatusManual,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        )
+      ),
+      androidBorderRadius: 30,
+      actions: _listaEstatusManual,
+    );
+  }
+
+  Future<void> _ejecutarEstatusManual(String estatusAnterior) async {
+    try {
+      var cambiarEstatus = await tool.ask("Cambiar estatus", "¿Desea asignar el estatus $_estatusManualSelected a la nota?");
+      if(cambiarEstatus) {
+        tool.isBusy();
+        var cobranzaStorage = List<Cobranzas>.from(
+          storage.get([Cobranzas()]).map((json) => Cobranzas.fromJson(json))
+        );
+        for (var i = 0; i < cobranzaStorage.length; i++) {
+          if(cobranzaStorage[i].idCobranza == cobranzaEditar!.idCobranza) {
+            cobranzaStorage[i].estatusManual = _estatusManualSelected;
+          }
+        }
+        await storage.update(cobranzaStorage);
+        await tool.wait(1);
+        tool.isBusy(false);
+      }
+      cobranzaEditar!.estatusManual = _estatusManualSelected;
+      _estatusManualSelected = estatusAnterior;
+      await Get.find<CobranzaMainController>().cargarListaCobranza();
+    } catch(_) {
+      tool.msg("Ocurrió un problema al intentar cambiar estatus de la nota", 3);
     } finally {
       update();
     }
@@ -484,7 +569,7 @@ class AltaCargoAbonoController extends GetInjection {
       opcionesConsulta = [];
       for (var i = 0; i < opcionesBase.length; i++) {
         var opciones = opcionesBase[i].split("~");
-        if(opciones[0] == "Ajustar saldo" && (cobranzaEditar!.bloqueado == Literals.bloqueoSi && esAdmin)) {
+        if((opciones[0] == "Ajustar saldo" || opciones[0] == "Filtro Manual") && (cobranzaEditar!.bloqueado == Literals.bloqueoSi && esAdmin)) {
           continue;
         }
         opcionesConsulta.add(MenuPopupOpciones(

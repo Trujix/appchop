@@ -52,6 +52,7 @@ class Literals {
   static const String estatusManualTodos = "TODOS";
   static const String estatusManualPendiente = "PENDIENTE";
   static const String estatusManualListado = "VISITA&ABONO";
+  static const String estatusManualListadoFull = "VISITA&ABONO&PENDIENTE";
 
   static const String cargoAbonoMsgBonificacion = "Bonificacion pronto pago";
   static const String cargoAbonoMsgIntereses = "Cargo de intereses";
