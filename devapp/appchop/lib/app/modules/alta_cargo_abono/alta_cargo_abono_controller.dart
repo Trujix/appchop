@@ -345,6 +345,20 @@ class AltaCargoAbonoController extends GetInjection {
       }
       tool.isBusy();
       await tool.wait(1);
+      var ajusteSaldo = await _ajustarSaldoExec();
+      if(!ajusteSaldo) {
+        throw Exception();
+      }
+      tool.msg("Se ajustó el saldo correctamente", 1);
+    } catch(_) {
+      tool.msg("Ocurrió un error al intentar recalcular el saldo", 3);
+    } finally {
+      update();
+    }
+  }
+
+  Future<bool> _ajustarSaldoExec() async {
+    try {
       var cargosAbonos = List<CargosAbonos>.from(
         storage.get([CargosAbonos()]).map((json) => CargosAbonos.fromJson(json))
       );
@@ -360,8 +374,6 @@ class AltaCargoAbonoController extends GetInjection {
         }
       }
       nuevoSaldo = cargos - abonos;
-      cobranzaEditar!.saldo = nuevoSaldo;
-      saldoPendiente = nuevoSaldo;
       var listaCobranzas = List<Cobranzas>.from(
         storage.get([Cobranzas()]).map((json) => Cobranzas.fromJson(json))
       );
@@ -372,11 +384,11 @@ class AltaCargoAbonoController extends GetInjection {
         }
       }
       await storage.update(listaCobranzas);
-      tool.msg("Se ajustó el saldo correctamente", 1);
+      cobranzaEditar!.saldo = nuevoSaldo;
+      saldoPendiente = nuevoSaldo;
+      return true;
     } catch(_) {
-      tool.msg("Ocurrió un error al intentar recalcular el saldo", 3);
-    } finally {
-      update();
+      return false;
     }
   }
 
@@ -491,9 +503,20 @@ class AltaCargoAbonoController extends GetInjection {
         return;
       }
       tool.isBusy();
+      var ajusteSaldo = await _ajustarSaldoExec();
+      if(!ajusteSaldo) {
+        tool.msg("Ocurrió un error al intentar recalcular el saldo", 3);
+        return;
+      }
+      update();
+      await tool.wait(2);
+      var listaCobranzas = List<Cobranzas>.from(
+        storage.get([Cobranzas()]).map((json) => Cobranzas.fromJson(json))
+      );
       var localStorage = LocalStorage.fromJson(storage.get(LocalStorage()));
       var fechaVencimiento = tool.str2date(cobranzaEditar!.fechaVencimiento!);
       var saldoCobranza = cobranzaEditar!.saldo!;
+      var saldoNuevo = cobranzaEditar!.saldo!;
       var finaliza = true;
       List<CargosAbonos> intereses = [];
       while(finaliza) {
@@ -535,25 +558,24 @@ class AltaCargoAbonoController extends GetInjection {
           continue;
         }
         agrega = true;
+        saldoNuevo = saldoNuevo + interes.monto!;
         listaCargosAbonos.add(interes);
         cargosAbonosTemp.add(interes);
       }
       if(agrega) {
         saldoCargos = saldoCobranza;
-        cobranzaEditar!.saldo = saldoCobranza;
-        saldoPendiente = saldoCobranza;
-        var listaCobranzas = List<Cobranzas>.from(
-          storage.get([Cobranzas()]).map((json) => Cobranzas.fromJson(json))
-        );
+        cobranzaEditar!.saldo = saldoNuevo;
+        saldoPendiente = saldoNuevo;
         for (var i = 0; i < listaCobranzas.length; i++) {
           if(listaCobranzas[i].idCobranza == cobranzaEditar!.idCobranza) {
-            listaCobranzas[i].saldo = saldoCobranza;
+            listaCobranzas[i].saldo = saldoNuevo;
           }
         }
         await storage.update(listaCobranzas);
         await storage.update(cargosAbonosTemp);
         await Get.find<CobranzaMainController>().cargarListaCobranza();
         tool.toast("Se agregaron cargos de intereses");
+        _cargarListaCargosAbonos();
       }
       await tool.wait(1);
       tool.isBusy(false);
