@@ -223,7 +223,7 @@ class CobranzaCustomscrollview extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: <Widget>[
                               Visibility(
-                                visible: cobranza.estatus != Literals.statusCobranzaPagada,
+                                visible: ((esAdmin && cobranza.bloqueado != Literals.bloqueoSi) && (cobranza.estatus != Literals.statusCobranzaPagada)),
                                 child: CircularButton(
                                   colorIcono: ColorList.sys[0],
                                   color: ColorList.sys[
